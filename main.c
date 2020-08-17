@@ -1,8 +1,10 @@
 #include <stdio.h>
+
 #include <stdlib.h>
 #include <signal.h> // Para las constantes SIGALRM y similares
 #include <ncurses.h>
 #include <unistd.h> //incluyo este para tener la funcion sleep()
+#include <string.h> //incluyo para tener strcpy()
 
 //PROTOTIPOS y VARIABLES GLOBALES
 int leer_tecla(int comprueba_letra, int pos_w_actual);
@@ -24,17 +26,29 @@ int pos_w_actual=0, pos_h_actual=0;
 
 int main(){    
     //definimos y configuramos las variables
-    char var_texto[]={"hola que tal, hola nhola hola"};
-    int long_texto=(sizeof(var_texto)/sizeof(char))-1;
-    int i;
-    int tecla_leida, ini_w_texto,ini_h_texto;
+    char **array_texto = malloc(80 * sizeof(char));
+    array_texto[0]="12345";
+    array_texto[1]="12345";
+    array_texto[2]="12345";
+    array_texto[3]="12345";
+
+    
+    char tmp_texto, var_texto[255];
+    
+    int num_cols_texto=0, long_texto=-1;//inicializamos long_texto a -1 pq en el bucle donde la llenamos empezarermos sumando ++
+    int i, i_row, i_col, long_var_texto;
+    int tecla_leida;
     int x_child_win=0, y_child_win=3;
+    int pos_w_inicial,pos_h_inicial, ini_w,ini_h;
+
+    ini_w=1;
+    ini_h=1;
     
-    ini_w_texto=1;
-    ini_h_texto=1;
-    
-    pos_w_actual=ini_w_texto+x_child_win;
-    pos_h_actual=ini_h_texto+y_child_win;    
+    pos_w_inicial=ini_w+x_child_win;
+    pos_h_inicial=ini_h+y_child_win;    
+
+    pos_w_actual=pos_w_inicial;
+    pos_h_actual=pos_h_inicial;    
 
     int width=70, height=7;
     int rows=25, cols=80;
@@ -68,61 +82,75 @@ int main(){
     //Creamos la ventana
     childwin = subwin(mainwin, height, width, y_child_win, x_child_win);
     box(childwin, 0, 0);
-    
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
     muestra_cabecera();
     
-    //para cambiar color del texto, hay que descomentar esto:
-    mvwaddstr(childwin, ini_h_texto, ini_w_texto, var_texto);
+    //mostramos el texto que hay que repetir
+    i=0;
+    while(array_texto[i]){
+        long_texto++;//sumamos el salto de línea anterior aquí porque si hemos llegado aquí quiere decir que aún hay texto
+        
+        mvwaddstr(childwin, ini_h+i, ini_w, array_texto[i]);//imprimimos la línea
+        long_texto+=strlen(array_texto[i]);//sumamos la nueva longitud del texto
+        i++;
+        num_cols_texto=i;//otra columna
+    }
     move(pos_h_actual,pos_w_actual);
+    wrefresh(childwin);
 
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
-    i=0;
-    wrefresh(childwin);//
-    while(i<long_texto){
+    i_row=0,i_col=0;
+    for(i_col=0;i_col<num_cols_texto;i_col++){
+//     while(i<long_texto){
+        strcpy(var_texto,array_texto[i_col]);
+        long_var_texto=strlen(var_texto);
+        
+        while(i_row<long_var_texto){
+        
+            tecla_leida=leer_tecla(var_texto[i_row],i_row);
+            
+            switch(tecla_leida){
+                case 0://KO tecla incorrecta
+                    //mostramos el siguiente carácter en rojo y volvemos atrás
+                    curs_set(0);//lo primero desactivamos el cursor pq sino se ve como se mueve y queda feo
+                    attron(COLOR_PAIR(C_LETRA_ERR));
+                    pitar();
+                    mvprintw(pos_h_actual, pos_w_actual, " ");
+                    attroff(COLOR_PAIR(C_LETRA_ERR));
+                    move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
 
-        tecla_leida=leer_tecla(var_texto[i],i);
-        switch(tecla_leida){
-            case 0://KO tecla incorrecta
-                //mostramos el siguiente carácter en rojo y volvemos atrás
-                curs_set(0);//lo primero desactivamos el cursor pq sino se ve como se mueve y queda feo
-                attron(COLOR_PAIR(C_LETRA_ERR));
-                pitar();
-                mvprintw(pos_h_actual, pos_w_actual, "#");
-                attroff(COLOR_PAIR(C_LETRA_ERR));
-                move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
+                    wrefresh(childwin);
+                    usleep(100000);//esperamos 100ms para que se pueda ver el cursor en Rojo
 
-                wrefresh(childwin);
-                 usleep(100000);//esperamos 100ms para que se pueda ver el cursor en Rojo
+                    mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);
 
-                mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i]);
-
-                num_errores++;
-                muestra_errores();
-                move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
-                curs_set(1);//volvemos a activar el cursor
-                refresh();
-                break;
-            case 1://OK tecla correcta                
-                //Marcamos el carácter en negrita
-                attron(A_BOLD);
-                mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i]);
-                attroff(A_BOLD);
-                wrefresh(childwin);//refrescamos la ventana para que se vea el cambio
-                //
-                
-                pos_w_actual++;i++;//corremos una posición
-                mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i]);
-                move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
-                wrefresh(childwin);//actualizamos la ventana para poder ver los cambios
-                break;
-            case 2://EXIT, de momento aquí no llegamos nunca
-                mvprintw(12, pos_w_actual, "quiero salir %d",tecla_leida);
-                break;
+                    num_errores++;
+                    muestra_errores();
+                    move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
+                    curs_set(1);//volvemos a activar el cursor
+                    refresh();
+                    break;
+                case 1://OK tecla correcta                
+                    //Marcamos el carácter en negrita
+                    attron(A_BOLD);
+                    mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);
+                    attroff(A_BOLD);
+                    wrefresh(childwin);//refrescamos la ventana para que se vea el cambio
+                    //
+                    
+                    pos_w_actual++;i_row++;//corremos una posición
+                    mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);
+                    move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
+                    wrefresh(childwin);//actualizamos la ventana para poder ver los cambios
+                    break;
+            }
         }
+        i_row=0;
+        pos_w_actual=pos_w_inicial;
+        pos_h_actual++;
     }
-    /*  Clean up after ourselves  */
+//     /*  Clean up after ourselves  */
     delwin(childwin);
     delwin(mainwin);
     endwin();
