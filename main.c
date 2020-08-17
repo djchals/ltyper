@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #include <stdlib.h>
 #include <signal.h> // Para las constantes SIGALRM y similares
 #include <ncurses.h>
@@ -22,6 +21,7 @@ int pos_w_actual=0, pos_h_actual=0;
 #define C_LETRA_ERR    1
 #define C_LETRA_CUR    2
 #define C_TEXTO        3
+#define ENTER 10
 //
 
 int main(){    
@@ -31,7 +31,7 @@ int main(){
     array_texto[1]="12345";
     array_texto[2]="12345";
     array_texto[3]="12345";
-
+    
     
     char tmp_texto, var_texto[255];
     
@@ -106,10 +106,11 @@ int main(){
         strcpy(var_texto,array_texto[i_col]);
         long_var_texto=strlen(var_texto);
         
-        while(i_row<long_var_texto){
-        
+        while(i_row<=long_var_texto){
+            if(var_texto[i_row]==0){
+                var_texto[i_row]=ENTER;
+            }
             tecla_leida=leer_tecla(var_texto[i_row],i_row);
-            
             switch(tecla_leida){
                 case 0://KO tecla incorrecta
                     //mostramos el siguiente carácter en rojo y volvemos atrás
@@ -121,28 +122,29 @@ int main(){
                     move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
 
                     wrefresh(childwin);
-                    usleep(100000);//esperamos 100ms para que se pueda ver el cursor en Rojo
+                    usleep(35000);//esperamos 35ms para que se pueda ver el cursor en Rojo
 
-                    mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);
+                    if(var_texto[i_row]!=ENTER){
+                        mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);//Repetimos el carácter correcto
+                    }else{
+                        mvprintw(pos_h_actual, pos_w_actual, " ");//Escribimos un espacio 
+                    }
 
                     num_errores++;
                     muestra_errores();
-                    move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
                     curs_set(1);//volvemos a activar el cursor
-                    refresh();
                     break;
-                case 1://OK tecla correcta                
-                    //Marcamos el carácter en negrita
-                    attron(A_BOLD);
-                    mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);
-                    attroff(A_BOLD);
-                    wrefresh(childwin);//refrescamos la ventana para que se vea el cambio
-                    //
-                    
+                case 1://OK tecla correcta                    
+                    //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
+                            if(var_texto[i_row]!=ENTER){
+                                //Marcamos el carácter en negrita
+                                attron(A_BOLD);
+                                mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);
+                                attroff(A_BOLD);
+                            }
                     pos_w_actual++;i_row++;//corremos una posición
                     mvprintw(pos_h_actual, pos_w_actual, "%c",var_texto[i_row]);
                     move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
-                    wrefresh(childwin);//actualizamos la ventana para poder ver los cambios
                     break;
             }
         }
