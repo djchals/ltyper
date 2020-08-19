@@ -1,39 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h> // Para las constantes SIGALRM y similares
-#include <ncurses.h>
-#include <unistd.h> //incluyo este para tener la funcion sleep()
-#include <string.h> //incluyo para tener strcpy()
-
-//PROTOTIPOS y VARIABLES GLOBALES
-int leer_tecla(int comprueba_letra, int pos_w_actual);
-int num_errores;
-void muestra_errores(void);
-void muestra_cabecera(void);
-void contar_segundos();
-void pitar(void);
-int segundos=-1;
-int j=0;
-bool var_parar_crono=true;
-int pos_w_actual=0, pos_h_actual=0;
-
-//DEFINIMOS LOS COLORES QUE VAMOS A USAR
-#define C_LETRA_ERR    1
-#define C_LETRA_CUR    2
-#define C_TEXTO        3
-#define ENTER 10
-//
+#include "header.h"
 
 int main(){    
-    //definimos y configuramos las variables
-    char **array_texto = malloc(80 * sizeof(char));
-    array_texto[0]="12345";
-    array_texto[1]="12345";
-    array_texto[2]="12345";
-    array_texto[3]="12345";
-    
-    
-    char tmp_texto, var_texto[255];
+
+    char var_texto[255];
     
     int num_cols_texto=0, long_texto=-1;//inicializamos long_texto a -1 pq en el bucle donde la llenamos empezarermos sumando ++
     int i, i_row, i_col, long_var_texto;
@@ -51,7 +20,7 @@ int main(){
     pos_h_actual=pos_h_inicial;    
 
     int width=70, height=7;
-    int rows=25, cols=80;
+//     int rows=25, cols=80;
     //
     WINDOW *mainwin, *childwin;
 
@@ -86,7 +55,11 @@ int main(){
 	signal(SIGALRM, contar_segundos);
     muestra_cabecera();
     
+    
     //mostramos el texto que hay que repetir
+    obten_texto(1);//para la prueba obtendremos texto 1
+    printf("array_texto antes de nada (%s)",array_texto[0]);
+
     i=0;
     while(array_texto[i]){
         long_texto++;//sumamos el salto de línea anterior aquí porque si hemos llegado aquí quiere decir que aún hay texto
@@ -96,6 +69,12 @@ int main(){
         i++;
         num_cols_texto=i;//otra columna
     }
+    
+// mvprintw(14, 0, "long texto (%d)",long_texto);  
+// mvprintw(15, 0, "i (%d)",i);  
+// mvprintw(16, 0, "array_texto (%s)",array_texto[0]);  
+    
+//     printf("array_texto despues (%s)",array_texto[0]);  
     move(pos_h_actual,pos_w_actual);
     wrefresh(childwin);
 
@@ -113,8 +92,8 @@ int main(){
             tecla_leida=leer_tecla(var_texto[i_row],i_row);
             switch(tecla_leida){
                 case 0://KO tecla incorrecta
-                    //mostramos el siguiente carácter en rojo y volvemos atrás
                     curs_set(0);//lo primero desactivamos el cursor pq sino se ve como se mueve y queda feo
+                    //mostramos el siguiente carácter en rojo y volvemos atrás
                     attron(COLOR_PAIR(C_LETRA_ERR));
                     pitar();
                     mvprintw(pos_h_actual, pos_w_actual, " ");
