@@ -16,7 +16,6 @@ int main(){
 
     int i_row;
     int tecla_leida;
-    int x_child_win=0, y_child_win=3;
     int ini_w,ini_h,act_ini_w,act_ini_h;
 // 
     ini_w=1;
@@ -28,7 +27,7 @@ int main(){
     pos_w_actual=act_ini_w;
     pos_h_actual=act_ini_h;    
 
-    int width=70, height=7;
+    int width=70, height=7;//dimensiones de la ventana
 
     /*  Initialize ncurses  */
     if ( (mainwin = initscr()) == NULL ) {
@@ -50,6 +49,7 @@ int main(){
     //creamos los pares de colores
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
     init_pair(C_LETRA_OK,COLOR_WHITE,COLOR_BLACK);
+    init_pair(C_TIMEOUT,COLOR_RED,COLOR_BLACK);
     //
     noecho();                  /*  Turn off key echoing                 */
     keypad(mainwin, TRUE);     /*  Enable the keypad for non-char keys  */  
@@ -58,7 +58,7 @@ int main(){
 // 
     //Creamos la ventana
     childwin = subwin(mainwin, height, width, y_child_win, x_child_win);
-    box(childwin, 0, 0);
+    box(childwin, 0, 0);   
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
     muestra_cabecera();
@@ -122,12 +122,7 @@ int main(){
                 break;
         }
     }
-     /*  Clean up after ourselves  */
-    delwin(childwin);
-    delwin(mainwin);
-    endwin();
-    refresh();
-    return EXIT_SUCCESS;
+    finalizar();
 }
 int leer_tecla(int comprueba_letra, int pos_w_actual) {
     int ch=getch();
@@ -146,19 +141,61 @@ void muestra_cabecera(void){
 // Esta es la función que se va a ejecutar cada vez que se reciba la señal SIGALRM
 void contar_segundos(){
 	// Usamos static para que se conserve el valor de "segundos" entre cada llamada a la función
-	segundos++;
+	total_tiempo++;
+    
+    int minutos=floor(total_tiempo/60);
+    int segundos=total_tiempo%60;    
+    
     attron(COLOR_PAIR(C_LETRA_OK));
-    mvprintw(0, 50, "Tiempo: %d",segundos);
+    mvprintw(0, 50, "Tiempo: ");
+
+    if((MAX_TIEMPO-total_tiempo)<30){
+        attron(COLOR_PAIR(C_TIMEOUT));
+        attron(A_BLINK);
+    }
+    mvprintw(0, 58, "%02d:%02d",minutos,segundos);
+    if((MAX_TIEMPO-total_tiempo)<30){
+        attron(COLOR_PAIR(C_LETRA_OK));
+        attroff(A_BLINK);
+    }
+    
     move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
 
     //SI se ha cometido un error dejamos el color tal y como estaba
     if(act_letra_err){
         attron(COLOR_PAIR(C_LETRA_ERR));
     }
+    
     refresh();
-    if(var_parar_crono){
+    if(total_tiempo<MAX_TIEMPO){
         alarm(1);
+    }else{
+        finalizar();//se acabó el tiempo!   
     }
+}
+void finalizar(){
+    /*  Clean up after ourselves  */
+//     int ch;
+//     delwin(childwin);
+//     refresh();
+//     
+//     int width=60, height=4;//dimensiones de la ventana
+//     //Creamos la ventana de nuevo
+//     childwin = subwin(mainwin, height, width, y_child_win, x_child_win);
+//     box(childwin, 0, 0);
+// 
+//     mvaddstr(5, 10, "Has conseguido la siguiente puntuación:");
+//     refresh();
+//     
+//     while ( (ch = getch()) != 'q' ) {
+//     }
+//     delwin(mainwin);    
+//     
+//     endwin();
+//     
+//     refresh();
+//     printf("Adiosss");
+//     exit(EXIT_SUCCESS);
 }
 void pitar(void){
     //Más adelante configuraremos si queremos que pite o no
