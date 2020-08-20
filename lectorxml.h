@@ -21,7 +21,7 @@ char *obten_texto(int id_texto){
     char *act_texto;
     int long_texto, i=0, i_row=0;
 // //     const static char **array_todos_textos = malloc(80 * sizeof(char));
-    document = xmlReadFile("archivo.xml", NULL, 0);
+    document = xmlReadFile("db_texts.xml", NULL, 0);
     root = xmlDocGetRootElement(document);
     
     for (node = root->children; node; node = node->next) {
