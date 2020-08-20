@@ -24,3 +24,4 @@ clean:
 cleanall:
 	rm -f lectorxml.o
 	rm -f meca
+

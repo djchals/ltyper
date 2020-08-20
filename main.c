@@ -14,11 +14,10 @@ int main(){
     char todo_texto[long_texto];
     memcpy(todo_texto,array_puntero_texto,long_texto);
 
-    char var_texto[255];
-    int i_row, i_col, long_var_texto;
+    int i_row;
     int tecla_leida;
     int x_child_win=0, y_child_win=3;
-    int ini_w,ini_h,act_ini_w,act_ini_h,act_cur_w_actual,act_cur_h_actual;
+    int ini_w,ini_h,act_ini_w,act_ini_h;
 // 
     ini_w=1;
     ini_h=4;
@@ -31,9 +30,6 @@ int main(){
 
     int width=70, height=7;
 
-    //     //
-    WINDOW *mainwin, *childwin;
-// 
     /*  Initialize ncurses  */
     if ( (mainwin = initscr()) == NULL ) {
         fprintf(stderr, "Error initializing ncurses.\n");
@@ -52,7 +48,8 @@ int main(){
     }
 
     //creamos los pares de colores
-    init_pair(C_LETRA_ERR,COLOR_RED,COLOR_RED);
+    init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
+    init_pair(C_LETRA_OK,COLOR_WHITE,COLOR_BLACK);
     //
     noecho();                  /*  Turn off key echoing                 */
     keypad(mainwin, TRUE);     /*  Enable the keypad for non-char keys  */  
@@ -65,56 +62,44 @@ int main(){
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
     muestra_cabecera();
-    
 
-        if(long_texto>0){
-            //Hay algo de texto
-            num_cols_texto=1;
-            for(i=0;i<long_texto;i++){
-                if(todo_texto[i]==salto){
-                    num_cols_texto++;
-                    act_ini_h++;
-                    act_ini_w=ini_w;
-                }else{
-                    mvprintw(act_ini_h, act_ini_w, "%c",todo_texto[i]);//imprimimos la línea
-                    act_ini_w++;
-                }
-                
+    if(long_texto>0){
+        //Hay algo de texto
+        num_cols_texto=1;
+        for(i=0;i<long_texto;i++){
+            if(todo_texto[i]==salto){
+                num_cols_texto++;
+                act_ini_h++;
+                act_ini_w=ini_w;
+            }else{
+                mvprintw(act_ini_h, act_ini_w, "%c",todo_texto[i]);//imprimimos la línea
+                act_ini_w++;
             }
+            
         }
-        refresh();
-//         redrawwin(childwin);
+    }
     move(pos_h_actual,pos_w_actual);
     redrawwin(childwin);
 // 
 //  //iniciamos el bucle de lectura y comprobación de tecla pulsada
-    i_row=0,i_col=0;
-
+    i_row=0;//,i_col=0;
     while(i_row<long_texto){
         tecla_leida=leer_tecla(todo_texto[i_row],i_row);
         switch(tecla_leida){
             case 0://KO tecla incorrecta
-                curs_set(0);//lo primero desactivamos el cursor pq sino se ve como se mueve y queda feo
-                //mostramos el siguiente carácter en rojo y volvemos atrás
-                attron(COLOR_PAIR(C_LETRA_ERR));
+                curs_set(0);//desactivamos el cursor pq no queremos que se vea como se mueve durante este proceso
+                num_errores++;
+                muestra_errores();
                 pitar();
-                mvprintw(pos_h_actual, pos_w_actual, " ");
-                attroff(COLOR_PAIR(C_LETRA_ERR));
-                move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
-
-                usleep(35000);//esperamos 35ms para que se pueda ver el cursor en Rojo
-                redrawwin(childwin);
-//                     refresh();
-
+                act_letra_err=true;
+                move(pos_h_actual,pos_w_actual);// colocamos el cursor en la posición que le toca
+                attron(COLOR_PAIR(C_LETRA_ERR));
                 if(todo_texto[i_row]!=ENTER){
                     mvprintw(pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);//Repetimos el carácter correcto
                 }else{
                     mvprintw(pos_h_actual, pos_w_actual, " ");//Escribimos un espacio 
                 }
-
-                num_errores++;
-                muestra_errores();
-                curs_set(1);//volvemos a activar el cursor
+                curs_set(1);//volvemos a activar el cursor y que siga el juego
                 break;
             case 1://OK tecla correcta                    
                 //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
@@ -129,6 +114,10 @@ int main(){
                         pos_h_actual++;
                 }
                 i_row++;
+                if(act_letra_err){
+                    attron(COLOR_PAIR(C_LETRA_OK));
+                    act_letra_err=false;
+                }
                 move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
                 break;
         }
@@ -145,7 +134,8 @@ int leer_tecla(int comprueba_letra, int pos_w_actual) {
     return (ch==comprueba_letra);
 }
 void muestra_errores(void){
-    mvprintw(0, 30, "Fallos: %d",num_errores);
+    attron(COLOR_PAIR(C_LETRA_OK));
+    mvprintw(0, 30, "Errores: %d",num_errores);
 }
 void muestra_cabecera(void){
     mvprintw(0, 0, "F1=Salir");
@@ -157,9 +147,14 @@ void muestra_cabecera(void){
 void contar_segundos(){
 	// Usamos static para que se conserve el valor de "segundos" entre cada llamada a la función
 	segundos++;
+    attron(COLOR_PAIR(C_LETRA_OK));
     mvprintw(0, 50, "Tiempo: %d",segundos);
     move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
 
+    //SI se ha cometido un error dejamos el color tal y como estaba
+    if(act_letra_err){
+        attron(COLOR_PAIR(C_LETRA_ERR));
+    }
     refresh();
     if(var_parar_crono){
         alarm(1);

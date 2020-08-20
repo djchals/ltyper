@@ -17,7 +17,8 @@
 char *obten_texto(int id_texto){
     xmlDoc *document;
     xmlNode *root, *node;
-    xmlChar *act_texto;
+//     xmlChar *act_texto;
+    char *act_texto;
     int long_texto, i=0, i_row=0;
 // //     const static char **array_todos_textos = malloc(80 * sizeof(char));
     document = xmlReadFile("archivo.xml", NULL, 0);
@@ -40,7 +41,7 @@ char *obten_texto(int id_texto){
     for(i=0;i<long_texto;i++){
         switch(act_texto[i]){
             case 0x20://es un espacio
-                if(act_texto[i+1]!=0x20){//si lo siguiente no es un espacio o un salto de línea, ni tampoco estamos al principio de la linea lo sumaremos
+                if(act_texto[i+1]!=0x20 && act_texto[i+1]!=0x0a){//si lo siguiente no es un espacio o un salto de línea, ni tampoco estamos al principio de la linea lo sumaremos
                     tmp_cadena[i_row]=act_texto[i];
                     i_row++;
                 }
