@@ -2,14 +2,12 @@
 #define FOO_DOT_H    /* prevents the file from being included twice. */
                      /* Including a header file twice causes all kinds */
                      /* of interesting problems.*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h> // Para las constantes SIGALRM y similares
 #include <unistd.h> //incluyo este para tener la funcion sleep()
 #include <string.h> //incluyo para tener strcpy()
 #include <math.h> //necesitaremos floor() para el cronometro
-
 
 // para el lectorxml.c necesitaremos estas
 #include <libxml/parser.h> 
@@ -25,14 +23,21 @@ void muestra_cabecera(void);
 void contar_segundos();
 void pitar(void);
 void finalizar();
+void borrar_caja(int y, int x,int c);
+void muestra_texto(int act_id_texto);
 
-static int total_tiempo=-1;
+
+static int total_tiempo;
 const static int MAX_TIEMPO=150;//El número máximo de segundos que le damos para la prueba
-// static bool var_parar_crono=true;
-static int pos_w_actual=0, pos_h_actual=0;
-static bool act_letra_err=false;//con esta controlaremos si nos hemos equivocado en la letra actual
+static int pos_w_actual, pos_h_actual;
+static bool act_letra_err;//con esta controlaremos si nos hemos equivocado en la letra actual
 const static int x_child_win=0, y_child_win=3;
-    
+static int minutos, segundos;
+static int long_texto;
+static int id_texto;    
+
+int ancho_caja, alto_caja;//dimensiones de la caja
+
 WINDOW *mainwin, *childwin;
 
 #define C_LETRA_ERR    1

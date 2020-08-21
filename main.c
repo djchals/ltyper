@@ -1,11 +1,42 @@
 #include "header.h"
 #include "lectorxml.h"
+int main(){
+    /*  Initialize ncurses  */
+    if ( (mainwin = initscr()) == NULL ) {
+        fprintf(stderr, "Error initializing ncurses.\n");
+        exit(EXIT_FAILURE);
+    }    
+    
+    if (has_colors() == FALSE) {
+        endwin();
+        printf("Your terminal does not support color\n");
+        exit(EXIT_FAILURE);
+    }
+    if(start_color()!=OK) {
+        endwin();
+        printf("Your terminal cannot start colors\n");
+        exit(EXIT_FAILURE);
+    }
+    muestra_texto(0);
+    return 0;
+}
 
-int main(){    
+
+void muestra_texto(int act_id_texto){
+    //inicializamos de nuevo las variables globales:
+    total_tiempo=-1;
+    pos_w_actual=0;
+    pos_h_actual=0;
+    act_letra_err=false;//con esta controlaremos si nos hemos equivocado en la letra actual
+    minutos=0;
+    segundos=0;
+    long_texto=0;
+    id_texto=act_id_texto;//guardamos el valor de la id del texto que vamos a leer en la variable global id_texto
+    //
+    
     //mostramos el texto que hay que repetir
     char *array_puntero_texto;
-    int long_texto;
-    array_puntero_texto=obten_texto(0);
+    array_puntero_texto=obten_texto(act_id_texto);//id_texto es una variable global
     long_texto=strlen(array_puntero_texto);
     
     int salto = 0x0a;//código de la tecla enter
@@ -27,24 +58,7 @@ int main(){
     pos_w_actual=act_ini_w;
     pos_h_actual=act_ini_h;    
 
-    int width=70, height=7;//dimensiones de la ventana
 
-    /*  Initialize ncurses  */
-    if ( (mainwin = initscr()) == NULL ) {
-        fprintf(stderr, "Error initializing ncurses.\n");
-        exit(EXIT_FAILURE);
-    }    
-    
-    if (has_colors() == FALSE) {
-        endwin();
-        printf("Your terminal does not support color\n");
-        exit(EXIT_FAILURE);
-    }
-    if(start_color()!=OK) {
-        endwin();
-        printf("Your terminal cannot start colors\n");
-        exit(EXIT_FAILURE);
-    }
 
     //creamos los pares de colores
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
@@ -56,8 +70,11 @@ int main(){
     //Ocultamos el cursor
     curs_set(1);
 // 
+    ancho_caja=70;
+    alto_caja=7;
+    
     //Creamos la ventana
-    childwin = subwin(mainwin, height, width, y_child_win, x_child_win);
+    childwin = subwin(mainwin, alto_caja, ancho_caja, y_child_win, x_child_win);
     box(childwin, 0, 0);   
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
@@ -143,8 +160,8 @@ void contar_segundos(){
 	// Usamos static para que se conserve el valor de "segundos" entre cada llamada a la función
 	total_tiempo++;
     
-    int minutos=floor(total_tiempo/60);
-    int segundos=total_tiempo%60;    
+    minutos=floor(total_tiempo/60);
+    segundos=total_tiempo%60;    
     
     attron(COLOR_PAIR(C_LETRA_OK));
     mvprintw(0, 50, "Tiempo: ");
@@ -174,28 +191,58 @@ void contar_segundos(){
     }
 }
 void finalizar(){
-    /*  Clean up after ourselves  */
-//     int ch;
-//     delwin(childwin);
-//     refresh();
-//     
-//     int width=60, height=4;//dimensiones de la ventana
-//     //Creamos la ventana de nuevo
-//     childwin = subwin(mainwin, height, width, y_child_win, x_child_win);
-//     box(childwin, 0, 0);
-// 
-//     mvaddstr(5, 10, "Has conseguido la siguiente puntuación:");
-//     refresh();
-//     
-//     while ( (ch = getch()) != 'q' ) {
-//     }
-//     delwin(mainwin);    
-//     
-//     endwin();
-//     
-//     refresh();
-//     printf("Adiosss");
-//     exit(EXIT_SUCCESS);
+    //PARAMOS EL CRONOMETRO
+    alarm(0);
+
+    int ch;
+    float minutos_reales=(float) total_tiempo/60;
+    float num_ppm=(long_texto+num_errores)/minutos_reales;
+    borrar_caja(y_child_win,x_child_win,alto_caja);
+
+    childwin = subwin(mainwin, 7, 70, y_child_win, x_child_win);
+    box(childwin, 0, 0);   
+    
+    mvprintw(2, 0, "Has obtenido la siguiente puntuación:");
+    mvprintw(5, 1, "Pulsaciones/min");
+    mvprintw(5, 20, "%d",(int)num_ppm);
+    mvprintw(6, 1, "Errores");
+    mvprintw(6, 20, "%d",num_errores);
+    mvprintw(7, 1, "Tiempo");
+    mvprintw(7, 20, "%02d:%02d",minutos,segundos);
+    mvprintw(10, 0, "Desea repetir? (S/n): ");
+
+    
+    refresh();
+    while(ch!='n' && ch!='N' && ch!='s' && ch!='S' ){ 
+        ch=getch();
+    }
+    switch(ch){
+        case 's':
+        case 'S':
+            borrar_caja(y_child_win,x_child_win,alto_caja);
+            muestra_texto(0);
+            break;
+
+        case 'n':
+        case 'N':
+            delwin(mainwin);    
+            endwin();
+            
+            refresh();
+            exit(EXIT_SUCCESS);
+            break;
+    }
+}
+void borrar_caja(int y, int x,int alto_caja){
+//     mvprintw(19, 1, "alto_caja (%d)\n",alto_caja);
+//         mvprintw(20, 1, "y (%d)\n",y);
+//             mvprintw(21, 1, "x (%d)\n",x);
+    move(0,0);
+
+    for(int i=0;i<20;i++){
+//      mvprintw(8+i, 1, "i (%d)\n",i);
+        deleteln();
+    }
 }
 void pitar(void){
     //Más adelante configuraremos si queremos que pite o no
