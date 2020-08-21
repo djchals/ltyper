@@ -32,6 +32,9 @@ const static int MAX_TIEMPO=150;//El número máximo de segundos que le damos pa
 static int pos_w_actual, pos_h_actual;
 static bool act_letra_err;//con esta controlaremos si nos hemos equivocado en la letra actual
 const static int x_child_win=0, y_child_win=3;
+#define POS_H_CABECERA 2
+#define POS_W_CABECERA 0
+
 static int minutos, segundos;
 static int long_texto;
 static int id_texto;    

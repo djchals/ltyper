@@ -1,5 +1,8 @@
 #include "header.h"
 #include "lectorxml.h"
+#include "cadenas_menus.h"
+#include "menus.h"
+
 int main(){
     /*  Initialize ncurses  */
     if ( (mainwin = initscr()) == NULL ) {
@@ -17,7 +20,10 @@ int main(){
         printf("Your terminal cannot start colors\n");
         exit(EXIT_FAILURE);
     }
-    muestra_texto(0);
+//     muestra_texto(0);
+
+    plantear_pregunta(0);        
+
     return 0;
 }
 
@@ -153,7 +159,7 @@ void muestra_cabecera(void){
     mvprintw(0, 0, "F1=Salir");
     muestra_errores();
     contar_segundos();
-    mvprintw(2, 0, "Repite el texto que ves a continuación:");
+    mvprintw(POS_H_CABECERA, POS_W_CABECERA, "Repite el texto que ves a continuación:");
 }
 // Esta es la función que se va a ejecutar cada vez que se reciba la señal SIGALRM
 void contar_segundos(){
