@@ -3,7 +3,9 @@
 #include "cadenas_menus.h"
 #include "menus.h"
 
+void borrar_caja(int y, int x,int alto_caja);
 int main(){
+    int opcion_selec=0;
     /*  Initialize ncurses  */
     if ( (mainwin = initscr()) == NULL ) {
         fprintf(stderr, "Error initializing ncurses.\n");
@@ -20,10 +22,19 @@ int main(){
         printf("Your terminal cannot start colors\n");
         exit(EXIT_FAILURE);
     }
-//     muestra_texto(0);
+    
+    _init_ncurses();
 
-    plantear_pregunta(0);        
-
+    opcion_selec=muestra_menu(0);
+    switch(opcion_selec){
+        case 1:/*muestra_texto*/
+            clear();
+            muestra_texto(0);
+            break;
+        case 2:/*texto personalizado*/break;
+        case 3:/*configurar*/break;
+        case 4:/*Salir*/break;   
+    }
     return 0;
 }
 
@@ -41,8 +52,9 @@ void muestra_texto(int act_id_texto){
     //
     
     //mostramos el texto que hay que repetir
-    char *array_puntero_texto;
-    array_puntero_texto=obten_texto(act_id_texto);//id_texto es una variable global
+    char *array_puntero_texto=obten_texto(act_id_texto);//id_texto es una variable global
+//     return 0;
+//     return 0;
     long_texto=strlen(array_puntero_texto);
     
     int salto = 0x0a;//código de la tecla enter
@@ -63,8 +75,6 @@ void muestra_texto(int act_id_texto){
 
     pos_w_actual=act_ini_w;
     pos_h_actual=act_ini_h;    
-
-
 
     //creamos los pares de colores
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
@@ -107,7 +117,7 @@ void muestra_texto(int act_id_texto){
 //  //iniciamos el bucle de lectura y comprobación de tecla pulsada
     i_row=0;//,i_col=0;
     while(i_row<long_texto){
-        tecla_leida=leer_tecla(todo_texto[i_row],i_row);
+        tecla_leida=leer_tecla(todo_texto[i_row]);
         switch(tecla_leida){
             case 0://KO tecla incorrecta
                 curs_set(0);//desactivamos el cursor pq no queremos que se vea como se mueve durante este proceso
@@ -147,7 +157,7 @@ void muestra_texto(int act_id_texto){
     }
     finalizar();
 }
-int leer_tecla(int comprueba_letra, int pos_w_actual) {
+int leer_tecla(int comprueba_letra) {
     int ch=getch();
     return (ch==comprueba_letra);
 }
@@ -219,7 +229,7 @@ void finalizar(){
 
     
     refresh();
-    while(ch!='n' && ch!='N' && ch!='s' && ch!='S' ){ 
+    while(ch!='n' && ch!='N' && ch!='s' && ch!='S'){ 
         ch=getch();
     }
     switch(ch){
@@ -240,9 +250,9 @@ void finalizar(){
     }
 }
 void borrar_caja(int y, int x,int alto_caja){
-//     mvprintw(19, 1, "alto_caja (%d)\n",alto_caja);
-//         mvprintw(20, 1, "y (%d)\n",y);
-//             mvprintw(21, 1, "x (%d)\n",x);
+//mvprintw(19, 1, "alto_caja (%d)\n",alto_caja);
+//mvprintw(20, 1, "y (%d)\n",y);
+//mvprintw(21, 1, "x (%d)\n",x);
     move(0,0);
 
     for(int i=0;i<20;i++){
@@ -252,5 +262,5 @@ void borrar_caja(int y, int x,int alto_caja){
 }
 void pitar(void){
     //Más adelante configuraremos si queremos que pite o no
-//     beep();
+    //beep();
 }

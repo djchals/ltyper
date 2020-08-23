@@ -13,17 +13,17 @@
 #include <libxml/parser.h> 
 #include <ctype.h>
 #include <ncurses.h>
-//
+
 
 //PROTOTIPOS y VARIABLES GLOBALES main.c
-int leer_tecla(int comprueba_letra, int pos_w_actual);
+int leer_tecla(int comprueba_letra);
 int num_errores;
 void muestra_errores(void);
 void muestra_cabecera(void);
 void contar_segundos();
 void pitar(void);
 void finalizar();
-void borrar_caja(int y, int x,int c);
+// void borrar_caja(int y, int x,int c);
 void muestra_texto(int act_id_texto);
 
 
