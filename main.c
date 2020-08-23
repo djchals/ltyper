@@ -5,7 +5,7 @@
 
 void borrar_caja(int y, int x,int alto_caja);
 int main(){
-    int opcion_selec=0;
+    int opcion_selec=0,opcion_sub_sel=0;
     /*  Initialize ncurses  */
     if ( (mainwin = initscr()) == NULL ) {
         fprintf(stderr, "Error initializing ncurses.\n");
@@ -27,13 +27,17 @@ int main(){
 
     opcion_selec=muestra_menu(0);
     switch(opcion_selec){
-        case 1:/*muestra_texto*/
+        case 0:/*muestra_texto*/
             clear();
-            muestra_texto(0);
+            opcion_sub_sel=muestra_menu(1);
+            if(opcion_sub_sel!=5 && opcion_sub_sel!=6){
+                clear();
+                muestra_texto(opcion_sub_sel);
+            } 
             break;
-        case 2:/*texto personalizado*/break;
-        case 3:/*configurar*/break;
-        case 4:/*Salir*/break;   
+        case 1:/*texto personalizado*/break;
+        case 2:/*configurar*/break;
+        case 3:/*Salir*/break;   
     }
     return 0;
 }

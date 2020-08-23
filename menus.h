@@ -28,31 +28,40 @@ t_menu menu[MAX_MENUS];
 
 //Definim el nostres menus. Aquí un exemple.
 int num_menus = 1;
-char *grups[] = {
+char *m_principal[] = {
     "Curso de mecanografia",
     "Practicar con texto personalizado",
     "Configurar",
     "Salir"
 };
+char *m_lecciones[] = {
+    "Lección 1: ",
+    "Lección 2:",
+    "Lección 3:",
+    "Lección 4:",
+    "Volver atrás",
+    "Salir"
+};
+
+
 
 void _init_ncurses();
 void _init_menus();
-void _imp_menus();
+// void _imp_menus();
 void _imp_menu(t_menu menu, int seleccionat);
 
-int muestra_menu(int id_menu){
-int menu_seleccionat = 0;
+int muestra_menu(int menu_seleccionat){
 int seleccionat = 1;
 int eleccio = 0;
 int c;
 
     _init_ncurses();
     _init_menus();
-    _imp_menus();
+//     _imp_menus();
 
     //imprimimos con la primera opción seleccionada
     mvprintw(2, 0, "%s",ET_ENUNCIADO_MENU);
-    _imp_menu(menu[0], 1);
+    _imp_menu(menu[menu_seleccionat], 1);
     refresh();
     //
     while(1){
@@ -91,14 +100,14 @@ int c;
     clrtoeol();
     refresh();
     endwin();
-    return eleccio;
+    return eleccio-1;
 }
 
 void _init_menus(){
 //Init menu grups    
 
-menu[0].menu = grups;
-menu[0].n_op = sizeof(grups) / sizeof(char *);
+menu[0].menu = m_principal;
+menu[0].n_op = sizeof(m_principal) / sizeof(char *);
 menu[0].startx = 0;
 menu[0].starty = 3;
 menu[0].max_x = WIDTH_MENU;
@@ -106,22 +115,22 @@ menu[0].max_y = HEIGHT_MENU;
 menu[0].wmenu = newwin(menu[0].max_y, menu[0].max_x, menu[0].starty, menu[0].startx);
 keypad(menu[0].wmenu, TRUE);
 
-// menu[1].menu = ordres;
-// menu[1].n_op = sizeof(ordres) / sizeof(char *);
-// menu[1].startx = WIDTH + SEP;
-// menu[1].starty = 0;
-// menu[1].max_x = WIDTH;
-// menu[1].max_y = HEIGHT;
-// menu[1].wmenu = newwin(menu[1].max_y, menu[1].max_x, menu[1].starty, menu[1].startx);
-// keypad(menu[1].wmenu, TRUE);
+menu[1].menu = m_lecciones;
+menu[1].n_op = sizeof(m_lecciones) / sizeof(char *);
+menu[1].startx = 0;
+menu[1].starty = 3;
+menu[1].max_x = WIDTH_MENU;
+menu[1].max_y = HEIGHT_MENU;
+menu[1].wmenu = newwin(menu[1].max_y, menu[1].max_x, menu[1].starty, menu[1].startx);
+keypad(menu[1].wmenu, TRUE);
 
 refresh();
 }
 
-void _imp_menus(){
-int i;
-    for ( i = 0; i < num_menus; i ++ )    _imp_menu(menu[i], 0);
-}
+// void _imp_menus(){
+// int i;
+//     for ( i = 0; i < num_menus; i ++ )    _imp_menu(menu[i], 0);
+// }
 
 void _imp_menu(t_menu menu, int seleccionat){
     int x, y, i;   
