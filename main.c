@@ -1,33 +1,35 @@
 #include "header.h"
-#include "lectorxml.h"
+#include "json_reader.h"
 #include "cadenas_menus.h"
 #include "menus.h"
 
 void borrar_caja(int y, int x,int alto_caja);
 int main(){
     int opcion_selec=0,opcion_sub_sel=0;
+    
     /*  Initialize ncurses  */
-    if ( (mainwin = initscr()) == NULL ) {
+    if((mainwin=initscr())==NULL){
         fprintf(stderr, "Error initializing ncurses.\n");
         exit(EXIT_FAILURE);
-    }    
-    
-    if (has_colors() == FALSE) {
+    }
+    if(has_colors()==FALSE){
         endwin();
         printf("Your terminal does not support color\n");
         exit(EXIT_FAILURE);
     }
-    if(start_color()!=OK) {
+    if(start_color()!=OK){
         endwin();
         printf("Your terminal cannot start colors\n");
         exit(EXIT_FAILURE);
     }
     
-    _init_ncurses();
+    _init_ncurses();//necesario para mostrar los menus y las cajas, etc...
+    _init_json();//necesario para leer el archivo db_texts.json
 
+ 
     opcion_selec=muestra_menu(0);
     switch(opcion_selec){
-        case 0:/*muestra_texto*/
+        case 0:/*muestra_lecciones*/
             clear();
             opcion_sub_sel=muestra_menu(1);
             if(opcion_sub_sel!=5 && opcion_sub_sel!=6){
@@ -57,8 +59,8 @@ void muestra_texto(int act_id_texto){
     
     //mostramos el texto que hay que repetir
     char *array_puntero_texto=obten_texto(act_id_texto);//id_texto es una variable global
-//     return 0;
-//     return 0;
+    //     return 0;
+
     long_texto=strlen(array_puntero_texto);
     
     int salto = 0x0a;//código de la tecla enter

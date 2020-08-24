@@ -5,13 +5,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h> // Para las constantes SIGALRM y similares
-#include <unistd.h> //incluyo este para tener la funcion sleep()
+#include <unistd.h> //incluyo este para tener la funcion sleep() y alarm()
 #include <string.h> //incluyo para tener strcpy()
 #include <math.h> //necesitaremos floor() para el cronometro
 
 // para el lectorxml.c necesitaremos estas
-#include <libxml/parser.h> 
-#include <ctype.h>
+#include<json-c/json.h>
+#include <ctype.h> //incluyo para tener isspace()
 #include <ncurses.h>
 
 
@@ -48,10 +48,5 @@ WINDOW *mainwin, *childwin;
 #define C_TIMEOUT      3
 #define ENTER           10
 //
-
-//PROTOTIPOS Y VARIABLES GLOBALES lectorxml.h
-// char **obten_todos_textos(void);
-char *trim(char *s);
-char *obten_texto(int id_texto);
 //
 #endif /* FOO_DOT_H */

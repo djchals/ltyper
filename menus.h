@@ -34,16 +34,9 @@ char *m_principal[] = {
     "Configurar",
     "Salir"
 };
-char *m_lecciones[] = {
-    "Lección 1: ",
-    "Lección 2:",
-    "Lección 3:",
-    "Lección 4:",
-    "Volver atrás",
-    "Salir"
-};
 
-
+char *m_lecciones[] = {};
+int num_lecciones;
 
 void _init_ncurses();
 void _init_menus();
@@ -79,12 +72,6 @@ int c;
                 else
                     ++seleccionat;
                 break;
-            case KEY_LEFT:
-                if (( seleccionat == 1 ) && ( menu_seleccionat > 0 )) menu_seleccionat--;
-                break;
-            case KEY_RIGHT:
-                if ( ( seleccionat == 1 ) && ( menu_seleccionat < num_menus - 1 )) menu_seleccionat++;
-                break;
             case ENTER:
                 eleccio = seleccionat;
                 break;
@@ -115,8 +102,14 @@ menu[0].max_y = HEIGHT_MENU;
 menu[0].wmenu = newwin(menu[0].max_y, menu[0].max_x, menu[0].starty, menu[0].startx);
 keypad(menu[0].wmenu, TRUE);
 
+
+num_lecciones=obten_num_titulos();
+for(int i=0;i<num_lecciones;i++){
+    m_lecciones[i]=obten_titulo(i);
+}
+
 menu[1].menu = m_lecciones;
-menu[1].n_op = sizeof(m_lecciones) / sizeof(char *);
+menu[1].n_op = num_lecciones;
 menu[1].startx = 0;
 menu[1].starty = 3;
 menu[1].max_x = WIDTH_MENU;
