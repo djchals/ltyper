@@ -40,7 +40,6 @@ int num_lecciones;
 
 void _init_ncurses();
 void _init_menus();
-// void _imp_menus();
 void _imp_menu(t_menu menu, int seleccionat);
 
 int muestra_menu(int menu_seleccionat){
@@ -50,7 +49,6 @@ int c;
 
     _init_ncurses();
     _init_menus();
-//     _imp_menus();
 
     //imprimimos con la primera opción seleccionada
     mvprintw(2, 0, "%s",ET_ENUNCIADO_MENU);
@@ -79,12 +77,9 @@ int c;
                 refresh();
                 break;
         }
-//             mvprintw(15, 0, "Menu seleccionat: %d", menu_seleccionat);refresh();
         _imp_menu(menu[menu_seleccionat], seleccionat);
         if(eleccio != 0) break;
     }   
-//     mvprintw(16, 0, "Has escollit %d amb l'elecció %s\n", eleccio, menu[menu_seleccionat].menu[eleccio - 1]);refresh();getchar();
-    clrtoeol();
     refresh();
     endwin();
     return eleccio-1;
@@ -119,12 +114,6 @@ keypad(menu[1].wmenu, TRUE);
 
 refresh();
 }
-
-// void _imp_menus(){
-// int i;
-//     for ( i = 0; i < num_menus; i ++ )    _imp_menu(menu[i], 0);
-// }
-
 void _imp_menu(t_menu menu, int seleccionat){
     int x, y, i;   
 

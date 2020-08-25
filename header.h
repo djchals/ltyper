@@ -19,7 +19,7 @@
 int leer_tecla(int comprueba_letra);
 int num_errores;
 void muestra_errores(void);
-void muestra_cabecera(void);
+void muestra_cabecera(int id_texto);
 void contar_segundos();
 void pitar(void);
 void finalizar();

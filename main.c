@@ -3,9 +3,10 @@
 #include "cadenas_menus.h"
 #include "menus.h"
 
-void borrar_caja(int y, int x,int alto_caja);
+// void borrar_caja(int y, int x,int alto_caja);
+bool flag_dentro_menus,flag_dentro_texto;
+void bucle_menus();
 int main(){
-    int opcion_selec=0,opcion_sub_sel=0;
     
     /*  Initialize ncurses  */
     if((mainwin=initscr())==NULL){
@@ -25,25 +26,39 @@ int main(){
     
     _init_ncurses();//necesario para mostrar los menus y las cajas, etc...
     _init_json();//necesario para leer el archivo db_texts.json
-
- 
-    opcion_selec=muestra_menu(0);
-    switch(opcion_selec){
-        case 0:/*muestra_lecciones*/
-            clear();
-            opcion_sub_sel=muestra_menu(1);
-            if(opcion_sub_sel!=5 && opcion_sub_sel!=6){
-                clear();
-                muestra_texto(opcion_sub_sel);
-            } 
-            break;
-        case 1:/*texto personalizado*/break;
-        case 2:/*configurar*/break;
-        case 3:/*Salir*/break;   
-    }
+    bucle_menus();
     return 0;
 }
+void bucle_menus(){
+    flag_dentro_menus=true;
 
+    int opcion_selec,opcion_sub_sel;
+
+    while(flag_dentro_menus){
+        opcion_selec=0;
+        opcion_sub_sel=0;
+        
+        opcion_selec=muestra_menu(0);
+        switch(opcion_selec){
+            case 0:/*muestra_lecciones*/
+                clear();
+                opcion_sub_sel=muestra_menu(1);
+                if(opcion_sub_sel!=5 && opcion_sub_sel!=6){
+                    flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
+                    while(flag_dentro_texto){
+                        clear();
+                        muestra_texto(opcion_sub_sel);
+                    }
+                } 
+                break;
+            case 1:/*texto personalizado*/break;
+            case 2:/*configurar*/break;
+            case 3:/*Salir*/
+                flag_dentro_menus=false;
+                break;   
+        }
+    }
+}
 
 void muestra_texto(int act_id_texto){
     //inicializamos de nuevo las variables globales:
@@ -53,6 +68,7 @@ void muestra_texto(int act_id_texto){
     act_letra_err=false;//con esta controlaremos si nos hemos equivocado en la letra actual
     minutos=0;
     segundos=0;
+    num_errores=0;
     long_texto=0;
     id_texto=act_id_texto;//guardamos el valor de la id del texto que vamos a leer en la variable global id_texto
     //
@@ -100,7 +116,7 @@ void muestra_texto(int act_id_texto){
     box(childwin, 0, 0);   
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
-    muestra_cabecera();
+    muestra_cabecera(id_texto);
 
     if(long_texto>0){
         //Hay algo de texto
@@ -171,8 +187,8 @@ void muestra_errores(void){
     attron(COLOR_PAIR(C_LETRA_OK));
     mvprintw(0, 30, "Errores: %d",num_errores);
 }
-void muestra_cabecera(void){
-    mvprintw(0, 0, "F1=Salir");
+void muestra_cabecera(int id_texto){
+    mvprintw(0, 0, obten_titulo(id_texto));
     muestra_errores();
     contar_segundos();
     mvprintw(POS_H_CABECERA, POS_W_CABECERA, "Repite el texto que ves a continuación:");
@@ -219,8 +235,8 @@ void finalizar(){
     int ch;
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
-    borrar_caja(y_child_win,x_child_win,alto_caja);
-
+//     borrar_caja(y_child_win,x_child_win,alto_caja);
+clear();
     childwin = subwin(mainwin, 7, 70, y_child_win, x_child_win);
     box(childwin, 0, 0);   
     
@@ -231,7 +247,7 @@ void finalizar(){
     mvprintw(6, 20, "%d",num_errores);
     mvprintw(7, 1, "Tiempo");
     mvprintw(7, 20, "%02d:%02d",minutos,segundos);
-    mvprintw(10, 0, "Desea repetir? (S/n): ");
+    mvprintw(10, 0, "Desea repetir el texto actual? (S/n): ");
 
     
     refresh();
@@ -241,29 +257,15 @@ void finalizar(){
     switch(ch){
         case 's':
         case 'S':
-            borrar_caja(y_child_win,x_child_win,alto_caja);
-            muestra_texto(0);
+            //para repetirlo no hay que hacer nada, ya solos iremos a repetirlo debido a flag_dentro_texto
             break;
 
         case 'n':
         case 'N':
+            flag_dentro_texto=false;
             delwin(mainwin);    
             endwin();
-            
-            refresh();
-            exit(EXIT_SUCCESS);
             break;
-    }
-}
-void borrar_caja(int y, int x,int alto_caja){
-//mvprintw(19, 1, "alto_caja (%d)\n",alto_caja);
-//mvprintw(20, 1, "y (%d)\n",y);
-//mvprintw(21, 1, "x (%d)\n",x);
-    move(0,0);
-
-    for(int i=0;i<20;i++){
-//      mvprintw(8+i, 1, "i (%d)\n",i);
-        deleteln();
     }
 }
 void pitar(void){
