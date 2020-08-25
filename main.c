@@ -3,11 +3,9 @@
 #include "cadenas_menus.h"
 #include "menus.h"
 
-// void borrar_caja(int y, int x,int alto_caja);
 bool flag_dentro_menus,flag_dentro_texto;
 void bucle_menus();
 int main(){
-    
     /*  Initialize ncurses  */
     if((mainwin=initscr())==NULL){
         fprintf(stderr, "Error initializing ncurses.\n");
@@ -31,7 +29,6 @@ int main(){
 }
 void bucle_menus(){
     flag_dentro_menus=true;
-
     int opcion_selec,opcion_sub_sel;
 
     while(flag_dentro_menus){
@@ -61,7 +58,7 @@ void bucle_menus(){
 }
 
 void muestra_texto(int act_id_texto){
-    //inicializamos de nuevo las variables globales:
+    //inicializamos de nuevo las variables globales
     total_tiempo=-1;
     pos_w_actual=0;
     pos_h_actual=0;
@@ -71,72 +68,70 @@ void muestra_texto(int act_id_texto){
     num_errores=0;
     long_texto=0;
     id_texto=act_id_texto;//guardamos el valor de la id del texto que vamos a leer en la variable global id_texto
-    //
-    
-    //mostramos el texto que hay que repetir
-    char *array_puntero_texto=obten_texto(act_id_texto);//id_texto es una variable global
-    //     return 0;
-
-    long_texto=strlen(array_puntero_texto);
-    
-    int salto = 0x0a;//código de la tecla enter
+    int salto=0x0a;//código de la tecla enter
     int num_cols_texto=0,i=0;
-
-    char todo_texto[long_texto];
-    memcpy(todo_texto,array_puntero_texto,long_texto);
-
-    int i_row;
-    int tecla_leida;
-    int ini_w,ini_h,act_ini_w,act_ini_h;
-// 
-    ini_w=1;
-    ini_h=4;
-//     
-    act_ini_w=ini_w;
-    act_ini_h=ini_h;    
-
-    pos_w_actual=act_ini_w;
-    pos_h_actual=act_ini_h;    
+    int i_row, tecla_leida, ini_w, ini_h, act_ini_w, act_ini_h;
+    //
 
     //creamos los pares de colores
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
     init_pair(C_LETRA_OK,COLOR_WHITE,COLOR_BLACK);
     init_pair(C_TIMEOUT,COLOR_RED,COLOR_BLACK);
     //
+
+    //inicializamos las variables para la childwin y el cursor
+    ancho_caja=70;
+    alto_caja=1;
+
+    ini_w=1;
+    ini_h=4;
+     
+    act_ini_w=ini_w;
+    act_ini_h=ini_h;    
+
+    pos_w_actual=act_ini_w;
+    pos_h_actual=act_ini_h;   
+    //
+    
+    //obtenemos el texto que hay que repetir
+    char *array_puntero_texto=obten_texto(act_id_texto);//id_texto es una variable global
+    long_texto=strlen(array_puntero_texto);
+    char todo_texto[long_texto];
+    memcpy(todo_texto,array_puntero_texto,long_texto);
+    //
+
+    //preparamos el terminal para el modo menú/lectura de tecla
     noecho();                  /*  Turn off key echoing                 */
     keypad(mainwin, TRUE);     /*  Enable the keypad for non-char keys  */  
-    //Ocultamos el cursor
-    curs_set(1);
-// 
-    ancho_caja=70;
-    alto_caja=7;
-    
-    //Creamos la ventana
-    childwin = subwin(mainwin, alto_caja, ancho_caja, y_child_win, x_child_win);
-    box(childwin, 0, 0);   
+    curs_set(1);//Ocultamos el cursor
+    // 
+
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
-    muestra_cabecera(id_texto);
+    childwin = subwin(mainwin, alto_caja, ancho_caja, y_child_win, x_child_win);
 
+    num_cols_texto=1;
     if(long_texto>0){
-        //Hay algo de texto
-        num_cols_texto=1;
+        //Lo recorremos de nuevo para imprimir los caracteres dentro de la caja, ya sé que es un desastre lógico hacer el bucle dos veces pero no lo veo de otra manera, pq sino box() se lia
         for(i=0;i<long_texto;i++){
             if(todo_texto[i]==salto){
-                num_cols_texto++;
+                mvprintw(act_ini_h, act_ini_w, "%c",161);//imprimimos elcaracter
+
                 act_ini_h++;
                 act_ini_w=ini_w;
+                num_cols_texto++;
             }else{
-                mvprintw(act_ini_h, act_ini_w, "%c",todo_texto[i]);//imprimimos la línea
+                mvprintw(act_ini_h, act_ini_w, "%c",todo_texto[i]);//imprimimos elcaracter
                 act_ini_w++;
             }
-            
         }
     }
+    wresize(childwin,alto_caja+num_cols_texto,ancho_caja);
+    box(childwin, 0, 0);
+    muestra_cabecera(id_texto);
     move(pos_h_actual,pos_w_actual);
-    redrawwin(childwin);
-// 
-//  //iniciamos el bucle de lectura y comprobación de tecla pulsada
+ 
+    //iniciamos el bucle de lectura y comprobación de tecla pulsada
     i_row=0;//,i_col=0;
     while(i_row<long_texto){
         tecla_leida=leer_tecla(todo_texto[i_row]);
@@ -152,7 +147,7 @@ void muestra_texto(int act_id_texto){
                 if(todo_texto[i_row]!=ENTER){
                     mvprintw(pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);//Repetimos el carácter correcto
                 }else{
-                    mvprintw(pos_h_actual, pos_w_actual, " ");//Escribimos un espacio 
+                    mvprintw(pos_h_actual, pos_w_actual, "%c"," ");//Escribimos un espacio 
                 }
                 curs_set(1);//volvemos a activar el cursor y que siga el juego
                 break;
@@ -182,6 +177,7 @@ void muestra_texto(int act_id_texto){
 int leer_tecla(int comprueba_letra) {
     int ch=getch();
     return (ch==comprueba_letra);
+    
 }
 void muestra_errores(void){
     attron(COLOR_PAIR(C_LETRA_OK));
@@ -191,6 +187,7 @@ void muestra_cabecera(int id_texto){
     mvprintw(0, 0, obten_titulo(id_texto));
     muestra_errores();
     contar_segundos();
+
     mvprintw(POS_H_CABECERA, POS_W_CABECERA, "Repite el texto que ves a continuación:");
 }
 // Esta es la función que se va a ejecutar cada vez que se reciba la señal SIGALRM
@@ -200,7 +197,6 @@ void contar_segundos(){
     
     minutos=floor(total_tiempo/60);
     segundos=total_tiempo%60;    
-    
     attron(COLOR_PAIR(C_LETRA_OK));
     mvprintw(0, 50, "Tiempo: ");
 
@@ -213,15 +209,14 @@ void contar_segundos(){
         attron(COLOR_PAIR(C_LETRA_OK));
         attroff(A_BLINK);
     }
-    
     move(pos_h_actual,pos_w_actual);// colocamos el cursor en la nueva posición
 
     //SI se ha cometido un error dejamos el color tal y como estaba
     if(act_letra_err){
         attron(COLOR_PAIR(C_LETRA_ERR));
     }
-    
     refresh();
+
     if(total_tiempo<MAX_TIEMPO){
         alarm(1);
     }else{
@@ -235,8 +230,8 @@ void finalizar(){
     int ch;
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
-//     borrar_caja(y_child_win,x_child_win,alto_caja);
-clear();
+
+    clear();
     childwin = subwin(mainwin, 7, 70, y_child_win, x_child_win);
     box(childwin, 0, 0);   
     
@@ -248,7 +243,6 @@ clear();
     mvprintw(7, 1, "Tiempo");
     mvprintw(7, 20, "%02d:%02d",minutos,segundos);
     mvprintw(10, 0, "Desea repetir el texto actual? (S/n): ");
-
     
     refresh();
     while(ch!='n' && ch!='N' && ch!='s' && ch!='S'){ 
