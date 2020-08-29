@@ -7,7 +7,6 @@ void bucle_menus();
 int main(){
     _init_ncurses();//necesario para mostrar los menus y las cajas, etc...
     _init_json();//necesario para leer el archivo db_texts.json
-// finalizar();
     bucle_menus();
     return 0;
 }
@@ -57,11 +56,7 @@ void muestra_texto(int act_id_texto){
     int i_row=0, tecla_leida, ini_w, ini_h, act_ini_w, act_ini_h;
     int ch;
 
-    //esto será necesario para el tratamiento de los carácteres especiales
-    unsigned char tmp_special_char[2];
-    *(tmp_special_char+0)=195;
-    tmp_special_char[2]=0x00;
-    //    //
+
 
     //creamos los pares de colores
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
@@ -123,7 +118,11 @@ void muestra_texto(int act_id_texto){
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
     
-
+    //esto será necesario para el tratamiento de los carácteres especiales
+    unsigned char tmp_special_char[2];
+    *(tmp_special_char+0)=195;
+    tmp_special_char[2]=0x00;
+    //   
     while(i_row<long_texto){
         ch=getch();
         move(pos_h_actual,pos_w_actual);// colocamos el cursor en la posición que le toca
@@ -136,60 +135,74 @@ void muestra_texto(int act_id_texto){
                 act_letra_err=true;
 
                 wattron(childwin,COLOR_PAIR(C_LETRA_ERR));
+                actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
+/*
+                actua
                 if(todo_texto[i_row]!=ENTER){
                     //AQUÍ LOS CARACTERES ESPECIALES
                     if(todo_texto[i_row]==195){
                         *(tmp_special_char+1)=todo_texto[i_row+1];
                         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);
+                        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                     }else{
                         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);//Repetimos el carácter correcto
+                        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                     }
                 }else{
                     mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c"," ");//Escribimos un espacio 
-                }
+                }*/
                 break;
-            case 1://OK tecla correcta                    
+            case 1://Owrefresh(finalwin);K tecla correcta                    
                 //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
+
                 if(todo_texto[i_row]!=ENTER){
                     //Marcamos el carácter en negrita
                     wattron(childwin,WA_BOLD);
                     //comprobamos si es un carácter normal o un carácter especial. Si es un carácter normal ocupa 1byte, pero si es un carácter especial ocupa 2 (á,é....)
                     if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
                         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
+                        pos_w_actual++;//corremos una posición
+                        i_row++;
+                        wattron(childwin,COLOR_PAIR(C_LETRA_OK));
+                        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
+                        
                     }else{
                         //AQUÍ LOS CARACTERES ESPECIALES
                         if(todo_texto[i_row]==195){
                             *(tmp_special_char+1)=todo_texto[i_row+1];
-                            mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);     
+                                mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);     
                             //si ue así es que venimos de pulsar una tecla correcta y lo anterior ue un caracter especial que ocupan el doble de bytes, por tanto sumamos i_row
                             i_row++;
+                            i_row++;    
+                            pos_w_actual++;//corremos una posición
+                            wattron(childwin,COLOR_PAIR(C_LETRA_OK));
+
+                            actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                             ch=getch();//como hemos pulsado una combinación de teclas para que salga el puto carácter leemos otra y la desecharemos        
                         }
                     }
+                            actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                     wattroff(childwin,WA_BOLD);
-                    pos_w_actual++;//corremos una posición
                 }else{
                     mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);//imprimimos el caracter que le queremos dar al Enter (espacio)
                     pos_w_actual=ini_w;
                     pos_h_actual++;
+                    wattron(childwin,COLOR_PAIR(C_LETRA_OK));
+
+                    actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                 }                            
-                
-                i_row++;
                 if(act_letra_err){
                     wattron(childwin,COLOR_PAIR(C_LETRA_OK));
                     act_letra_err=false;
                 }
                 break;
         }
-        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
         wrefresh(childwin);
     }
     finalizar();
 }
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned char todo_texto[]){
-    unsigned char tmp_special_char[2];
-    *(tmp_special_char+0)=195;
-    tmp_special_char[2]=0x00;
+    mvprintw(16, 0, "uera i_row %d %d %d %d",todo_texto[i_row],todo_texto[i_row+1],i_row,pos_w_actual);             wrefresh(childwin);
     
     wattron(childwin,WA_UNDERLINE);
     if(todo_texto[i_row]==ENTER){
@@ -199,12 +212,14 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned ch
     }else{
         //AQUÍ LOS CARACTERES ESPECIALES
         if(todo_texto[i_row]==195){
+            unsigned char tmp_special_char[2];
+            tmp_special_char[2]=0x00;
+            *(tmp_special_char+0)=195;
             *(tmp_special_char+1)=todo_texto[i_row+1];
             mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);           
         }
     }
     wattroff(childwin,WA_UNDERLINE);
-    
 }
 void muestra_errores(void){
     wattron(errorwin,COLOR_PAIR(C_LETRA_OK));
@@ -252,29 +267,27 @@ void contar_segundos(){
 void finalizar(){
     //PARAMOS EL CRONOMETRO
     alarm(0);
-    WINDOW *finalwin;
     int ch;
+
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
 
     clear();
-    
-//     endwin= newwin(1, 15, 0, 30);
-    finalwin= newwin(0, 0, 10, 80);
 
+//     finalwin=newwin(1, 1, 12, 80);
+    finalwin = subwin(mainwin,7, 80, y_child_win, x_child_win);
     box(finalwin, 0, 0);   
 
-    mvwprintw(finalwin,2, 0, "Has obtenido la siguiente puntuación:");
-    mvwprintw(finalwin,5, 1, "Pulsaciones/min");
-    mvwprintw(finalwin,5, 20, "%d",(int)num_ppm);
-    mvwprintw(finalwin,6, 1, "Errores");
-    mvwprintw(finalwin,6, 20, "%d",num_errores);
-    mvwprintw(finalwin,7, 1, "Tiempo");
-    mvwprintw(finalwin,7, 20, "%02d:%02d",minutos,segundos);
-    mvwprintw(finalwin,10, 0, "Desea repetir el texto actual? (S/n): ");
+    mvprintw(2, 0, "Has obtenido la siguiente puntuación:");
+    mvprintw(5, 1, "Pulsaciones/min");
+    mvprintw(5, 20, "%d",(int)num_ppm);
+    mvprintw(6, 1, "Errores");
+    mvprintw(6, 20, "%d",num_errores);
+    mvprintw(7, 1, "Tiempo");
+    mvprintw(7, 20, "%02d:%02d",minutos,segundos);
+    mvprintw(10, 0, "Desea repetir el texto actual? (S/n): ");
 
     wrefresh(finalwin);
-    refresh();
     while(ch!='n' && ch!='N' && ch!='s' && ch!='S'){ 
         ch=getch();
     }
