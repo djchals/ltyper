@@ -25,7 +25,7 @@ void pitar(void);
 void finalizar();
 // void borrar_caja(int y, int x,int c);
 void muestra_texto(int act_id_texto);
-
+void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual)
 
 static int total_tiempo;
 const static int MAX_TIEMPO=150;//El número máximo de segundos que le damos para la prueba
@@ -35,13 +35,13 @@ const static int x_child_win=0, y_child_win=3;
 #define POS_H_CABECERA 2
 #define POS_W_CABECERA 0
 
-static int minutos, segundos;
+static int minutos, segundos;//, centesimas=0;
 static int long_texto;
 static int id_texto;    
 
 int ancho_caja, alto_caja;//dimensiones de la caja
 
-WINDOW *mainwin, *childwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin;
 
 #define C_LETRA_ERR    1
 #define C_LETRA_OK     2
