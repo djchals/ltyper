@@ -102,7 +102,7 @@ void muestra_texto(int act_id_texto){
         //Lo recorremos de nuevo para imprimir los caracteres dentro de la caja, ya sé que es un desastre lógico hacer el bucle dos veces pero no lo veo de otra manera, pq sino box() se lia
         for(i=0;i<long_texto;i++){
             if(todo_texto[i]==salto){
-                mvwprintw(childwin,act_ini_h, act_ini_w, "%c"," ");//imprimimos elcaracter
+                mvwprintw(childwin,act_ini_h, act_ini_w, "%c",32);//imprimimos elcaracter
                 act_ini_h++;
                 act_ini_w=ini_w;
                 num_cols_texto++;
@@ -114,9 +114,11 @@ void muestra_texto(int act_id_texto){
         num_cols_texto++;//añadimos el salto de línea al inal para que se vea la última línea
     }
     actualiza_cursor(0,pos_h_actual,pos_w_actual,todo_texto);//mostramos el cursor en la primera letra
-    muestra_cabecera(id_texto);
+//     muestra_cabecera(id_texto);
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
+
+    muestra_cabecera(id_texto);//esta línea debe ir despues del refresh();
     
     //esto será necesario para el tratamiento de los carácteres especiales
     unsigned char tmp_special_char[2];
@@ -174,7 +176,7 @@ void muestra_texto(int act_id_texto){
                     pos_w_actual=ini_w;
                     pos_h_actual++;
                     wattron(childwin,COLOR_PAIR(C_LETRA_OK));
-
+                    i_row++;  
                     actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                 }                            
                 if(act_letra_err){
