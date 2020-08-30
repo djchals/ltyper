@@ -136,21 +136,7 @@ void muestra_texto(int act_id_texto){
 
                 wattron(childwin,COLOR_PAIR(C_LETRA_ERR));
                 actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-/*
-                actua
-                if(todo_texto[i_row]!=ENTER){
-                    //AQUÍ LOS CARACTERES ESPECIALES
-                    if(todo_texto[i_row]==195){
-                        *(tmp_special_char+1)=todo_texto[i_row+1];
-                        mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);
-                        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-                    }else{
-                        mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);//Repetimos el carácter correcto
-                        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-                    }
-                }else{
-                    mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c"," ");//Escribimos un espacio 
-                }*/
+
                 break;
             case 1://Owrefresh(finalwin);K tecla correcta                    
                 //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
@@ -202,7 +188,8 @@ void muestra_texto(int act_id_texto){
     finalizar();
 }
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned char todo_texto[]){
-    mvprintw(16, 0, "uera i_row %d %d %d %d",todo_texto[i_row],todo_texto[i_row+1],i_row,pos_w_actual);             wrefresh(childwin);
+    mvprintw(20, 0, " ");//si comento esta línea da errores el iltro
+    wrefresh(childwin);
     
     wattron(childwin,WA_UNDERLINE);
     if(todo_texto[i_row]==ENTER){
@@ -222,9 +209,10 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned ch
     wattroff(childwin,WA_UNDERLINE);
 }
 void muestra_errores(void){
+    wrefresh(errorwin);
     wattron(errorwin,COLOR_PAIR(C_LETRA_OK));
     mvwprintw(errorwin,0, 0, "Errores: %d",num_errores);
-    wrefresh(errorwin);
+    wrefresh(errorwin);    
 }
 void muestra_cabecera(int id_texto){
     mvprintw(0, 0, obten_titulo(id_texto));
