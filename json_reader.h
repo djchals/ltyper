@@ -32,19 +32,26 @@ char *obten_texto(int id_texto){
 void quita_espacios(char *act_texto){
     int long_texto, i=0, i_row=0;
     long_texto=strlen(act_texto);
-    char tmp_cadena[255];
-
+    unsigned char tmp_cadena[255];
+    bool flag_sumar=false;
     //quitamos los espacios de sobra
     for(i=0;i<long_texto;i++){        
-        while(act_texto[i]==0x0a && isspace(act_texto[i+1])){
-            act_texto[i+1]=0x0a;
-            i++;
+        flag_sumar=true;
+        if(act_texto[i]!=0x0a && isblank(act_texto[i]) && isblank(act_texto[i+1])) { 
+            flag_sumar=false;
         }
-        while(isblank(act_texto[i]) && isblank(act_texto[i+1])) { 
-            i++;
+        if(act_texto[i-1]==0x0a && (isblank(act_texto[i]) || isspace(act_texto[i]))) {
+            flag_sumar=false;
         }
-        tmp_cadena[i_row]=act_texto[i];
-        i_row++;
+        if((isblank(act_texto[i]) || isspace(act_texto[i])) && act_texto[i+1]==0x0a) {
+            flag_sumar=false;
+        }
+
+        if(flag_sumar){
+            tmp_cadena[i_row]=act_texto[i];
+//             printf("tmp_cadena[i_row] (%d)\n",tmp_cadena[i_row]);
+            i_row++;
+        }
     }    
     tmp_cadena[i_row]=0;//hacemos esto para saber que aquí acaba la cadena
     strcpy(act_texto, tmp_cadena);//en la dirección del puntero de act_texto escribimos tmp_cadena
