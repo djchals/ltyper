@@ -17,8 +17,8 @@ void bucle_menus(){
     while(flag_dentro_menus){
         opcion_selec=0;
         opcion_sub_sel=0;
-        
         opcion_selec=muestra_menu(0);
+        
         switch(opcion_selec){
             case 0:/*muestra_lecciones*/
                 clear();
@@ -26,7 +26,6 @@ void bucle_menus(){
                 if(opcion_sub_sel!=5 && opcion_sub_sel!=6){
                     flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
                     while(flag_dentro_texto){
-                        clear();
                         muestra_texto(opcion_sub_sel);
                     }
                 } 
@@ -41,7 +40,9 @@ void bucle_menus(){
 }
 
 void muestra_texto(int act_id_texto){
+    
     //inicializamos de nuevo las variables globales
+    flag_timeout=false;
     total_tiempo=-1;
     pos_w_actual=0;
     pos_h_actual=0;
@@ -54,9 +55,6 @@ void muestra_texto(int act_id_texto){
     int salto=0x0a;//código de la tecla enter
     int num_cols_texto=0,i=0;
     int i_row=0, tecla_leida, ini_w, ini_h, act_ini_w, act_ini_h;
-    int ch;
-
-
 
     //creamos los pares de colores
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
@@ -86,6 +84,7 @@ void muestra_texto(int act_id_texto){
     //
 
     //preparamos el terminal para el modo menú/lectura de tecla
+    clear();
     noecho();/*  Turn off key echoing */
 
     keypad(mainwin, TRUE);     /*  Enable the keypad for non-char keys  */  
@@ -119,7 +118,8 @@ void muestra_texto(int act_id_texto){
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
 
     muestra_cabecera(id_texto);//esta línea debe ir despues del refresh();
-    muestra_pie();//esta línea debe ir despues del refresh();
+    int tmp_opciones[3]={1,1,1};
+    muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
     
     //esto será necesario para el tratamiento de los carácteres especiales
     unsigned char tmp_special_char[2];
@@ -128,6 +128,9 @@ void muestra_texto(int act_id_texto){
     //   
     while(i_row<long_texto){
         ch=getch();
+        if(flag_timeout){
+            break;
+        }
         //comprobamos las opciones del footer menu
         switch(ch){
             case 27:
@@ -248,7 +251,9 @@ void muestra_cabecera(int id_texto){
 
     mvprintw(POS_H_CABECERA, POS_W_CABECERA, "Repite el texto que ves a continuación:");
 }
-void muestra_pie(){
+void muestra_pie(int opciones[3]){
+    //según las opciones[] que traigamos mostraremos unas opciones del menú u otras
+    
     char var_barra[max_x];
 
     //creamos los pares de colores
@@ -260,26 +265,55 @@ void muestra_pie(){
     
     wattron(footerwin,COLOR_PAIR(C_LETRA_PIE));
     mvwprintw(footerwin,0, 0,"%s",var_barra);
-    wattron(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 1,"ESC");
-    wattroff(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 4,"=Salir del programa");
-
-    wattron(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 25,"F1");
-    wattroff(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 27,"=Ayuda");
-
-    wattron(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 35,"F2");
-    wattroff(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 37,"=Cancelar texto");
-
-    wattron(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 54,"F3");
-    wattroff(footerwin,WA_BOLD);
-    mvwprintw(footerwin,0, 56,"=Volver al menú");
     
+    char et_opcion0[]="Salir del programa";
+
+    char et_opcion11[]="Cancelar texto";
+
+    char et_opcion12[]="Repetir texto";
+
+    char et_opcion2[]="Volver al menú";
+    
+    int pos_opc=1;//with this variable we control the options position in the menu
+    if(opciones[0]){
+        wattron(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"ESC");
+        pos_opc=pos_opc+3;
+        wattroff(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"=");
+        pos_opc++;        
+        mvwprintw(footerwin,0, pos_opc,et_opcion0);
+        pos_opc=pos_opc+strlen(et_opcion0)+3;
+    }
+    if(opciones[1]==1){
+        wattron(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"F2");
+        pos_opc=pos_opc+2;
+        wattroff(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"=");
+        pos_opc++;        
+        mvwprintw(footerwin,0, pos_opc,et_opcion11);
+        pos_opc=pos_opc+strlen(et_opcion11)+3;
+    }else if(opciones[1]==2){
+        wattron(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"R");
+        pos_opc++;
+        wattroff(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"=");
+        pos_opc++;        
+        mvwprintw(footerwin,0, pos_opc,et_opcion12);
+        pos_opc=pos_opc+strlen(et_opcion12)+3;        
+    }
+    if(opciones[2]){
+        wattron(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0,pos_opc,"F3");
+        pos_opc=pos_opc+2;
+        wattroff(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"=");
+        pos_opc++;        
+        mvwprintw(footerwin,0,pos_opc,et_opcion2);
+        pos_opc=pos_opc+strlen(et_opcion2)+3;
+    }
     
     wattroff(footerwin,COLOR_PAIR(C_LETRA_PIE));
     wrefresh(footerwin);
@@ -307,47 +341,75 @@ void contar_segundos(){
     if(total_tiempo<MAX_TIEMPO){
         alarm(1);
     }else{
-        finalizar();//se acabó el tiempo!   
+        flag_timeout=true;//se acabó el tiempo! 
+        //
+        
+        char tmp_cadena[]="SE TE HA ACABADO EL TIEMPO!!";
+        int tmp_borde=floor((ancho_caja-strlen(tmp_cadena))/2);
+        wattron(childwin,WA_BLINK);
+        wattron(childwin,WA_BOLD);
+        mvwprintw(childwin,4,tmp_borde,tmp_cadena);
+        wattroff(childwin,WA_BLINK);
+        wattroff(childwin,WA_BOLD);
+        
+        mvprintw(13, 0, "Presiona cualquier tecla para continuar...");
+        wrefresh(childwin);
+        refresh();
+    
     }
 }
 void finalizar(){
     //PARAMOS EL CRONOMETRO
     alarm(0);
-    int ch;
-
+    flag_salir=true;
+    ungetch(ch);
+    bool flag_opcion_valida=false;
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
 
     clear();
 
-//     finalwin=newwin(1, 1, 12, 80);
     finalwin = subwin(mainwin,7, 80, y_child_win, x_child_win);
     box(finalwin, 0, 0);   
 
     mvprintw(2, 0, "Has obtenido la siguiente puntuación:");
-    mvprintw(5, 1, "Pulsaciones/min");
-    mvprintw(5, 20, "%d",(int)num_ppm);
-    mvprintw(6, 1, "Errores");
-    mvprintw(6, 20, "%d",num_errores);
-    mvprintw(7, 1, "Tiempo");
-    mvprintw(7, 20, "%02d:%02d",minutos,segundos);
-    mvprintw(10, 0, "Desea repetir el texto actual? (S/n): ");
+    mvwprintw(finalwin,2, 1, "Pulsaciones/min");
+    mvwprintw(finalwin,2, 20, "%d",(int)num_ppm);
+    mvwprintw(finalwin,3, 1, "Errores");
+    mvwprintw(finalwin,3, 20, "%d",num_errores);
+    mvwprintw(finalwin,4, 1, "Tiempo");
+    mvwprintw(finalwin,4, 20, "%02d:%02d",minutos,segundos);
 
+    int tmp_opciones[3]={1,2,1};
     wrefresh(finalwin);
-    while(ch!='n' && ch!='N' && ch!='s' && ch!='S'){ 
+    refresh();
+    muestra_pie(tmp_opciones);    
+
+   do{
         ch=getch();
-    }
-    switch(ch){
-        case 's':
-        case 'S':
-            delwin(finalwin);   
-            //para repetirlo no hay que hacer nada, ya solos iremos a repetirlo debido a flag_dentro_texto
-            break;
-        case 'n':
-        case 'N':
-            salir_al_menu();
-            break;
-    }
+        //comprobamos las opciones del footer menu
+        switch(ch){
+            case 27:
+                //ESC exit program
+                flag_opcion_valida=true;
+                flag_dentro_menus=false;
+                salir_al_menu();
+                return;
+                break;
+            case 'r':
+            case 'R':
+                //R repeat the text
+                flag_opcion_valida=true;
+                //do need anymore, whe are in a loop 
+                break;
+            case 0x10b:/*f3 exit to menu*/
+                flag_opcion_valida=true;
+                salir_al_menu();
+                return;
+                break;
+        }
+   }while(!flag_opcion_valida);
+    
 }
 void salir_al_menu(){
     alarm(0);

@@ -18,7 +18,7 @@ int leer_tecla(int comprueba_letra);
 int num_errores;
 void muestra_errores(void);
 void muestra_cabecera(int id_texto);
-void muestra_pie();
+void muestra_pie(int opciones[3]);
 void contar_segundos();
 void pitar(void);
 void finalizar();
@@ -31,6 +31,8 @@ const static int MAX_TIEMPO=150;//El número máximo de segundos que le damos pa
 static int pos_w_actual, pos_h_actual;
 static bool act_letra_err;//con esta controlaremos si nos hemos equivocado en la letra actual
 const static int x_child_win=0, y_child_win=3;
+bool flag_timeout=false, flag_salir=false;
+int ch;
 #define POS_H_CABECERA 2
 #define POS_W_CABECERA 0
 
