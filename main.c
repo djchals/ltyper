@@ -88,7 +88,7 @@ void muestra_texto(int act_id_texto){
     //preparamos el terminal para el modo menú/lectura de tecla
     noecho();/*  Turn off key echoing */
 
-    //keypad(mainwin, TRUE);     /*  Enable the keypad for non-char keys  */  
+    keypad(mainwin, TRUE);     /*  Enable the keypad for non-char keys  */  
     curs_set(0);//Ocultamos el cursor (ahora lo estoy mostrando para ver los errores)
     // 
 
@@ -119,6 +119,7 @@ void muestra_texto(int act_id_texto){
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
 
     muestra_cabecera(id_texto);//esta línea debe ir despues del refresh();
+    muestra_pie();//esta línea debe ir despues del refresh();
     
     //esto será necesario para el tratamiento de los carácteres especiales
     unsigned char tmp_special_char[2];
@@ -127,7 +128,25 @@ void muestra_texto(int act_id_texto){
     //   
     while(i_row<long_texto){
         ch=getch();
-        move(pos_h_actual,pos_w_actual);// colocamos el cursor en la posición que le toca
+        //comprobamos las opciones del footer menu
+        switch(ch){
+            case 27:
+                //ESC exit program
+                flag_dentro_menus=false;
+                salir_al_menu();
+                return;
+                break;
+            case 0x109:/*f1 help*/break;
+            case 0x10a:/*f2 cancel*/
+                long_texto=i_row;
+                finalizar();
+                return;//lo frenamos aquí en seco, para que no se vaya al final de este while y ejecute otra vez finalizar();
+                break;
+            case 0x10b:/*f3 exit to menu*/
+                salir_al_menu();
+                return;
+                break;
+        }
         tecla_leida=(ch==todo_texto[i_row]);//tecla_leida=0 si es incorrecto, 1 si es correcto  
 
         switch(tecla_leida){
@@ -194,6 +213,7 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned ch
     wrefresh(childwin);
     
     wattron(childwin,WA_UNDERLINE);
+    wattroff(childwin,WA_BOLD);
     if(todo_texto[i_row]==ENTER){
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);        
     }else if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
@@ -227,6 +247,42 @@ void muestra_cabecera(int id_texto){
     contar_segundos();
 
     mvprintw(POS_H_CABECERA, POS_W_CABECERA, "Repite el texto que ves a continuación:");
+}
+void muestra_pie(){
+    char var_barra[max_x];
+
+    //creamos los pares de colores
+    init_pair(C_LETRA_PIE,COLOR_WHITE,COLOR_BLUE);
+
+    footerwin=newwin(1, max_x, max_y-1,0);    
+
+    memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
+    
+    wattron(footerwin,COLOR_PAIR(C_LETRA_PIE));
+    mvwprintw(footerwin,0, 0,"%s",var_barra);
+    wattron(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 1,"ESC");
+    wattroff(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 4,"=Salir del programa");
+
+    wattron(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 25,"F1");
+    wattroff(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 27,"=Ayuda");
+
+    wattron(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 35,"F2");
+    wattroff(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 37,"=Cancelar texto");
+
+    wattron(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 54,"F3");
+    wattroff(footerwin,WA_BOLD);
+    mvwprintw(footerwin,0, 56,"=Volver al menú");
+    
+    
+    wattroff(footerwin,COLOR_PAIR(C_LETRA_PIE));
+    wrefresh(footerwin);
 }
 // Esta es la función que se va a ejecutar cada vez que se reciba la señal SIGALRM
 void contar_segundos(){
@@ -289,12 +345,17 @@ void finalizar(){
             break;
         case 'n':
         case 'N':
-            flag_dentro_texto=false;
-            delwin(mainwin);    
-            endwin();
+            salir_al_menu();
             break;
     }
 }
+void salir_al_menu(){
+    alarm(0);
+    flag_dentro_texto=false;
+    delwin(childwin);    
+    endwin();    
+}
+
 void pitar(void){
     //Más adelante configuraremos si queremos que pite o no
     //beep();

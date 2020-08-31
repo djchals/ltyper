@@ -9,23 +9,22 @@
 #include <string.h> //incluyo para tener strcpy()
 #include <math.h> //necesitaremos floor() para el cronometro
 
-// para el lectorxml.c necesitaremos estas
 #include<json-c/json.h>
 #include <ctype.h> //incluyo para tener isspace()
 #include <ncurses.h>
-
 
 //PROTOTIPOS y VARIABLES GLOBALES main.c
 int leer_tecla(int comprueba_letra);
 int num_errores;
 void muestra_errores(void);
 void muestra_cabecera(int id_texto);
+void muestra_pie();
 void contar_segundos();
 void pitar(void);
 void finalizar();
-// void borrar_caja(int y, int x,int c);
 void muestra_texto(int act_id_texto);
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual,unsigned char todo_texto[]);
+void salir_al_menu();
 
 static int total_tiempo;
 const static int MAX_TIEMPO=150;//El número máximo de segundos que le damos para la prueba
@@ -41,12 +40,12 @@ static int id_texto;
 
 int ancho_caja, alto_caja;//dimensiones de la caja
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin;
-    WINDOW *finalwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin;
 
-#define C_LETRA_ERR    1
-#define C_LETRA_OK     2
-#define C_TIMEOUT      3
+#define C_LETRA_ERR     1
+#define C_LETRA_OK      2
+#define C_LETRA_PIE     3
+#define C_TIMEOUT       4
 #define ENTER           10
 //
 //
