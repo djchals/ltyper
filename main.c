@@ -1,45 +1,40 @@
 #include "header.h"
 #include "json_reader.h"
-#include "cadenas_menus.h"
 #include "menus.h"
-bool flag_dentro_menus,flag_dentro_texto;
-void bucle_menus();
+
 int main(){
     _init_ncurses();//necesario para mostrar los menus y las cajas, etc...
-    _init_json();//necesario para leer el archivo db_texts.json
     bucle_menus();
     return 0;
 }
 void bucle_menus(){
     flag_dentro_menus=true;
-    int opcion_selec,opcion_sub_sel;
+    int opcion_selec,lecccion_sel;
+    _init_cursos();//necesario para leer el archivo db_texts.json
 
     while(flag_dentro_menus){
         opcion_selec=0;
-        opcion_sub_sel=0;
+        lecccion_sel=0;
         opcion_selec=muestra_menu(0);
         
-        switch(opcion_selec){
-            case 0:/*muestra_lecciones*/
-                clear();
-                opcion_sub_sel=muestra_menu(1);
-                if(opcion_sub_sel!=5 && opcion_sub_sel!=6){
-                    flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
-                    while(flag_dentro_texto){
-                        muestra_texto(opcion_sub_sel);
-                    }
-                } 
-                break;
-            case 1:/*texto personalizado*/break;
-            case 2:/*configurar*/break;
-            case 3:/*Salir*/
-                flag_dentro_menus=false;
-                break;   
+        lecccion_sel=muestra_menu(array_cursos[opcion_selec]);//aquí ya deiniremos id_course
+        clear();
+        flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
+        while(flag_dentro_texto){
+            muestra_texto(lecccion_sel,array_cursos[opcion_selec]);
         }
+//                 } 
+//                 break;
+//             case 1:/*texto personalizado*/break;
+//             case 2:/*configurar*/break;
+//             case 3:/*Salir*/
+//                 flag_dentro_menus=false;
+//                 break;   
+//         }
     }
 }
 
-void muestra_texto(int act_id_texto){
+void muestra_texto(int act_id_texto, int id_course){
     
     //inicializamos de nuevo las variables globales
     flag_timeout=false;
@@ -77,7 +72,7 @@ void muestra_texto(int act_id_texto){
     //
 
     //obtenemos el texto que hay que repetir
-    char *array_puntero_texto=obten_texto(act_id_texto);//id_texto es una variable global
+    char *array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
     long_texto=strlen(array_puntero_texto);
     unsigned char todo_texto[long_texto];
     memcpy(todo_texto,array_puntero_texto,long_texto);
@@ -117,7 +112,7 @@ void muestra_texto(int act_id_texto){
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
 
-    muestra_cabecera(id_texto);//esta línea debe ir despues del refresh();
+    muestra_cabecera(id_texto,id_course);//esta línea debe ir despues del refresh();
     int tmp_opciones[3]={1,1,1};
     muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
     
@@ -125,7 +120,8 @@ void muestra_texto(int act_id_texto){
     unsigned char tmp_special_char[2];
     *(tmp_special_char+0)=195;
     tmp_special_char[2]=0x00;
-    //   
+    //
+    
     while(i_row<long_texto){
         ch=getch();
         if(flag_timeout){
@@ -236,11 +232,11 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned ch
 void muestra_errores(void){
     wrefresh(errorwin);
     wattron(errorwin,COLOR_PAIR(C_LETRA_OK));
-    mvwprintw(errorwin,0, 0, "Errores: %d",num_errores);
+    mvwprintw(errorwin,0, 0, ET_ERRORS": %d",num_errores);
     wrefresh(errorwin);    
 }
-void muestra_cabecera(int id_texto){
-    mvprintw(0, 0, obten_titulo(id_texto));
+void muestra_cabecera(int id_texto, int id_course){
+    mvprintw(0, 0, obten_titulo(id_texto,id_course));
     
     //Creamos las ventana de tiempo y errores ya que se tendrán que ir rerescando periodicamente
     timewin = newwin(1, 15, 0, 50);
@@ -249,30 +245,24 @@ void muestra_cabecera(int id_texto){
     muestra_errores();
     contar_segundos();
 
-    mvprintw(POS_H_CABECERA, POS_W_CABECERA, "Repite el texto que ves a continuación:");
+    mvprintw(POS_H_CABECERA, POS_W_CABECERA, ET_REPEAT_THE_TEXT":");
 }
 void muestra_pie(int opciones[3]){
     //según las opciones[] que traigamos mostraremos unas opciones del menú u otras
-    
     char var_barra[max_x];
 
     //creamos los pares de colores
     init_pair(C_LETRA_PIE,COLOR_WHITE,COLOR_BLUE);
-
     footerwin=newwin(1, max_x, max_y-1,0);    
-
     memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
     
     wattron(footerwin,COLOR_PAIR(C_LETRA_PIE));
     mvwprintw(footerwin,0, 0,"%s",var_barra);
     
-    char et_opcion0[]="Salir del programa";
-
-    char et_opcion11[]="Cancelar texto";
-
-    char et_opcion12[]="Repetir texto";
-
-    char et_opcion2[]="Volver al menú";
+    char et_opcion0[]=ET_OPTION0;
+    char et_opcion11[]=ET_OPTION11;
+    char et_opcion12[]=ET_OPTION12;
+    char et_opcion2[]=ET_OPTION2;
     
     int pos_opc=1;//with this variable we control the options position in the menu
     if(opciones[0]){
@@ -329,7 +319,7 @@ void contar_segundos(){
     wattron(timewin,COLOR_PAIR(C_LETRA_OK));
     wattroff(timewin,WA_BLINK);
         
-    mvwprintw(timewin,0, 0, "Tiempo: ");
+    mvwprintw(timewin,0, 0, ET_TIME": ");
 
     if((MAX_TIEMPO-total_tiempo)<30){
         wattron(timewin,COLOR_PAIR(C_TIMEOUT));
@@ -343,8 +333,7 @@ void contar_segundos(){
     }else{
         flag_timeout=true;//se acabó el tiempo! 
         //
-        
-        char tmp_cadena[]="SE TE HA ACABADO EL TIEMPO!!";
+        char tmp_cadena[]=ET_TIME_OVER;
         int tmp_borde=floor((ancho_caja-strlen(tmp_cadena))/2);
         wattron(childwin,WA_BLINK);
         wattron(childwin,WA_BOLD);
@@ -352,10 +341,9 @@ void contar_segundos(){
         wattroff(childwin,WA_BLINK);
         wattroff(childwin,WA_BOLD);
         
-        mvprintw(13, 0, "Presiona cualquier tecla para continuar...");
+        mvprintw(13, 0, ET_PRESS_KEY_CONTINUE);
         wrefresh(childwin);
         refresh();
-    
     }
 }
 void finalizar(){
@@ -372,12 +360,12 @@ void finalizar(){
     finalwin = subwin(mainwin,7, 80, y_child_win, x_child_win);
     box(finalwin, 0, 0);   
 
-    mvprintw(2, 0, "Has obtenido la siguiente puntuación:");
-    mvwprintw(finalwin,2, 1, "Pulsaciones/min");
+    mvprintw(2, 0, ET_YOUR_SCORE);
+    mvwprintw(finalwin,2, 1, ET_PPM );
     mvwprintw(finalwin,2, 20, "%d",(int)num_ppm);
-    mvwprintw(finalwin,3, 1, "Errores");
+    mvwprintw(finalwin,3, 1, ET_ERRORS);
     mvwprintw(finalwin,3, 20, "%d",num_errores);
-    mvwprintw(finalwin,4, 1, "Tiempo");
+    mvwprintw(finalwin,4, 1, ET_TIME);
     mvwprintw(finalwin,4, 20, "%02d:%02d",minutos,segundos);
 
     int tmp_opciones[3]={1,2,1};
@@ -408,8 +396,7 @@ void finalizar(){
                 return;
                 break;
         }
-   }while(!flag_opcion_valida);
-    
+   }while(!flag_opcion_valida);    
 }
 void salir_al_menu(){
     alarm(0);

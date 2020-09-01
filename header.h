@@ -12,19 +12,22 @@
 #include<json-c/json.h>
 #include <ctype.h> //incluyo para tener isspace()
 #include <ncurses.h>
+#include "cadenas_menus.h"
 
 //PROTOTIPOS y VARIABLES GLOBALES main.c
 int leer_tecla(int comprueba_letra);
 int num_errores;
 void muestra_errores(void);
-void muestra_cabecera(int id_texto);
+void muestra_cabecera(int id_texto, int id_course);
 void muestra_pie(int opciones[3]);
 void contar_segundos();
 void pitar(void);
 void finalizar();
-void muestra_texto(int act_id_texto);
+void muestra_texto(int act_id_texto, int id_course);
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual,unsigned char todo_texto[]);
 void salir_al_menu();
+bool flag_dentro_menus,flag_dentro_texto;
+void bucle_menus();
 
 static int total_tiempo;
 const static int MAX_TIEMPO=150;//El número máximo de segundos que le damos para la prueba

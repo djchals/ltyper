@@ -1,10 +1,7 @@
-#define ET_ENUNCIADO_MENU "Mecacurses - Elige una opción"
-
 #define WIDTH_MENU          70
 #define HEIGHT_MENU         10
 #define SEP             2
 
-#define MAX_MENUS      10
 #define MAX_OP_MENU    100
 
 #define ENTER          10
@@ -24,48 +21,49 @@ typedef struct menus {
     int n_op;
 } t_menu;
 
-t_menu menu[MAX_MENUS];
+t_menu menu;
 
-//Definim el nostres menus. Aquí un exemple.
+//Deinimos los menus.
 int num_menus = 1;
-char *m_principal[] = {
-    "Curso de mecanografia",
-    "Practicar con texto personalizado",
-    "Configurar",
-    "Salir"
-};
-
+char *m_principal[]={};
 char *m_lecciones[] = {};
+
 int num_lecciones;
 
 void _init_ncurses();
 void _init_menus();
 void _imp_menu(t_menu menu, int seleccionat);
+void obten_menu_inicial();
+void obten_submenu(int id_course);
 
-int muestra_menu(int menu_seleccionat){
+int muestra_menu(int id_course){
 int seleccionat = 1;
 int eleccio = 0;
 int c;
 
     _init_ncurses();
-    _init_menus();
+    if(id_course==0){
+        obten_menu_inicial();
+    }else{
+        obten_submenu(id_course);
+    }
 
     //imprimimos con la primera opción seleccionada
     mvprintw(2, 0, "%s",ET_ENUNCIADO_MENU);
-    _imp_menu(menu[menu_seleccionat], 1);
+    _imp_menu(menu, 1);
     refresh();
     //
     while(1){
-        c = wgetch(menu[menu_seleccionat].wmenu);
+        c = wgetch(menu.wmenu);
         switch(c){
                 case KEY_UP:
                 if(seleccionat == 1)
-                    seleccionat = menu[menu_seleccionat].n_op;
+                    seleccionat = menu.n_op;
                 else
                     --seleccionat;
                 break;
             case KEY_DOWN:
-                if(seleccionat == menu[menu_seleccionat].n_op)
+                if(seleccionat == menu.n_op)
                     seleccionat = 1;
                 else
                     ++seleccionat;
@@ -77,7 +75,7 @@ int c;
                 refresh();
                 break;
         }
-        _imp_menu(menu[menu_seleccionat], seleccionat);
+        _imp_menu(menu, seleccionat);
         if(eleccio != 0) break;
     }   
     refresh();
@@ -85,35 +83,38 @@ int c;
     return eleccio-1;
 }
 
-void _init_menus(){
-//Init menu grups    
-
-menu[0].menu = m_principal;
-menu[0].n_op = sizeof(m_principal) / sizeof(char *);
-menu[0].startx = 0;
-menu[0].starty = 3;
-menu[0].max_x = WIDTH_MENU;
-menu[0].max_y = HEIGHT_MENU;
-menu[0].wmenu = newwin(menu[0].max_y, menu[0].max_x, menu[0].starty, menu[0].startx);
-keypad(menu[0].wmenu, TRUE);
-
-
-num_lecciones=obten_num_titulos();
-for(int i=0;i<num_lecciones;i++){
-    m_lecciones[i]=obten_titulo(i);
+void obten_menu_inicial(){  
+    for(int i=0;i<num_cursos;i++){
+        m_principal[i]=obten_course_title(array_cursos[i]);
+    }
+    menu.menu = m_principal;
+    menu.n_op = num_cursos;
+    menu.startx = 0;
+    menu.starty = 3;
+    menu.max_x = WIDTH_MENU;
+    menu.max_y = HEIGHT_MENU;
+    menu.wmenu = newwin(menu.max_y, menu.max_x, menu.starty, menu.startx);
+    keypad(menu.wmenu, TRUE);
+    refresh();
 }
 
-menu[1].menu = m_lecciones;
-menu[1].n_op = num_lecciones;
-menu[1].startx = 0;
-menu[1].starty = 3;
-menu[1].max_x = WIDTH_MENU;
-menu[1].max_y = HEIGHT_MENU;
-menu[1].wmenu = newwin(menu[1].max_y, menu[1].max_x, menu[1].starty, menu[1].startx);
-keypad(menu[1].wmenu, TRUE);
 
-refresh();
+void obten_submenu(int id_course){
+    num_lecciones=obten_num_titulos(id_course);
+    for(int i=0;i<num_lecciones;i++){
+        m_lecciones[i]=obten_titulo(i,id_course);
+    }
+    menu.menu = m_lecciones;
+    menu.n_op = num_lecciones;
+    menu.startx = 0;
+    menu.starty = 3;
+    menu.max_x = WIDTH_MENU;
+    menu.max_y = HEIGHT_MENU;
+    menu.wmenu = newwin(menu.max_y, menu.max_x, menu.starty, menu.startx);
+    keypad(menu.wmenu, TRUE);
+    refresh();
 }
+
 void _imp_menu(t_menu menu, int seleccionat){
     int x, y, i;   
 
@@ -134,7 +135,23 @@ void _imp_menu(t_menu menu, int seleccionat){
 }
 
 void _init_ncurses(){
-   initscr();
+    /*  Initialize ncurses  */
+
+    if((mainwin=initscr())==NULL){
+        fprintf(stderr, "Error initializing ncurses.\n");
+        exit(EXIT_FAILURE);
+    }
+    if(has_colors()==FALSE){
+        endwin();
+        printf("Your terminal does not support color\n");
+        exit(EXIT_FAILURE);
+    }
+    if(start_color()!=OK){
+        endwin();
+        printf("Your terminal cannot start colors\n");
+        exit(EXIT_FAILURE);
+    }
+    
    getmaxyx(stdscr, max_y, max_x);  
    clear();
    noecho();
