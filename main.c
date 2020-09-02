@@ -3,35 +3,29 @@
 #include "menus.h"
 
 int main(){
-    _init_ncurses();//necesario para mostrar los menus y las cajas, etc...
     bucle_menus();
     return 0;
 }
 void bucle_menus(){
     flag_dentro_menus=true;
     int opcion_selec,lecccion_sel;
-    _init_cursos();//necesario para leer el archivo db_texts.json
-
+    _init_cursos();//necesario para leer el archivo json
     while(flag_dentro_menus){
+        flag_dentro_menu_lecciones=true;
         opcion_selec=0;
         lecccion_sel=0;
         opcion_selec=muestra_menu(0);
-        
-        lecccion_sel=muestra_menu(array_cursos[opcion_selec]);//aquí ya deiniremos id_course
-        clear();
-        flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
-        while(flag_dentro_texto){
-            muestra_texto(lecccion_sel,array_cursos[opcion_selec]);
+        while(flag_dentro_menu_lecciones && opcion_selec!=9999){
+            lecccion_sel=muestra_menu(array_cursos[opcion_selec]);//aquí ya deiniremos id_course
+            flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
+            clear();
+            while(flag_dentro_texto && lecccion_sel!=9999){
+                muestra_texto(lecccion_sel,array_cursos[opcion_selec]);
+            }
         }
-//                 } 
-//                 break;
-//             case 1:/*texto personalizado*/break;
-//             case 2:/*configurar*/break;
-//             case 3:/*Salir*/
-//                 flag_dentro_menus=false;
-//                 break;   
-//         }
     }
+    refresh();
+    endwin();//si llegamos aquí es que hemos pulsado la tecla ESC en los menús
 }
 
 void muestra_texto(int act_id_texto, int id_course){
@@ -113,7 +107,7 @@ void muestra_texto(int act_id_texto, int id_course){
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
 
     muestra_cabecera(id_texto,id_course);//esta línea debe ir despues del refresh();
-    int tmp_opciones[3]={1,1,1};
+    int tmp_opciones[4]={1,1,1,1};
     muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
     
     //esto será necesario para el tratamiento de los carácteres especiales
@@ -132,7 +126,7 @@ void muestra_texto(int act_id_texto, int id_course){
             case 27:
                 //ESC exit program
                 flag_dentro_menus=false;
-                salir_al_menu();
+                seleccionar_otra_leccion();
                 return;
                 break;
             case 0x109:/*f1 help*/break;
@@ -141,8 +135,13 @@ void muestra_texto(int act_id_texto, int id_course){
                 finalizar(id_course);
                 return;//lo frenamos aquí en seco, para que no se vaya al final de este while y ejecute otra vez finalizar();
                 break;
-            case 0x10b:/*f3 exit to menu*/
-                salir_al_menu();
+            case 0x10b:/*f3 change lesson*/
+                seleccionar_otra_leccion();
+                return;
+                break;
+            case 0x10c:/*f4 change course*/
+                flag_dentro_menu_lecciones=false;
+                seleccionar_otra_leccion();
                 return;
                 break;
         }
@@ -245,12 +244,11 @@ void muestra_cabecera(int id_texto, int id_course){
 
     
     mvprintw(1, 0, obten_titulo(id_texto,id_course));
-    mvprintw(POS_H_CABECERA, POS_W_CABECERA, ET_REPEAT_THE_TEXT":");
+    mvprintw(POS_H_CABECERA, POS_W_CABECERA, ET_REPEAT_THE_TEXT);
 }
 
 void muestra_titulo_curso(int id_course){
     char var_barra[max_x];
-//     titlewin = newwin(1, 40,0,0);
     init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
     
     attron(A_BOLD);
@@ -264,7 +262,7 @@ void muestra_titulo_curso(int id_course){
 
     refresh();  
 }
-void muestra_pie(int opciones[3]){    
+void muestra_pie(int opciones[4]){    
     //según las opciones[] que traigamos mostraremos unas opciones del menú u otras
     char var_barra[max_x];
 
@@ -280,6 +278,7 @@ void muestra_pie(int opciones[3]){
     char et_opcion11[]=ET_OPTION11;
     char et_opcion12[]=ET_OPTION12;
     char et_opcion2[]=ET_OPTION2;
+    char et_opcion3[]=ET_OPTION3;   
     
     int pos_opc=1;//with this variable we control the options position in the menu
     if(opciones[0]){
@@ -319,6 +318,16 @@ void muestra_pie(int opciones[3]){
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
         mvwprintw(footerwin,0,pos_opc,et_opcion2);
+        pos_opc=pos_opc+strlen(et_opcion2)+3;
+    }
+    if(opciones[3]){
+        wattron(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0,pos_opc,"F4");
+        pos_opc=pos_opc+2;
+        wattroff(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"=");
+        pos_opc++;        
+        mvwprintw(footerwin,0,pos_opc,et_opcion3);
         pos_opc=pos_opc+strlen(et_opcion2)+3;
     }
     
@@ -386,7 +395,7 @@ void finalizar(int id_course){
     mvwprintw(finalwin,5, 1, ET_TIME);
     mvwprintw(finalwin,5, 20, "%02d:%02d",minutos,segundos);
 
-    int tmp_opciones[3]={1,2,1};
+    int tmp_opciones[4]={1,2,1,1};
     wrefresh(finalwin);
 
     muestra_titulo_curso(id_course);
@@ -401,7 +410,8 @@ void finalizar(int id_course){
                 //ESC exit program
                 flag_opcion_valida=true;
                 flag_dentro_menus=false;
-                salir_al_menu();
+                flag_dentro_menu_lecciones=false;
+                seleccionar_otra_leccion();
                 return;
                 break;
             case 'r':
@@ -410,15 +420,22 @@ void finalizar(int id_course){
                 flag_opcion_valida=true;
                 //do need anymore, whe are in a loop 
                 break;
-            case 0x10b:/*f3 exit to menu*/
+            case 0x10b:/*f3 change lesson*/
                 flag_opcion_valida=true;
-                salir_al_menu();
+                seleccionar_otra_leccion();
                 return;
                 break;
+            case 0x10c:/*f4 change course*/
+                flag_opcion_valida=true;
+                flag_dentro_menu_lecciones=false;
+                seleccionar_otra_leccion();
+                return;
+                break;
+            
         }
    }while(!flag_opcion_valida);    
 }
-void salir_al_menu(){
+void seleccionar_otra_leccion(){
     alarm(0);
     flag_dentro_texto=false;
     delwin(childwin);    

@@ -21,14 +21,14 @@ int leer_tecla(int comprueba_letra);
 int num_errores;
 void muestra_errores(void);
 void muestra_cabecera(int id_texto, int id_course);
-void muestra_pie(int opciones[3]);
+void muestra_pie(int opciones[4]);
 void contar_segundos();
 void pitar(void);
 void finalizar(int id_course);
 void muestra_texto(int act_id_texto, int id_course);
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual,unsigned char todo_texto[]);
-void salir_al_menu();
-bool flag_dentro_menus,flag_dentro_texto;
+void seleccionar_otra_leccion();
+bool flag_dentro_menus,flag_dentro_menu_lecciones,flag_dentro_texto;
 void bucle_menus();
 void muestra_titulo_curso(int id_course);
 
@@ -48,7 +48,7 @@ static int id_texto;
 
 int ancho_caja, alto_caja;//dimensiones de la caja
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *titlewin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2

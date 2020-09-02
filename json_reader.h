@@ -10,7 +10,7 @@ void quita_espacios(char *act_texto);
 json_object *parsed_json, *titulos;
 
 void error(const char *s);/* Función para devolver un error en caso de que ocurra */
-void procesoArchivo(char *archivo);/* Función que hace algo con un archivo */
+void proceso_archivo(char *archivo);/* Función que hace algo con un archivo */
 int obten_id_course();
 int _init_cursos();
 
@@ -81,7 +81,7 @@ int _init_cursos(){
         /* Nos devolverá el directorio actual (.) y el anterior (..), como hace ls */
         if ( (strcmp(ent->d_name, ".")!=0) && (strcmp(ent->d_name, "..")!=0) ){
             /* Una vez tenemos el archivo, lo pasamos a una función para procesarlo. */
-            procesoArchivo(ent->d_name);
+            proceso_archivo(ent->d_name);
             array_cursos[num_cursos]=obten_id_course();
             num_cursos++;
         }
@@ -90,7 +90,7 @@ int _init_cursos(){
     return EXIT_SUCCESS;
 } 
 
-void procesoArchivo(char *archivo){
+void proceso_archivo(char *archivo){
     char *ruta_archivo = malloc(strlen(ruta) + strlen(archivo) + 1); // +1 for the null-terminator
     strcpy(ruta_archivo, ruta);
     strcat(ruta_archivo, archivo);
@@ -128,9 +128,8 @@ char *obten_titulo(int id_texto, int id_course){
     return act_titulo;
 }
 int obten_id_course(){
-    struct json_object *id_course, *ids;
-    json_object_object_get_ex(tmp_json_parsed, "id_course", &ids);
-    id_course=json_object_array_get_idx(ids, 0);
+    struct json_object *id_course;
+    json_object_object_get_ex(tmp_json_parsed, "id_course", &id_course);
     int *tmp_id=(int *) json_object_get_int(id_course);
     return (int)tmp_id;
 }

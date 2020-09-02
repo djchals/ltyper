@@ -51,12 +51,15 @@ int c;
     //imprimimos con la primera opción seleccionada
     mvprintw(2, 0, "%s",ET_ENUNCIADO_MENU);
     _imp_menu(menu, 1);
+    int tmp_opciones[4]={1,0,0,0};
+    muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
+    
     refresh();
     //
     while(1){
         c = wgetch(menu.wmenu);
         switch(c){
-                case KEY_UP:
+            case KEY_UP:
                 if(seleccionat == 1)
                     seleccionat = menu.n_op;
                 else
@@ -71,6 +74,11 @@ int c;
             case ENTER:
                 eleccio = seleccionat;
                 break;
+            case 27:
+                //ESC exit program
+                flag_dentro_menus=false;
+                flag_dentro_menu_lecciones=false;
+                eleccio=10000;//como le restaremos 1 se quedará en 9999
             default:
                 refresh();
                 break;
