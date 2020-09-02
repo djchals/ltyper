@@ -13,3 +13,10 @@
 
 //menus.h
 #define ET_ENUNCIADO_MENU "Mecacurses - Elige una opción"
+
+//json_reader.h
+char *array_et_course_title[MAX_COURSES]={
+    0,
+    "Curso de mecanografia en inglés (distribución QWERTY)",
+    "Curso de mecanografia en inglés (distribución DVORAK)"
+};

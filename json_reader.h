@@ -13,7 +13,6 @@ void error(const char *s);/* Función para devolver un error en caso de que ocur
 void procesoArchivo(char *archivo);/* Función que hace algo con un archivo */
 int obten_id_course();
 int _init_cursos();
-#define MAX_COURSES 6
 
 json_object *array_json_parseds[MAX_COURSES];
 json_object *tmp_json_parsed;
@@ -137,11 +136,13 @@ int obten_id_course(){
 }
 
 char *obten_course_title(int id_course){
-    json_object *titulo_curso;
-    json_object_object_get_ex(array_json_parseds[id_course], "course_title", &titulo_curso);
-    char *act_titulo=(char *) json_object_get_string(titulo_curso);
-    quita_espacios(act_titulo);
-    
+//     json_object *titulo_curso;
+//     json_object_object_get_ex(array_json_parseds[id_course], "course_title", &titulo_curso);
+//     char *act_titulo=(char *) json_object_get_string(titulo_curso);
+//     quita_espacios(act_titulo);
+//     
+//     return act_titulo;
+    char *act_titulo=array_et_course_title[id_course];
     return act_titulo;
 }
 

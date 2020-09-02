@@ -138,7 +138,7 @@ void muestra_texto(int act_id_texto, int id_course){
             case 0x109:/*f1 help*/break;
             case 0x10a:/*f2 cancel*/
                 long_texto=i_row;
-                finalizar();
+                finalizar(id_course);
                 return;//lo frenamos aquí en seco, para que no se vaya al final de este while y ejecute otra vez finalizar();
                 break;
             case 0x10b:/*f3 exit to menu*/
@@ -205,7 +205,7 @@ void muestra_texto(int act_id_texto, int id_course){
         }
         wrefresh(childwin);
     }
-    finalizar();
+    finalizar(id_course);
 }
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned char todo_texto[]){
     mvprintw(20, 0, " ");//si comento esta línea da errores el iltro
@@ -236,18 +236,35 @@ void muestra_errores(void){
     wrefresh(errorwin);    
 }
 void muestra_cabecera(int id_texto, int id_course){
-    mvprintw(0, 0, obten_titulo(id_texto,id_course));
-    
     //Creamos las ventana de tiempo y errores ya que se tendrán que ir rerescando periodicamente
-    timewin = newwin(1, 15, 0, 50);
-    errorwin = newwin(1, 15, 0, 30);
-    
+    timewin = newwin(1, 15, 1, 50);
+    errorwin = newwin(1, 15, 1, 30);
     muestra_errores();
     contar_segundos();
+    muestra_titulo_curso(id_course);
 
+    
+    mvprintw(1, 0, obten_titulo(id_texto,id_course));
     mvprintw(POS_H_CABECERA, POS_W_CABECERA, ET_REPEAT_THE_TEXT":");
 }
-void muestra_pie(int opciones[3]){
+
+void muestra_titulo_curso(int id_course){
+    char var_barra[max_x];
+//     titlewin = newwin(1, 40,0,0);
+    init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
+    
+    attron(A_BOLD);
+    attron(COLOR_PAIR(C_TITLE));
+    memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
+    mvprintw(0, 0,"%s",var_barra);
+    int tmp_borde=floor((ancho_caja-strlen(array_et_course_title[id_course]))/2);
+    mvprintw(0, tmp_borde, "%s",array_et_course_title[id_course]);
+    attroff(COLOR_PAIR(C_TITLE));
+    attroff(A_BOLD);
+
+    refresh();  
+}
+void muestra_pie(int opciones[3]){    
     //según las opciones[] que traigamos mostraremos unas opciones del menú u otras
     char var_barra[max_x];
 
@@ -337,39 +354,42 @@ void contar_segundos(){
         int tmp_borde=floor((ancho_caja-strlen(tmp_cadena))/2);
         wattron(childwin,WA_BLINK);
         wattron(childwin,WA_BOLD);
-        mvwprintw(childwin,4,tmp_borde,tmp_cadena);
+        mvwprintw(childwin,5,tmp_borde,tmp_cadena);
         wattroff(childwin,WA_BLINK);
         wattroff(childwin,WA_BOLD);
         
-        mvprintw(13, 0, ET_PRESS_KEY_CONTINUE);
+        mvprintw(14, 0, ET_PRESS_KEY_CONTINUE);
         wrefresh(childwin);
         refresh();
     }
 }
-void finalizar(){
+void finalizar(int id_course){
     //PARAMOS EL CRONOMETRO
     alarm(0);
+
+    clear();
     flag_salir=true;
     ungetch(ch);
     bool flag_opcion_valida=false;
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
 
-    clear();
-
-    finalwin = subwin(mainwin,7, 80, y_child_win, x_child_win);
+    finalwin = subwin(mainwin,8, 80, y_child_win, x_child_win);
     box(finalwin, 0, 0);   
 
-    mvprintw(2, 0, ET_YOUR_SCORE);
-    mvwprintw(finalwin,2, 1, ET_PPM );
-    mvwprintw(finalwin,2, 20, "%d",(int)num_ppm);
-    mvwprintw(finalwin,3, 1, ET_ERRORS);
-    mvwprintw(finalwin,3, 20, "%d",num_errores);
-    mvwprintw(finalwin,4, 1, ET_TIME);
-    mvwprintw(finalwin,4, 20, "%02d:%02d",minutos,segundos);
+    mvprintw(3, 0, ET_YOUR_SCORE);
+    mvwprintw(finalwin,2, 20, "%s",obten_titulo(id_texto,id_course));
+    mvwprintw(finalwin,3, 1, ET_PPM );
+    mvwprintw(finalwin,3, 20, "%d",(int)num_ppm);
+    mvwprintw(finalwin,4, 1, ET_ERRORS);
+    mvwprintw(finalwin,4, 20, "%d",num_errores);
+    mvwprintw(finalwin,5, 1, ET_TIME);
+    mvwprintw(finalwin,5, 20, "%02d:%02d",minutos,segundos);
 
     int tmp_opciones[3]={1,2,1};
     wrefresh(finalwin);
+
+    muestra_titulo_curso(id_course);
     refresh();
     muestra_pie(tmp_opciones);    
 
