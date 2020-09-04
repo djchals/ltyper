@@ -2,7 +2,7 @@
 #LIBS=`xml2-config --libs` -lncurses
 
 CFLAGS=``
-LIBS=-lncurses -ljson-c
+LIBS=-lm -lncurses -ljson-c
 
 
 #en principio esto no hara falta pero lo guardo aquí por si acaso
@@ -22,6 +22,10 @@ lectorxml:
 	gcc -o lectorxml lectorxml.c $(CFLAGS) $(LIBS)
 jsonreader:
 	gcc -o jsonreader json_reader.c -lncurses -ljson-c 
+dibuja:
+	gcc -o dibuja dibuja.c -lm $(CFLAGS) $(LIBS)
+
+
 .PHONY: clean
 
 clean:

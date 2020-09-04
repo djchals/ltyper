@@ -1,6 +1,7 @@
 #include "header.h"
 #include "json_reader.h"
 #include "menus.h"
+#include "draw_keys.h"
 
 int main(){
     bucle_menus();
@@ -102,6 +103,11 @@ void muestra_texto(int act_id_texto, int id_course){
         num_cols_texto++;//añadimos el salto de línea al inal para que se vea la última línea
     }
     actualiza_cursor(0,pos_h_actual,pos_w_actual,todo_texto);//mostramos el cursor en la primera letra
+    //dibujamos el teclado
+    dibuja_teclado();
+    marca_blink_letra(todo_texto[0],true);
+    //
+    
 //     muestra_cabecera(id_texto);
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
@@ -117,6 +123,14 @@ void muestra_texto(int act_id_texto, int id_course){
     //
     
     while(i_row<long_texto){
+        //marcamos la tecla que debemos pulsar
+        if(todo_texto[i_row]==ENTER){
+            marca_blink_letra(64,true); 
+        }else if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
+            marca_blink_letra((int) toupper(todo_texto[i_row]),true); 
+        }    
+        //
+
         ch=getch();
         if(flag_timeout){
             break;
@@ -126,7 +140,8 @@ void muestra_texto(int act_id_texto, int id_course){
             case 27:
                 //ESC exit program
                 flag_dentro_menus=false;
-                seleccionar_otra_leccion();
+                flag_dentro_menu_lecciones=false;
+                seleccionar_menu();
                 return;
                 break;
             case 0x109:/*f1 help*/break;
@@ -136,12 +151,12 @@ void muestra_texto(int act_id_texto, int id_course){
                 return;//lo frenamos aquí en seco, para que no se vaya al final de este while y ejecute otra vez finalizar();
                 break;
             case 0x10b:/*f3 change lesson*/
-                seleccionar_otra_leccion();
+                seleccionar_menu();
                 return;
                 break;
             case 0x10c:/*f4 change course*/
                 flag_dentro_menu_lecciones=false;
-                seleccionar_otra_leccion();
+                seleccionar_menu();
                 return;
                 break;
         }
@@ -161,15 +176,20 @@ void muestra_texto(int act_id_texto, int id_course){
                 //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
 
                 if(todo_texto[i_row]!=ENTER){
+                    
                     //Marcamos el carácter en negrita
                     wattron(childwin,WA_BOLD);
                     //comprobamos si es un carácter normal o un carácter especial. Si es un carácter normal ocupa 1byte, pero si es un carácter especial ocupa 2 (á,é....)
                     if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
+                        //desmarcamos la última tecla pulsada
+                        marca_blink_letra((int) toupper(todo_texto[i_row]),false); 
+                        //
                         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
                         pos_w_actual++;//corremos una posición
                         i_row++;
                         wattron(childwin,COLOR_PAIR(C_LETRA_OK));
                         actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
+
                         
                     }else{
                         //AQUÍ LOS CARACTERES ESPECIALES
@@ -189,13 +209,19 @@ void muestra_texto(int act_id_texto, int id_course){
                             actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                     wattroff(childwin,WA_BOLD);
                 }else{
+                    //desmarcamos la última tecla pulsada
+                    marca_blink_letra(64,false); 
+                    //
+
                     mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);//imprimimos el caracter que le queremos dar al Enter (espacio)
                     pos_w_actual=ini_w;
                     pos_h_actual++;
                     wattron(childwin,COLOR_PAIR(C_LETRA_OK));
                     i_row++;  
+                    
                     actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-                }                            
+                }
+
                 if(act_letra_err){
                     wattron(childwin,COLOR_PAIR(C_LETRA_OK));
                     act_letra_err=false;
@@ -208,12 +234,13 @@ void muestra_texto(int act_id_texto, int id_course){
 }
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned char todo_texto[]){
     mvprintw(20, 0, " ");//si comento esta línea da errores el iltro
-    wrefresh(childwin);
-    
-    wattron(childwin,WA_UNDERLINE);
+        
+    wattron(childwin,WA_BLINK);
+    wattron(childwin,WA_REVERSE);
     wattroff(childwin,WA_BOLD);
     if(todo_texto[i_row]==ENTER){
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);        
+        marca_blink_letra(64,true);
     }else if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
     }else{
@@ -226,7 +253,9 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned ch
             mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);           
         }
     }
-    wattroff(childwin,WA_UNDERLINE);
+    wattroff(childwin,WA_BLINK);
+    wattroff(childwin,WA_REVERSE);
+    wrefresh(childwin);
 }
 void muestra_errores(void){
     wrefresh(errorwin);
@@ -241,7 +270,6 @@ void muestra_cabecera(int id_texto, int id_course){
     muestra_errores();
     contar_segundos();
     muestra_titulo_curso(id_course);
-
     
     mvprintw(1, 0, obten_titulo(id_texto,id_course));
     mvprintw(POS_H_CABECERA, POS_W_CABECERA, ET_REPEAT_THE_TEXT);
@@ -411,7 +439,7 @@ void finalizar(int id_course){
                 flag_opcion_valida=true;
                 flag_dentro_menus=false;
                 flag_dentro_menu_lecciones=false;
-                seleccionar_otra_leccion();
+                seleccionar_menu();
                 return;
                 break;
             case 'r':
@@ -422,20 +450,20 @@ void finalizar(int id_course){
                 break;
             case 0x10b:/*f3 change lesson*/
                 flag_opcion_valida=true;
-                seleccionar_otra_leccion();
+                seleccionar_menu();
                 return;
                 break;
             case 0x10c:/*f4 change course*/
                 flag_opcion_valida=true;
                 flag_dentro_menu_lecciones=false;
-                seleccionar_otra_leccion();
+                seleccionar_menu();
                 return;
                 break;
             
         }
    }while(!flag_opcion_valida);    
 }
-void seleccionar_otra_leccion(){
+void seleccionar_menu(){
     alarm(0);
     flag_dentro_texto=false;
     delwin(childwin);    

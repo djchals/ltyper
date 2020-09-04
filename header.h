@@ -27,7 +27,7 @@ void pitar(void);
 void finalizar(int id_course);
 void muestra_texto(int act_id_texto, int id_course);
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual,unsigned char todo_texto[]);
-void seleccionar_otra_leccion();
+void seleccionar_menu();
 bool flag_dentro_menus,flag_dentro_menu_lecciones,flag_dentro_texto;
 void bucle_menus();
 void muestra_titulo_curso(int id_course);
@@ -48,7 +48,7 @@ static int id_texto;
 
 int ancho_caja, alto_caja;//dimensiones de la caja
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2

@@ -21,3 +21,17 @@ char *array_et_course_title[MAX_COURSES]={
     "Curso de mecanografia en inglés (distribución QWERTY)",
     "Curso de mecanografia en inglés (distribución DVORAK)"
 };
+
+    // NOMBRES DE LOS DEDOS EN INGLÉS
+    // Index finger. el dedo índice.
+    // Middle finger. el dedo corazón.
+    // Ring finger. el anular.
+    // Little finger. el meñique.
+    // Thumb. el pulgar.
+
+//draw_keys.h
+#define ET_FINGER_INDEX "Dedo índice"
+#define ET_FINGER_MIDDLE "Dedo corazón"
+#define ET_FINGER_RING "Dedo anular"
+#define ET_FINGER_LITTLE "Dedo meñique"
+#define ET_FINGER_THUMB "Dedo pulgar"
