@@ -1,16 +1,3 @@
-#define WIDTH_MENU          70
-#define HEIGHT_MENU         10
-#define SEP             2
-
-#define MAX_OP_MENU    100
-
-#define ENTER          10
-
-int startx;
-int starty;
-int max_x;
-int max_y;
-
 typedef struct menus {
     WINDOW *wmenu;
     int startx;
@@ -49,7 +36,11 @@ int c;
     }
 
     //imprimimos con la primera opción seleccionada
-    mvprintw(2, 0, "%s",ET_ENUNCIADO_MENU);
+    muestra_titulo_menu();
+    descmenuwin=newwin(1, max_x, y_descmenuwin,x_descmenuwin);  
+    mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_MENU);
+    wrefresh(descmenuwin);
+    
     _imp_menu(menu, 1);
     int tmp_opciones[4]={1,0,0,0};
     muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
@@ -97,10 +88,10 @@ void obten_menu_inicial(){
     }
     menu.menu = m_principal;
     menu.n_op = num_cursos;
-    menu.startx = 0;
-    menu.starty = 3;
-    menu.max_x = WIDTH_MENU;
-    menu.max_y = HEIGHT_MENU;
+    menu.startx = x_menuwin;
+    menu.starty = y_menuwin;
+    menu.max_x = ancho_caja_menu;
+    menu.max_y = alto_caja_menu;
     menu.wmenu = newwin(menu.max_y, menu.max_x, menu.starty, menu.startx);
     keypad(menu.wmenu, TRUE);
     refresh();
@@ -114,10 +105,10 @@ void obten_submenu(int id_course){
     }
     menu.menu = m_lecciones;
     menu.n_op = num_lecciones;
-    menu.startx = 0;
-    menu.starty = 3;
-    menu.max_x = WIDTH_MENU;
-    menu.max_y = HEIGHT_MENU;
+    menu.startx = x_menuwin;
+    menu.starty = y_menuwin;
+    menu.max_x = ancho_caja_menu;
+    menu.max_y = alto_caja_menu;
     menu.wmenu = newwin(menu.max_y, menu.max_x, menu.starty, menu.startx);
     keypad(menu.wmenu, TRUE);
     refresh();
@@ -167,3 +158,16 @@ void _init_ncurses(){
    curs_set(FALSE);
    refresh();
  }
+ 
+void muestra_titulo_menu(){
+    wrefresh(titlewin);
+    char var_barra[max_x];
+    init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
+    int tmp_borde=floor((max_x-strlen(ET_PROGRAMA))/2);
+
+    memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
+    wattron(titlewin, WA_BOLD | COLOR_PAIR(C_TITLE));
+    mvwprintw(titlewin, 0, 0,"%s",var_barra);
+    mvwprintw(titlewin, 0, tmp_borde, "%s",ET_PROGRAMA);
+    wrefresh(titlewin);
+}

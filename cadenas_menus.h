@@ -1,6 +1,6 @@
 //main.c
 #define ET_ERRORS "Errores"
-#define ET_REPEAT_THE_TEXT "Repite el texto que ves a continuación:"
+#define ET_DESC "Repite el texto que ves a continuación:"
 #define ET_OPTION0 "Salir"
 #define ET_OPTION11 "Cancelar texto"
 #define ET_OPTION12 "Repetir texto"
@@ -13,6 +13,8 @@
 #define ET_PPM "Pulsaciones/min"
 
 //menus.h
+#define ET_PROGRAMA "TYPEMINAL v0.1"
+
 #define ET_ENUNCIADO_MENU "Elige una opción:"
 
 //json_reader.h

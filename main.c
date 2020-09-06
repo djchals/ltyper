@@ -14,6 +14,8 @@ int main(){
 void bucle_menus(){
     flag_dentro_menus=true;
     int opcion_selec,lecccion_sel;
+    
+    titlewin=newwin(1, max_x, y_titlewin,y_titlewin);  
     while(flag_dentro_menus){
         flag_dentro_menu_lecciones=true;
         opcion_selec=0;
@@ -260,7 +262,6 @@ void muestra_cabecera(int id_texto, int id_course){
     //Creamos las ventana de tiempo y errores ya que se tendrán que ir rerescando periodicamente
     timewin = newwin(1, 15, y_timewin, x_timewin);
     errorwin = newwin(1, 15, y_errorwin, x_errorwin);
-    titlewin=newwin(1, max_x, y_titlewin,y_titlewin);  
     lessonwin=newwin(1, max_x, y_lessonwin,x_lessonwin);  
     descwin=newwin(1, max_x, y_descwin,x_descwin);  
     //
@@ -278,13 +279,19 @@ void muestra_cabecera(int id_texto, int id_course){
 void muestra_titulo_curso(int id_course){
     wrefresh(titlewin);
     char var_barra[max_x];
+    
+    char act_titulo_curso[255];
+    strcpy(act_titulo_curso,array_et_course_title[id_course]);
+    strcat(act_titulo_curso," - ");
+    strcat(act_titulo_curso,ET_PROGRAMA);
+    
     init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
-    int tmp_borde=floor((max_x-strlen(array_et_course_title[id_course]))/2);
+    int tmp_borde=floor((max_x-strlen(act_titulo_curso))/2);
 
     memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
     wattron(titlewin, WA_BOLD | COLOR_PAIR(C_TITLE));
     mvwprintw(titlewin, 0, 0,"%s",var_barra);
-    mvwprintw(titlewin, 0, tmp_borde, "%s",array_et_course_title[id_course]);
+    mvwprintw(titlewin, 0, tmp_borde, "%s",act_titulo_curso);
     wrefresh(titlewin);
 }
 void muestra_pie(int opciones[4]){    
@@ -405,12 +412,14 @@ void finalizar(int id_course){
     wclear(timewin);
     wclear(childwin);
     wclear(keyboardwin);
+    wclear(descwin);
 
     wrefresh(lessonwin);
     wrefresh(errorwin);
     wrefresh(timewin);
     wrefresh(childwin);
     wrefresh(keyboardwin);
+    wrefresh(descwin);
 
     muestra_titulo_curso(id_course);
     flag_salir=true;
@@ -419,18 +428,20 @@ void finalizar(int id_course){
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
 
-    finalwin = subwin(mainwin,8, 80, y_finalwin, x_finalwin);
+    finalwin=newwin(alto_caja_final, ancho_caja_final, y_finalwin, x_finalwin);
     box(finalwin, 0, 0);   
 
-    mvprintw(3, 0, ET_YOUR_SCORE);
-    mvwprintw(finalwin,2, 20, "%s",obten_titulo(id_texto,id_course));
-    mvwprintw(finalwin,3, 1, ET_PPM );
-    mvwprintw(finalwin,3, 20, "%d",(int)num_ppm);
-    mvwprintw(finalwin,4, 1, ET_ERRORS);
-    mvwprintw(finalwin,4, 20, "%d",num_errores);
-    mvwprintw(finalwin,5, 1, ET_TIME);
-    mvwprintw(finalwin,5, 20, "%02d:%02d",minutos,segundos);
-
+    descfinalwin=newwin(1, ancho_caja_final, y_descfinal, x_descfinal);
+    mvwprintw(descfinalwin,0, 0, ET_YOUR_SCORE);
+    wrefresh(descfinalwin);
+    
+    mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
+    mvwprintw(finalwin,3, 1, "%20s",ET_PPM );
+    mvwprintw(finalwin,3, 25, "%d",(int)num_ppm);
+    mvwprintw(finalwin,4, 1, "%20s",ET_ERRORS);
+    mvwprintw(finalwin,4, 25, "%d",num_errores);
+    mvwprintw(finalwin,5, 1, "%20s",ET_TIME);
+    mvwprintw(finalwin,5, 25, "%02d:%02d",minutos,segundos);
     wrefresh(finalwin);
 
     int tmp_opciones[4]={1,2,1,1};

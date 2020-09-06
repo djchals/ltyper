@@ -31,14 +31,11 @@ void seleccionar_menu();
 bool flag_dentro_menus,flag_dentro_menu_lecciones,flag_dentro_texto;
 void bucle_menus();
 void muestra_titulo_curso(int id_course);
-
+void muestra_titulo_menu();
+ 
 //menus.h
-#define WIDTH_MENU          70
-#define HEIGHT_MENU         10
 #define SEP             2
-
 #define MAX_OP_MENU    100
-
 #define ENTER          10
 
 int startx;
@@ -64,6 +61,9 @@ static int x_keyboardwin, y_keyboardwin;
 static int x_titlewin, y_titlewin;
 static int x_lessonwin, y_lessonwin;
 static int x_descwin, y_descwin;
+static int x_menuwin, y_menuwin;
+static int x_descmenuwin, y_descmenuwin;
+static int x_descfinal, y_descfinal;
 
 bool flag_timeout=false, flag_salir=false;
 int ch;
@@ -74,8 +74,10 @@ static int id_texto;
 
 //inicializamos las variables para la childwin y el cursor
 int ancho_caja=80, alto_caja=10;//dimensiones de la caja
+int ancho_caja_menu=70, alto_caja_menu=10;
+int ancho_caja_final=50, alto_caja_final=8;
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin, *titlewin, *lessonwin,*descwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *descmenuwin, *descfinalwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2
