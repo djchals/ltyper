@@ -24,7 +24,7 @@ int num_cursos=0;
 void quita_espacios(char *act_texto){
     int long_texto, i=0, i_row=0;
     long_texto=strlen(act_texto);
-    char tmp_cadena[255];
+    char tmp_cadena[1024];
     bool flag_sumar=false;
     //quitamos los espacios de sobra
     for(i=0;i<long_texto;i++){        
@@ -133,18 +133,10 @@ int obten_id_course(){
     int *tmp_id=(int *) json_object_get_int(id_course);
     return (int)tmp_id;
 }
-
 char *obten_course_title(int id_course){
-//     json_object *titulo_curso;
-//     json_object_object_get_ex(array_json_parseds[id_course], "course_title", &titulo_curso);
-//     char *act_titulo=(char *) json_object_get_string(titulo_curso);
-//     quita_espacios(act_titulo);
-//     
-//     return act_titulo;
     char *act_titulo=array_et_course_title[id_course];
     return act_titulo;
 }
-
 void error(const char *s){
     /* perror() devuelve la cadena S y el error (en cadena de caracteres) que tenga errno */
     perror (s);

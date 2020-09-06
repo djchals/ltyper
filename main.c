@@ -75,7 +75,6 @@ void muestra_texto(int act_id_texto, int id_course){
     //preparamos el terminal para el modo menú/lectura de tecla
     clear();
     noecho();/*  Turn off key echoing */
-
     keypad(mainwin, TRUE);     /*  Enable the keypad for non-char keys  */  
     curs_set(0);//Ocultamos el cursor (ahora lo estoy mostrando para ver los errores)
     // 
@@ -105,8 +104,6 @@ void muestra_texto(int act_id_texto, int id_course){
     //dibujamos el teclado
     dibuja_teclado();
     //
-    
-//     muestra_cabecera(id_texto);
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
 
@@ -159,7 +156,6 @@ void muestra_texto(int act_id_texto, int id_course){
                 break;
         }
         tecla_leida=(ch==todo_texto[i_row]);//tecla_leida=0 si es incorrecto, 1 si es correcto  
-
         switch(tecla_leida){
             case 0://KO tecla incorrecta
                 num_errores++;
@@ -172,9 +168,7 @@ void muestra_texto(int act_id_texto, int id_course){
                 break;
             case 1://Owrefresh(finalwin);K tecla correcta                    
                 //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
-
                 if(todo_texto[i_row]!=ENTER){
-                    
                     //Marcamos el carácter en negrita
                     wattron(childwin,WA_BOLD);
                     //comprobamos si es un carácter normal o un carácter especial. Si es un carácter normal ocupa 1byte, pero si es un carácter especial ocupa 2 (á,é....)
@@ -217,7 +211,6 @@ void muestra_texto(int act_id_texto, int id_course){
                     
                     actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                 }
-
                 if(act_letra_err){
                     wattron(childwin,COLOR_PAIR(C_LETRA_OK));
                     act_letra_err=false;
@@ -275,7 +268,6 @@ void muestra_cabecera(int id_texto, int id_course){
     muestra_errores();
     contar_segundos();
 }
-
 void muestra_titulo_curso(int id_course){
     wrefresh(titlewin);
     char var_barra[max_x];
@@ -380,7 +372,7 @@ void contar_segundos(){
     mvwprintw(timewin,0, 0, ET_TIME": ");
 
     if((MAX_TIEMPO-total_tiempo)<30){
-        wattron(timewin,COLOR_PAIR(C_TIMEOUT) | WA_BLINK);
+        wattron(timewin,COLOR_PAIR(C_TIMEOUT) | WA_BLINK | WA_BOLD);
     }
     mvwprintw(timewin,0, 8, "%02d:%02d",minutos,segundos);
     wrefresh(timewin);
@@ -390,7 +382,7 @@ void contar_segundos(){
     }else{
         flag_timeout=true;//se acabó el tiempo! 
         //
-        wattron(childwin,WA_BLINK|COLOR_PAIR(C_LETRA_OK));
+        wattron(childwin,WA_BLINK|COLOR_PAIR(C_LETRA_ERR));
         char tmp_cadena[]=ET_TIME_OVER;
         int tmp_borde=floor((ancho_caja-strlen(tmp_cadena))/2);
         int tmp_borde2=floor((ancho_caja-strlen(ET_PRESS_KEY_CONTINUE))/2);
@@ -402,6 +394,7 @@ void contar_segundos(){
         wrefresh(childwin);
         refresh();
     }
+    wattroff(timewin,COLOR_PAIR(C_TIMEOUT) | WA_BLINK | WA_BOLD);
 }
 void finalizar(int id_course){
     //PARAMOS EL CRONOMETRO
@@ -436,7 +429,7 @@ void finalizar(int id_course){
     wrefresh(descfinalwin);
     
     mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
-    mvwprintw(finalwin,3, 1, "%20s",ET_PPM );
+    mvwprintw(finalwin,3, 1, "%20s",ET_PPM);
     mvwprintw(finalwin,3, 25, "%d",(int)num_ppm);
     mvwprintw(finalwin,4, 1, "%20s",ET_ERRORS);
     mvwprintw(finalwin,4, 25, "%d",num_errores);
@@ -452,8 +445,7 @@ void finalizar(int id_course){
         ch=getch();
         //comprobamos las opciones del footer menu
         switch(ch){
-            case 27:
-                //ESC exit program
+            case 27://ESC exit program
                 flag_opcion_valida=true;
                 flag_dentro_menus=false;
                 flag_dentro_menu_lecciones=false;
@@ -461,8 +453,7 @@ void finalizar(int id_course){
                 return;
                 break;
             case 'r':
-            case 'R':
-                //R repeat the text
+            case 'R'://R repeat the text
                 flag_opcion_valida=true;
                 //do need anymore, whe are in a loop 
                 break;
