@@ -1,8 +1,8 @@
-#define NUM_LETRAS 42
+#define NUM_LETRAS 43
 void escribe_teclas();
 double array_coord_letras[NUM_LETRAS];
 double array_colores_letras[NUM_LETRAS];
-char act_distribucion_teclado[NUM_LETRAS]="1234567890QWERTYUIOP@ASDFGHJKL;ZXCVBNM,. ";
+char act_distribucion_teclado[NUM_LETRAS]="1234567890QWERTYUIOPASDFGHJKL;ZXCVBNM,. @~^";
 int array_num_letra_posicion[255];
 void marca_blink_letra(int act_letra,bool flag_marcala);
 void dibuja_teclado();
@@ -10,16 +10,8 @@ int num_ultima_tecla=0;
 
 void dibuja_teclado(){    
     int i,j;
-//     _init_ncurses();//necesario para leer el archivo json
-    keyboardwin= subwin(mainwin,13, 80, 15, 2);
-    // NOMBRES DE LOS DEDOS EN INGLÉS
-    // Index finger. el dedo índice.
-    // Middle finger. el dedo corazón.
-    // Ring finger. el anular.
-    // Little finger. el meñique.
-    // Thumb. el pulgar.
-    //     
-    
+    keyboardwin= subwin(mainwin,13, 80, 14, 0);
+
     int keyb_schetch[13][66]={
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -41,8 +33,7 @@ void dibuja_teclado(){
     mvwprintw(keyboardwin,8,67,ET_FINGER_LITTLE);
     mvwprintw(keyboardwin,10,67,ET_FINGER_THUMB);
     
-//     en este array quedará 
-//     array_coord_letras[z]=y,x;
+//  en este array quedará array_coord_letras[z]=y,x;
     array_coord_letras[0]=2.07;
     array_coord_letras[1]=2.11;
     array_coord_letras[2]=2.15;
@@ -63,27 +54,30 @@ void dibuja_teclado(){
     array_coord_letras[17]=4.37;
     array_coord_letras[18]=4.41;
     array_coord_letras[19]=4.45;
-    array_coord_letras[20]=5.58;
-    array_coord_letras[21]=6.10;
-    array_coord_letras[22]=6.14;
-    array_coord_letras[23]=6.18;
-    array_coord_letras[24]=6.22;
-    array_coord_letras[25]=6.26;
-    array_coord_letras[26]=6.30;
-    array_coord_letras[27]=6.34;
-    array_coord_letras[28]=6.38;
-    array_coord_letras[29]=6.42;
-    array_coord_letras[30]=6.46;
-    array_coord_letras[31]=8.12;
-    array_coord_letras[32]=8.16;
-    array_coord_letras[33]=8.20;
-    array_coord_letras[34]=8.24;
-    array_coord_letras[35]=8.28;
-    array_coord_letras[36]=8.32;
-    array_coord_letras[37]=8.36;
-    array_coord_letras[38]=8.40;
-    array_coord_letras[39]=8.44;
-    array_coord_letras[40]=10.20;
+    array_coord_letras[20]=6.10;
+    array_coord_letras[21]=6.14;
+    array_coord_letras[22]=6.18;
+    array_coord_letras[23]=6.22;
+    array_coord_letras[24]=6.26;
+    array_coord_letras[25]=6.30;
+    array_coord_letras[26]=6.34;
+    array_coord_letras[27]=6.38;
+    array_coord_letras[28]=6.42;
+    array_coord_letras[29]=6.46;
+    array_coord_letras[30]=8.12;
+    array_coord_letras[31]=8.16;
+    array_coord_letras[32]=8.20;
+    array_coord_letras[33]=8.24;
+    array_coord_letras[34]=8.28;
+    array_coord_letras[35]=8.32;
+    array_coord_letras[36]=8.36;
+    array_coord_letras[37]=8.40;
+    array_coord_letras[38]=8.44;
+
+    array_coord_letras[39]=10.20;//32
+    array_coord_letras[40]=5.58;//64
+    array_coord_letras[41]=8.03;//126
+    array_coord_letras[42]=8.52;//94
     
     #define KEYB_WHITE      6
     #define KEYB_BLACK      7
@@ -123,11 +117,14 @@ void dibuja_teclado(){
         for(j=0;j<66;j++){
             switch(keyb_schetch[i][j]){
                 case 0:
-                    wattron(keyboardwin,COLOR_PAIR(KEYB_BLACK));
+//                     wattron(keyboardwin,COLOR_PAIR(KEYB_WHITE));
+                        wattron(keyboardwin,COLOR_PAIR(KEYB_BLACK));
                     mvwprintw(keyboardwin,i,j,"%c",32);
                     break;
                 case 1:
+
                     wattron(keyboardwin,COLOR_PAIR(KEYB_WHITE));
+//                     wattron(keyboardwin,COLOR_PAIR(KEYB_BLACK));
                     mvwprintw(keyboardwin,i,j,"%c",35);
                     break;
                 case 8:
@@ -177,6 +174,14 @@ void escribe_teclas(){
         array_num_letra_posicion[(int) array_letras[i]]=i;
 
         switch(array_letras[i]){
+            case 126://SHIFT LEFT
+                flag_repite=1;
+                act_tecla=32;
+                break;
+            case 94://SHIFT RIGHT
+                flag_repite=8;
+                act_tecla=32;
+                break;
             case 64://ENTER
                 flag_repite=1;
                 act_tecla=32;
@@ -199,36 +204,82 @@ void escribe_teclas(){
 void marca_blink_letra(int tmp_letra,bool flag_marcala){
     char act_tecla;//necesario para marcar los espacios y el enter
     int j,flag_repite;
-    int act_posicion=array_num_letra_posicion[tmp_letra];
+    int act_posicion=array_num_letra_posicion[toupper(tmp_letra)];
 
     double tmp_y=floor(array_coord_letras[act_posicion]);
     double tmp_x=(array_coord_letras[act_posicion]-tmp_y)*100;
     int x=round(tmp_x);
     int y=round(tmp_y);
+
+    if(isupper(tmp_letra)){
+        switch(act_posicion){
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 20:                
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 30:                
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+                marca_blink_letra(94,flag_marcala);//con las letras que pulsamos con mano izq marcamos SHIFT der
+                break;
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:                
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 35:
+            case 36:
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+                marca_blink_letra(126,flag_marcala);//con las letras que pulsamos con mano der marcamos SHIFT izq
+                break;
+        }
+    }
     if(flag_marcala){//la vamos a marcar
         wattron(keyboardwin,WA_BLINK | WA_BOLD | COLOR_PAIR(array_colores_letras[act_posicion]));
     }else{//la desmarcamos
-        wattroff(keyboardwin,WA_BLINK | WA_BOLD | COLOR_PAIR(array_colores_letras[act_posicion]));
+        wattroff(keyboardwin,WA_BLINK | WA_BOLD);
         wattron(keyboardwin,COLOR_PAIR(array_colores_letras[act_posicion]));
     }
-    switch(tmp_letra){
+    switch(toupper(tmp_letra)){
+        case 126://SHIFT LEFT
+            flag_repite=1;
+            act_tecla=(flag_marcala?124:32);
+            break;
+        case 94://SHIFT RIGHT
+            flag_repite=8;
+            act_tecla=(flag_marcala?124:32);
+            break;
         case 64:
             flag_repite=1;
-            act_tecla=124;
+            act_tecla=(flag_marcala?124:32);
             break;
         case 32:
             flag_repite=18;
-            act_tecla=124;
+            act_tecla=(flag_marcala?124:32);
             break;
-
         default:
             act_tecla=tmp_letra;
             flag_repite=0;
             break;        
     }
     for(j=0;j<(1+flag_repite);j++){
-        mvwprintw(keyboardwin,y, x+j,"%c",act_tecla);
+        mvwprintw(keyboardwin,y, x+j,"%c",toupper(act_tecla));
     }
  wrefresh(keyboardwin);
-    wattroff(keyboardwin,WA_BLINK | WA_BOLD | COLOR_PAIR(array_colores_letras[act_posicion]));    
 }

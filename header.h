@@ -39,8 +39,6 @@ static bool act_letra_err;//con esta controlaremos si nos hemos equivocado en la
 const static int x_child_win=0, y_child_win=4;
 bool flag_timeout=false, flag_salir=false;
 int ch;
-#define POS_H_CABECERA 3
-#define POS_W_CABECERA 0
 
 static int minutos, segundos;//, centesimas=0;
 static int long_texto;
@@ -48,7 +46,7 @@ static int id_texto;
 
 int ancho_caja, alto_caja;//dimensiones de la caja
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin, *titlewin, *lessonwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2

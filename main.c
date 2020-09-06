@@ -105,7 +105,6 @@ void muestra_texto(int act_id_texto, int id_course){
     actualiza_cursor(0,pos_h_actual,pos_w_actual,todo_texto);//mostramos el cursor en la primera letra
     //dibujamos el teclado
     dibuja_teclado();
-    marca_blink_letra(todo_texto[0],true);
     //
     
 //     muestra_cabecera(id_texto);
@@ -127,7 +126,7 @@ void muestra_texto(int act_id_texto, int id_course){
         if(todo_texto[i_row]==ENTER){
             marca_blink_letra(64,true); 
         }else if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
-            marca_blink_letra((int) toupper(todo_texto[i_row]),true); 
+            marca_blink_letra(todo_texto[i_row],true); 
         }    
         //
 
@@ -182,15 +181,13 @@ void muestra_texto(int act_id_texto, int id_course){
                     //comprobamos si es un carácter normal o un carácter especial. Si es un carácter normal ocupa 1byte, pero si es un carácter especial ocupa 2 (á,é....)
                     if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
                         //desmarcamos la última tecla pulsada
-                        marca_blink_letra((int) toupper(todo_texto[i_row]),false); 
+                        marca_blink_letra(todo_texto[i_row],false); 
                         //
                         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
                         pos_w_actual++;//corremos una posición
                         i_row++;
                         wattron(childwin,COLOR_PAIR(C_LETRA_OK));
                         actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-
-                        
                     }else{
                         //AQUÍ LOS CARACTERES ESPECIALES
                         if(todo_texto[i_row]==195){
@@ -235,9 +232,9 @@ void muestra_texto(int act_id_texto, int id_course){
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned char todo_texto[]){
     mvprintw(20, 0, " ");//si comento esta línea da errores el iltro
         
-    wattron(childwin,WA_BLINK);
-    wattron(childwin,WA_REVERSE);
+    wattron(childwin,WA_BLINK | WA_REVERSE);
     wattroff(childwin,WA_BOLD);
+    
     if(todo_texto[i_row]==ENTER){
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);        
         marca_blink_letra(64,true);
@@ -253,8 +250,7 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned ch
             mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);           
         }
     }
-    wattroff(childwin,WA_BLINK);
-    wattroff(childwin,WA_REVERSE);
+    wattroff(childwin,WA_BLINK | WA_REVERSE);
     wrefresh(childwin);
 }
 void muestra_errores(void){
@@ -267,28 +263,30 @@ void muestra_cabecera(int id_texto, int id_course){
     //Creamos las ventana de tiempo y errores ya que se tendrán que ir rerescando periodicamente
     timewin = newwin(1, 15, 1, 50);
     errorwin = newwin(1, 15, 1, 30);
+    titlewin=newwin(1, max_x, 0,0);  
+    lessonwin=newwin(3, max_x, 1,0);  
+
+    muestra_titulo_curso(id_course);
+    mvwprintw(lessonwin,0, 0, obten_titulo(id_texto,id_course));
+    mvwprintw(lessonwin,2,0, ET_REPEAT_THE_TEXT);
+    wrefresh(lessonwin);
+
     muestra_errores();
     contar_segundos();
-    muestra_titulo_curso(id_course);
     
-    mvprintw(1, 0, obten_titulo(id_texto,id_course));
-    mvprintw(POS_H_CABECERA, POS_W_CABECERA, ET_REPEAT_THE_TEXT);
 }
 
 void muestra_titulo_curso(int id_course){
+    wrefresh(titlewin);
     char var_barra[max_x];
     init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
-    
-    attron(A_BOLD);
-    attron(COLOR_PAIR(C_TITLE));
-    memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
-    mvprintw(0, 0,"%s",var_barra);
     int tmp_borde=floor((ancho_caja-strlen(array_et_course_title[id_course]))/2);
-    mvprintw(0, tmp_borde, "%s",array_et_course_title[id_course]);
-    attroff(COLOR_PAIR(C_TITLE));
-    attroff(A_BOLD);
 
-    refresh();  
+    memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
+    wattron(titlewin, WA_BOLD | COLOR_PAIR(C_TITLE));
+    mvwprintw(titlewin, 0, 0,"%s",var_barra);
+    mvwprintw(titlewin, 0, tmp_borde, "%s",array_et_course_title[id_course]);
+    wrefresh(titlewin);
 }
 void muestra_pie(int opciones[4]){    
     //según las opciones[] que traigamos mostraremos unas opciones del menú u otras
@@ -376,8 +374,7 @@ void contar_segundos(){
     mvwprintw(timewin,0, 0, ET_TIME": ");
 
     if((MAX_TIEMPO-total_tiempo)<30){
-        wattron(timewin,COLOR_PAIR(C_TIMEOUT));
-        wattron(timewin,WA_BLINK);
+        wattron(timewin,COLOR_PAIR(C_TIMEOUT) | WA_BLINK);
     }
     mvwprintw(timewin,0, 8, "%02d:%02d",minutos,segundos);
     wrefresh(timewin);
@@ -387,15 +384,15 @@ void contar_segundos(){
     }else{
         flag_timeout=true;//se acabó el tiempo! 
         //
+        wattron(childwin,WA_BLINK|COLOR_PAIR(C_LETRA_OK));
         char tmp_cadena[]=ET_TIME_OVER;
         int tmp_borde=floor((ancho_caja-strlen(tmp_cadena))/2);
-        wattron(childwin,WA_BLINK);
-        wattron(childwin,WA_BOLD);
+        int tmp_borde2=floor((ancho_caja-strlen(ET_PRESS_KEY_CONTINUE))/2);
+
+        wattron(childwin,WA_BLINK | WA_BOLD);
         mvwprintw(childwin,5,tmp_borde,tmp_cadena);
-        wattroff(childwin,WA_BLINK);
-        wattroff(childwin,WA_BOLD);
-        
-        mvprintw(14, 0, ET_PRESS_KEY_CONTINUE);
+        wattroff(childwin,WA_BLINK | WA_BOLD);
+        mvwprintw(childwin,6, tmp_borde2, ET_PRESS_KEY_CONTINUE);
         wrefresh(childwin);
         refresh();
     }
@@ -404,7 +401,19 @@ void finalizar(int id_course){
     //PARAMOS EL CRONOMETRO
     alarm(0);
 
-    clear();
+    wclear(lessonwin);
+    wclear(errorwin);
+    wclear(timewin);
+    wclear(childwin);
+    wclear(keyboardwin);
+
+    wrefresh(lessonwin);
+    wrefresh(errorwin);
+    wrefresh(timewin);
+    wrefresh(childwin);
+    wrefresh(keyboardwin);
+
+    muestra_titulo_curso(id_course);
     flag_salir=true;
     ungetch(ch);
     bool flag_opcion_valida=false;
@@ -423,10 +432,9 @@ void finalizar(int id_course){
     mvwprintw(finalwin,5, 1, ET_TIME);
     mvwprintw(finalwin,5, 20, "%02d:%02d",minutos,segundos);
 
-    int tmp_opciones[4]={1,2,1,1};
     wrefresh(finalwin);
 
-    muestra_titulo_curso(id_course);
+    int tmp_opciones[4]={1,2,1,1};
     refresh();
     muestra_pie(tmp_opciones);    
 
@@ -448,12 +456,12 @@ void finalizar(int id_course){
                 flag_opcion_valida=true;
                 //do need anymore, whe are in a loop 
                 break;
-            case 0x10b:/*f3 change lesson*/
+            case 0x10b://f3 change lesson
                 flag_opcion_valida=true;
                 seleccionar_menu();
                 return;
                 break;
-            case 0x10c:/*f4 change course*/
+            case 0x10c://f4 change course
                 flag_opcion_valida=true;
                 flag_dentro_menu_lecciones=false;
                 seleccionar_menu();
