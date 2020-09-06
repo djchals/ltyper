@@ -2,15 +2,18 @@
 #include "json_reader.h"
 #include "menus.h"
 #include "draw_keys.h"
+#include "coord_wins.h"
 
 int main(){
+    _init_cursos();//necesario para leer el archivo json en json_reader.h
+    _init_ncurses();//it s not the same
+    obten_coord_wins();
     bucle_menus();
     return 0;
 }
 void bucle_menus(){
     flag_dentro_menus=true;
     int opcion_selec,lecccion_sel;
-    _init_cursos();//necesario para leer el archivo json
     while(flag_dentro_menus){
         flag_dentro_menu_lecciones=true;
         opcion_selec=0;
@@ -28,9 +31,7 @@ void bucle_menus(){
     refresh();
     endwin();//si llegamos aquí es que hemos pulsado la tecla ESC en los menús
 }
-
 void muestra_texto(int act_id_texto, int id_course){
-    
     //inicializamos de nuevo las variables globales
     flag_timeout=false;
     total_tiempo=-1;
@@ -51,10 +52,6 @@ void muestra_texto(int act_id_texto, int id_course){
     init_pair(C_LETRA_OK,COLOR_WHITE,COLOR_BLACK);
     init_pair(C_TIMEOUT,COLOR_RED,COLOR_BLACK);
     //
-
-    //inicializamos las variables para la childwin y el cursor
-    ancho_caja=80;
-    alto_caja=10;
 
     ini_w=1;
     ini_h=1;
@@ -83,7 +80,7 @@ void muestra_texto(int act_id_texto, int id_course){
 
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
-    childwin = subwin(mainwin, alto_caja, ancho_caja, y_child_win, x_child_win);
+    childwin = subwin(mainwin, alto_caja, ancho_caja, y_childwin, x_childwin);
     box(childwin, 0, 0);
 
     num_cols_texto=1;
@@ -261,26 +258,28 @@ void muestra_errores(void){
 }
 void muestra_cabecera(int id_texto, int id_course){
     //Creamos las ventana de tiempo y errores ya que se tendrán que ir rerescando periodicamente
-    timewin = newwin(1, 15, 1, 50);
-    errorwin = newwin(1, 15, 1, 30);
-    titlewin=newwin(1, max_x, 0,0);  
-    lessonwin=newwin(3, max_x, 1,0);  
-
+    timewin = newwin(1, 15, y_timewin, x_timewin);
+    errorwin = newwin(1, 15, y_errorwin, x_errorwin);
+    titlewin=newwin(1, max_x, y_titlewin,y_titlewin);  
+    lessonwin=newwin(1, max_x, y_lessonwin,x_lessonwin);  
+    descwin=newwin(1, max_x, y_descwin,x_descwin);  
+    //
+    
     muestra_titulo_curso(id_course);
     mvwprintw(lessonwin,0, 0, obten_titulo(id_texto,id_course));
-    mvwprintw(lessonwin,2,0, ET_REPEAT_THE_TEXT);
+    mvwprintw(descwin,0,0, ET_DESC);
+    wrefresh(descwin);
     wrefresh(lessonwin);
 
     muestra_errores();
     contar_segundos();
-    
 }
 
 void muestra_titulo_curso(int id_course){
     wrefresh(titlewin);
     char var_barra[max_x];
     init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
-    int tmp_borde=floor((ancho_caja-strlen(array_et_course_title[id_course]))/2);
+    int tmp_borde=floor((max_x-strlen(array_et_course_title[id_course]))/2);
 
     memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
     wattron(titlewin, WA_BOLD | COLOR_PAIR(C_TITLE));
@@ -294,7 +293,7 @@ void muestra_pie(int opciones[4]){
 
     //creamos los pares de colores
     init_pair(C_LETRA_PIE,COLOR_WHITE,COLOR_BLUE);
-    footerwin=newwin(1, max_x, max_y-1,0);    
+    footerwin=newwin(1, max_x, y_footerwin,x_footerwin);    
     memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
     
     wattron(footerwin,COLOR_PAIR(C_LETRA_PIE));
@@ -420,7 +419,7 @@ void finalizar(int id_course){
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
 
-    finalwin = subwin(mainwin,8, 80, y_child_win, x_child_win);
+    finalwin = subwin(mainwin,8, 80, y_finalwin, x_finalwin);
     box(finalwin, 0, 0);   
 
     mvprintw(3, 0, ET_YOUR_SCORE);

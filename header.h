@@ -32,11 +32,39 @@ bool flag_dentro_menus,flag_dentro_menu_lecciones,flag_dentro_texto;
 void bucle_menus();
 void muestra_titulo_curso(int id_course);
 
+//menus.h
+#define WIDTH_MENU          70
+#define HEIGHT_MENU         10
+#define SEP             2
+
+#define MAX_OP_MENU    100
+
+#define ENTER          10
+
+int startx;
+int starty;
+int max_x;
+int max_y;
+void _init_ncurses();
+//
+
 static int total_tiempo;
 const static int MAX_TIEMPO=150;//El número máximo de segundos que le damos para la prueba
 static int pos_w_actual, pos_h_actual;
 static bool act_letra_err;//con esta controlaremos si nos hemos equivocado en la letra actual
-const static int x_child_win=0, y_child_win=4;
+void obten_coord_wins();
+
+bool flag_muestra_borde_keyb=true;
+static int x_childwin, y_childwin;
+static int x_timewin, y_timewin;
+static int x_errorwin, y_errorwin;
+static int x_finalwin, y_finalwin;
+static int x_footerwin, y_footerwin;
+static int x_keyboardwin, y_keyboardwin;
+static int x_titlewin, y_titlewin;
+static int x_lessonwin, y_lessonwin;
+static int x_descwin, y_descwin;
+
 bool flag_timeout=false, flag_salir=false;
 int ch;
 
@@ -44,9 +72,10 @@ static int minutos, segundos;//, centesimas=0;
 static int long_texto;
 static int id_texto;    
 
-int ancho_caja, alto_caja;//dimensiones de la caja
+//inicializamos las variables para la childwin y el cursor
+int ancho_caja=80, alto_caja=10;//dimensiones de la caja
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin, *titlewin, *lessonwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin, *titlewin, *lessonwin,*descwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2
