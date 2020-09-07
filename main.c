@@ -188,11 +188,11 @@ void muestra_texto(int act_id_texto, int id_course){
                                 mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);     
                             //si ue así es que venimos de pulsar una tecla correcta y lo anterior ue un caracter especial que ocupan el doble de bytes, por tanto sumamos i_row
                             i_row++;
+                            actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                             i_row++;    
                             pos_w_actual++;//corremos una posición
                             wattron(childwin,COLOR_PAIR(C_LETRA_OK));
-
-                            actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
+                            wrefresh(childwin);
                             ch=getch();//como hemos pulsado una combinación de teclas para que salga el puto carácter leemos otra y la desecharemos        
                         }
                     }
@@ -242,7 +242,8 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned ch
             mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);           
         }
     }
-    wattroff(childwin,WA_BLINK | WA_REVERSE);
+    wattroff(childwin,WA_BLINK);
+    wattroff(childwin,WA_REVERSE);
     wrefresh(childwin);
 }
 void muestra_errores(void){
