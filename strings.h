@@ -22,7 +22,8 @@ char *array_et_course_title[MAX_COURSES]={
     0,
     "Curso de mecanografia en inglés (distribución QWERTY)",
     "Curso de mecanografia en inglés (distribución DVORAK)",
-    "Curso de mecanografia en español (distribución QWERTY)"
+    "Curso de mecanografia en inglés (distribución COLEMAK)",
+    "Curso de mecanografia en inglés (distribución DVORAK REVERSE)"
 };
 
     // NOMBRES DE LOS DEDOS EN INGLÉS
