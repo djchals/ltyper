@@ -11,10 +11,13 @@
 
 #include<json-c/json.h>
 #include <ctype.h> //incluyo para tener isspace()
-#include <ncurses.h>
+// #include <ncursesw/curses.h>
+#include <curses.h>
 
 #define MAX_COURSES 6 //debe estar aquí para que la coja en cadenas_menus.hs
-#include "cadenas_menus.h"
+#include "strings.h"
+
+#include <locale.h>
 
 //PROTOTIPOS y VARIABLES GLOBALES main.c
 int leer_tecla(int comprueba_letra);
@@ -26,16 +29,16 @@ void contar_segundos();
 void pitar(void);
 void finalizar(int id_course);
 void muestra_texto(int act_id_texto, int id_course);
-void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual,unsigned char todo_texto[]);
+void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, int flag_attrs,unsigned char todo_texto[]);
 void seleccionar_menu();
 bool flag_dentro_menus,flag_dentro_menu_lecciones,flag_dentro_texto;
 void bucle_menus();
 void muestra_titulo_curso(int id_course);
 void muestra_titulo_menu();
- 
+int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]);
+bool is_special(int tmp_caracter);
+int contar_195(int i_row, unsigned char todo_texto[]);
 //menus.h
-#define SEP             2
-#define MAX_OP_MENU    100
 #define ENTER          10
 
 int startx;
@@ -84,7 +87,10 @@ WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboar
 #define C_LETRA_PIE     3
 #define C_TIMEOUT       4
 #define C_TITLE         5
+#define C_TITLE         5
 #define ENTER           10
+#define C_LETRA_PRUEBA  20
+
 //
 //
 #endif /* FOO_DOT_H */

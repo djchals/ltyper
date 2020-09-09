@@ -5,6 +5,7 @@
 #include "coord_wins.h"
 
 int main(){
+    setlocale(LC_ALL,"es_ES");
     _init_cursos();//necesario para leer el archivo json en json_reader.h
     _init_ncurses();//it s not the same
     obten_coord_wins();
@@ -53,8 +54,10 @@ void muestra_texto(int act_id_texto, int id_course){
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
     init_pair(C_LETRA_OK,COLOR_WHITE,COLOR_BLACK);
     init_pair(C_TIMEOUT,COLOR_RED,COLOR_BLACK);
+//  init_pair(C_LETRA_PRUEBA,COLOR_WHITE,COLOR_RED);
+    init_pair(C_LETRA_PRUEBA,COLOR_WHITE,COLOR_GREEN);
+    
     //
-
     ini_w=1;
     ini_h=1;
      
@@ -100,9 +103,9 @@ void muestra_texto(int act_id_texto, int id_course){
         }
         num_cols_texto++;//añadimos el salto de línea al inal para que se vea la última línea
     }
-    actualiza_cursor(0,pos_h_actual,pos_w_actual,todo_texto);//mostramos el cursor en la primera letra
-    //dibujamos el teclado
-    dibuja_teclado();
+//     actualiza_cursor(0,pos_h_actual,pos_w_actual,3,todo_texto);//mostramos el cursor en la primera letra
+//     dibujamos el teclado
+    dibuja_teclado();   
     //
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
@@ -116,17 +119,27 @@ void muestra_texto(int act_id_texto, int id_course){
     *(tmp_special_char+0)=195;
     tmp_special_char[2]=0x00;
     //
-    
-    while(i_row<long_texto){
+    int conta=0;
+    int act_pos=0;//con esta controlamos la posición en el string, los caracteres especiales aquí serán solo 1
+    //en i_row son dobles!
+    int act_attrs;
+    act_letra_err=false;
+    while(act_pos<long_texto){ 
+        if(todo_texto[i_row]==195){
+            i_row++;
+            continue;
+        }  
+        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,3,todo_texto);
+   
+        conta++;
         //marcamos la tecla que debemos pulsar
         if(todo_texto[i_row]==ENTER){
             marca_blink_letra(64,true); 
         }else if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
             marca_blink_letra(todo_texto[i_row],true); 
-        }    
-        //
-
+        }
         ch=getch();
+        wrefresh(childwin);
         if(flag_timeout){
             break;
         }
@@ -153,99 +166,118 @@ void muestra_texto(int act_id_texto, int id_course){
                 flag_dentro_menu_lecciones=false;
                 seleccionar_menu();
                 return;
-                break;
         }
-        tecla_leida=(ch==todo_texto[i_row]);//tecla_leida=0 si es incorrecto, 1 si es correcto  
+        tecla_leida=comprueba_tecla(ch,i_row,todo_texto);//tecla_leida=0 si es incorrecto, 1 si es correcto  
         switch(tecla_leida){
             case 0://KO tecla incorrecta
-                num_errores++;
-                muestra_errores();
-                act_letra_err=true;
-
-                wattron(childwin,COLOR_PAIR(C_LETRA_ERR));
-                actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-
+                    if(ch!=195){
+                        num_errores++;
+                        muestra_errores();
+                        act_letra_err=true;
+                        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,2,todo_texto);
+                    }
                 break;
-            case 1://Owrefresh(finalwin);K tecla correcta                    
+            case 1://OK tecla correcta  
+                if(act_letra_err){
+                    act_attrs=0;
+                    act_letra_err=false;
+                }else{
+                    act_attrs=1;
+                }
                 //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
                 if(todo_texto[i_row]!=ENTER){
-                    //Marcamos el carácter en negrita
-                    wattron(childwin,WA_BOLD);
-                    //comprobamos si es un carácter normal o un carácter especial. Si es un carácter normal ocupa 1byte, pero si es un carácter especial ocupa 2 (á,é....)
-                    if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
-                        //desmarcamos la última tecla pulsada
-                        marca_blink_letra(todo_texto[i_row],false); 
-                        //
-                        mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
-                        pos_w_actual++;//corremos una posición
-                        i_row++;
-                        wattron(childwin,COLOR_PAIR(C_LETRA_OK));
-                        actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-                    }else{
-                        //AQUÍ LOS CARACTERES ESPECIALES
-                        if(todo_texto[i_row]==195){
-                            *(tmp_special_char+1)=todo_texto[i_row+1];
-                                mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);     
-                            //si ue así es que venimos de pulsar una tecla correcta y lo anterior ue un caracter especial que ocupan el doble de bytes, por tanto sumamos i_row
-                            i_row++;
-                            actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-                            i_row++;    
-                            pos_w_actual++;//corremos una posición
-                            wattron(childwin,COLOR_PAIR(C_LETRA_OK));
-                            wrefresh(childwin);
-                            ch=getch();//como hemos pulsado una combinación de teclas para que salga el puto carácter leemos otra y la desecharemos        
-                        }
-                    }
-                            actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
-                    wattroff(childwin,WA_BOLD);
+                    marca_blink_letra(todo_texto[i_row],false); //desmarcamos la última tecla pulsada
+                    actualiza_cursor(i_row,pos_h_actual,pos_w_actual,act_attrs,todo_texto);
+                    pos_w_actual++;//corremos una posición
+                    
                 }else{
                     //desmarcamos la última tecla pulsada
-                    marca_blink_letra(64,false); 
+                    marca_blink_letra(64,false);
                     //
-
-                    mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);//imprimimos el caracter que le queremos dar al Enter (espacio)
+                    actualiza_cursor(i_row,pos_h_actual,pos_w_actual,act_attrs,todo_texto);
                     pos_w_actual=ini_w;
                     pos_h_actual++;
-                    wattron(childwin,COLOR_PAIR(C_LETRA_OK));
-                    i_row++;  
-                    
-                    actualiza_cursor(i_row,pos_h_actual,pos_w_actual,todo_texto);
                 }
-                if(act_letra_err){
-                    wattron(childwin,COLOR_PAIR(C_LETRA_OK));
-                    act_letra_err=false;
-                }
+                act_pos++;//sumamos una posición 
+                i_row=act_pos+contar_195(i_row,todo_texto);
                 break;
         }
         wrefresh(childwin);
     }
     finalizar(id_course);
 }
-void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, unsigned char todo_texto[]){
-    mvprintw(20, 0, " ");//si comento esta línea da errores el iltro
-        
-    wattron(childwin,WA_BLINK | WA_REVERSE);
-    wattroff(childwin,WA_BOLD);
-    
+bool is_special(int tmp_caracter){
+    switch(tmp_caracter){
+        case 161://á
+        case 169://é
+        case 173://í
+        case 179://ó
+        case 186://ú
+        case 129://Á
+        case 137://É
+        case 141://Í
+        case 147://Ó
+        case 154://Ú
+        case 177://ñ
+        case 145://Ñ
+            return true;
+        break;
+        default:
+            return false;
+        break;
+    }
+}
+int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]){
+     if(ch<=128){
+         return (int)(ch==todo_texto[i_row]);
+    }
+    switch(ch){
+        case 161://á
+        case 169://é
+        case 173://í
+        case 179://ó
+        case 186://ú
+        case 129://Á
+        case 137://É
+        case 141://Í
+        case 147://Ó
+        case 154://Ú
+        case 177://ñ
+        case 145://Ñ
+            return (int)(ch==todo_texto[i_row]);
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+
+void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, int flag_attrs,unsigned char todo_texto[]){
+    wattrset(childwin,0);
+    switch(flag_attrs){
+        case 0:wattron(childwin,WA_BOLD | COLOR_PAIR(C_LETRA_ERR));break;
+        case 1:wattron(childwin,WA_BOLD | COLOR_PAIR(C_LETRA_OK));break;
+        case 2:wattron(childwin,WA_BLINK | WA_REVERSE | COLOR_PAIR(C_LETRA_ERR));break;
+        case 3:wattron(childwin,WA_BLINK | WA_REVERSE | COLOR_PAIR(C_LETRA_OK));break;
+    }
     if(todo_texto[i_row]==ENTER){
-        mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);        
+        mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);   
         marca_blink_letra(64,true);
-    }else if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
+    }else if(isprint(todo_texto[i_row])){
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
     }else{
         //AQUÍ LOS CARACTERES ESPECIALES
-        if(todo_texto[i_row]==195){
+        if(is_special(todo_texto[i_row])){
             unsigned char tmp_special_char[2];
-            tmp_special_char[2]=0x00;
             *(tmp_special_char+0)=195;
-            *(tmp_special_char+1)=todo_texto[i_row+1];
-            mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);           
+            *(tmp_special_char+1)=todo_texto[i_row];
+            mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);
         }
     }
-    wattroff(childwin,WA_BLINK);
-    wattroff(childwin,WA_REVERSE);
     wrefresh(childwin);
 }
+
+
 void muestra_errores(void){
     wrefresh(errorwin);
     wattron(errorwin,COLOR_PAIR(C_LETRA_OK));
@@ -479,8 +511,12 @@ void seleccionar_menu(){
     delwin(childwin);    
     endwin();    
 }
-
-void pitar(void){
-    //Más adelante configuraremos si queremos que pite o no
-    //beep();
+int contar_195(int i_row, unsigned char todo_texto[]){
+    int cont=0;
+    for (int i=0; i<=i_row;++i){
+        if(todo_texto[i]==195){
+            cont++;
+        }
+    }
+    return cont;
 }
