@@ -1,11 +1,16 @@
 {
 "id_course": 1,
 "titles":
-    ["Lección 1","Lección 2","Lección 3"],
+    ["Lección 1","Lección 2"],
 "texts": 
     [
-    "1aaaaa 2aa 3aaaaaa",
-    "Hola que tal, hola hola hola",
-    "Anto"
+    "jjjj kkkk llll ;;;; aaaa ssss dddd ffff ;;;; llll kkkk jjjj
+ffff dddd ssss aaaa ;;;; aaaa llll ssss kkkk dddd jjjj ffff
+aajj sskk ddll ff;; jjaa kkss lldd ;;ff ;;aa llss kkdd jjff
+ajf; ;jfa adjl sfk; ;kfs ljfa sldk ldks lj;k dafs fljs aj;f",
+    "jhfg khdg lhsg ;hag khdg lhsg ;hag lhsg ;hah lhsg khdg jhfg
+fgjh dgkh sglh ag;h dgkh sglh ag;h sglh ag;h sglh dgkh fgjh
+jfkf lf;f ajsj djfj ahsh dhdh fh;g lgkg jggh g;hg ahgl hsgh
+ghhg gah; gshl gdhk gfhj ghhg g;ha glhs gkhd gjhf ghhg hag;"
     ]
 }  
