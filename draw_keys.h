@@ -1,15 +1,15 @@
 #define NUM_LETRAS 46
-void escribe_teclas();
+void escribe_teclas(int id_texto,int id_course);
 double array_coord_letras[NUM_LETRAS];
 double array_colores_letras[NUM_LETRAS];
-char act_distribucion_teclado[NUM_LETRAS]="1234567890QWERTYUIOPASDFGHJKL;ZXCVBNM,. @~^'";
+// char act_distribucion_teclado[NUM_LETRAS]="1234567890QWERTYUIOPASDFGHJKL;ZXCVBNM,. @~^'";
 int array_num_letra_posicion[255];
 void marca_blink_letra(int act_letra,bool flag_marcala);
-void dibuja_teclado();
+void dibuja_teclado(int id_texto,int id_course);
 int num_ultima_tecla=0;
 int max_y_keyb=13;
 
-void dibuja_teclado(){    
+void dibuja_teclado(int id_texto,int id_course){    
     int i,j;
     keyboardwin= subwin(mainwin,max_y_keyb, 80,y_keyboardwin, x_keyboardwin);
 
@@ -150,9 +150,9 @@ void dibuja_teclado(){
             }
         }
     }
-    escribe_teclas();
+    escribe_teclas(id_texto,id_course);
 }
-void escribe_teclas(){
+void escribe_teclas(int id_texto,int id_course){
     char array_letras[NUM_LETRAS];
     char act_tecla;
     bool flag_special;
@@ -160,8 +160,11 @@ void escribe_teclas(){
     int y,x,i,j,flag_repite;
     unsigned char tmp_special_char[2];
     //
-   memcpy(array_letras,act_distribucion_teclado,(strlen(act_distribucion_teclado)));
-   array_letras[strlen(act_distribucion_teclado)]=0;
+    
+    char act_distribucion_teclado[NUM_LETRAS]={};
+    strcpy(act_distribucion_teclado,&*obten_distribucion(id_texto,id_course));
+    memcpy(array_letras,act_distribucion_teclado,(strlen(act_distribucion_teclado)));
+    array_letras[strlen(act_distribucion_teclado)]=0;
     //La @ equivale a ENTER
     for(i=0;i<NUM_LETRAS;i++){
         flag_special=false;

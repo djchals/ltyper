@@ -4,6 +4,7 @@
 char *obten_texto(int id_texto,int id_course);
 char *obten_titulo(int id_texto, int id_course);
 char *obten_course_title(int id_course);
+char *obten_distribucion(int id_texto, int id_course);
 int obten_num_titulos(int id_course);
 void obten_titulos();
 void quita_espacios(char *act_texto);
@@ -95,9 +96,9 @@ void proceso_archivo(char *archivo){
     strcpy(ruta_archivo, ruta);
     strcat(ruta_archivo, archivo);
     FILE *fp;
-	char buffer[1024];
+	char buffer[10240];//si el archivo ocupase más de 10kb habria que aumentar este valor
     fp = fopen(ruta_archivo,"r");
-	fread(buffer, 1024, 1, fp);
+	fread(buffer, 10240, 1, fp);//si el archivo ocupase más de 10kb habria que aumentar este valor
 	fclose(fp);
     tmp_json_parsed = json_tokener_parse(buffer);
     
@@ -127,8 +128,15 @@ char *obten_titulo(int id_texto, int id_course){
     quita_espacios(act_titulo);
     return act_titulo;
 }
+char *obten_distribucion(int id_texto, int id_course){
+    json_object *distribution;
+    json_object_object_get_ex(array_json_parseds[id_course], "distribution", &distribution);
+    char *tmp_distribution=(char *)json_object_get_string(distribution);
+    return tmp_distribution;
+}
+
 int obten_id_course(){
-    struct json_object *id_course;
+    json_object *id_course;
     json_object_object_get_ex(tmp_json_parsed, "id_course", &id_course);
     int *tmp_id=(int *) json_object_get_int(id_course);
     return (int)tmp_id;

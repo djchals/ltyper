@@ -11,11 +11,14 @@
 #define ET_PRESS_KEY_CONTINUE "Presiona cualquier tecla para continuar..."
 #define ET_YOUR_SCORE "Has obtenido la siguiente puntuación:"
 #define ET_PPM "Pulsaciones/min"
+#define ET_LESSON "Lección"
+
 
 //menus.h
 #define ET_PROGRAMA "TYPEMINAL v0.1"
+#define ET_ENUNCIADO_COURSE "Escoge el curso que quieres realizar:"
+#define ET_ENUNCIADO_LESSON "Escoge la lección que quieres practicar:"
 
-#define ET_ENUNCIADO_MENU "Elige una opción:"
 
 //json_reader.h
 char *array_et_course_title[MAX_COURSES]={

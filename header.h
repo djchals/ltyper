@@ -15,6 +15,7 @@
 #include <curses.h>
 
 #define MAX_COURSES 6 //debe estar aquí para que la coja en cadenas_menus.hs
+#define MAX_LESSONS_FOR_COURSE 40
 #include "strings.h"
 
 #include <locale.h>
@@ -77,10 +78,10 @@ static int id_texto;
 
 //inicializamos las variables para la childwin y el cursor
 int ancho_caja=80, alto_caja=10;//dimensiones de la caja
-int ancho_caja_menu=70, alto_caja_menu=10;
+int ancho_caja_menu=70, alto_caja_menu=10,alto_caja_submenu=6;
 int ancho_caja_final=50, alto_caja_final=8;
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *finalwin, *footerwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *descmenuwin, *descfinalwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2
