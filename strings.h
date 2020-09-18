@@ -23,10 +23,10 @@
 //json_reader.h
 char *array_et_course_title[MAX_COURSES]={
     0,
-    "Curso de mecanografia en inglés (distribución QWERTY)",
-    "Curso de mecanografia en inglés (distribución DVORAK)",
-    "Curso de mecanografia en inglés (distribución COLEMAK)",
-    "Curso de mecanografia en inglés (distribución DVORAK REVERSE)"
+    "Curso de mecanografia en inglés (dist. QWERTY)",
+    "Curso de mecanografia en inglés (dist. DVORAK)",
+    "Curso de mecanografia en inglés (dist. COLEMAK)",
+    "Curso de mecanografia en inglés (dist. DVORAK REVERSE)"
 };
 
     // NOMBRES DE LOS DEDOS EN INGLÉS

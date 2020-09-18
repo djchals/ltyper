@@ -74,12 +74,13 @@ void dibuja_teclado(int id_texto,int id_course){
     array_coord_letras[36]=8.36;
     array_coord_letras[37]=8.40;
     array_coord_letras[38]=8.44;
-    array_coord_letras[39]=10.20;//32 space
-    array_coord_letras[40]=5.58;//64 enter
-    array_coord_letras[41]=8.03;//126 shift left
-    array_coord_letras[42]=8.52;//94 shift right
-    array_coord_letras[43]=6.50;//39 tilde
-    array_coord_letras[44]=6.46;//95 Ñ
+    array_coord_letras[39]=8.48;
+    array_coord_letras[40]=10.20;//32 space
+    array_coord_letras[41]=5.58;//64 enter (arroba)
+    array_coord_letras[42]=8.03;//126 shift left
+    array_coord_letras[43]=8.52;//94 shift right
+    array_coord_letras[44]=6.50;//39 tilde
+    array_coord_letras[45]=6.46;//95 Ñ
     #define KEYB_WHITE      6
     #define KEYB_BLACK      7
     #define KEYB_FINGER1     8
@@ -228,56 +229,56 @@ void marca_blink_letra(int tmp_letra,bool flag_marcala){
     //
    
     //veriicamos si es un caracter especial
-    switch(tmp_letra){
-        case 161://á
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=97;//a
-            break;
-        case 129://Á
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=65;//A
-            break;
-        case 169://é
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=101;//e
-            break;
-        case 137://É
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=69;//E
-            break;
-        case 173://í
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=105;//i
-            break;
-        case 141://Í
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=73;//I
-            break;
-        case 179://ó
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=111;//o
-            break;
-        case 147://Ó
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=79;//O
-            break;
-        case 186://ú
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=117;
-            break;
-        case 154://Ú
-            marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
-            tmp_letra=85;//U
-            break;
-//             ALTA ACABAR ESTA PARTE
-//         case 164://ñ 
-//             tmp_letra=95;//U
+//     switch(tmp_letra){
+//         case 161://á
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=97;//a
 //             break;
-//         case 165://Ñ
-//             marca_blink_letra(126,flag_marcala);//con las letras que pulsamos con mano der marcamos SHIFT izq
-//             tmp_letra=95;//U
-            break;
-    }
+//         case 129://Á
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=65;//A
+//             break;
+//         case 169://é
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=101;//e
+//             break;
+//         case 137://É
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=69;//E
+//             break;
+//         case 173://í
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=105;//i
+//             break;
+//         case 141://Í
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=73;//I
+//             break;
+//         case 179://ó
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=111;//o
+//             break;
+//         case 147://Ó
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=79;//O
+//             break;
+//         case 186://ú
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=117;
+//             break;
+//         case 154://Ú
+//             marca_blink_letra(39,flag_marcala);//marcamos la tilde ya que es un carácter acentuado
+//             tmp_letra=85;//U
+//             break;
+// //             ALTA ACABAR ESTA PARTE
+// //         case 164://ñ 
+// //             tmp_letra=95;//U
+// //             break;
+// //         case 165://Ñ
+// //             marca_blink_letra(126,flag_marcala);//con las letras que pulsamos con mano der marcamos SHIFT izq
+// //             tmp_letra=95;//U
+//             break;
+//     }
     int act_posicion=array_num_letra_posicion[toupper(tmp_letra)];
 
     double tmp_y=floor(array_coord_letras[act_posicion]);

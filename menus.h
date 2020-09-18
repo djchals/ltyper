@@ -30,7 +30,7 @@ int muestra_menu(int id_course){
     int seleccionat = 1;
     int eleccio = 0;
     int c;
-
+    int tmp_opciones[4];
     _init_ncurses();
     if(id_course==0){
         obten_menu_inicial();
@@ -44,13 +44,21 @@ int muestra_menu(int id_course){
     if(id_course==0){
         mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_COURSE);
         _imp_menu_vertical(menu, 1);
+        tmp_opciones[0]=1;
+        tmp_opciones[1]=0;
+        tmp_opciones[2]=0;
+        tmp_opciones[3]=0;        
+
     }else{
         mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_LESSON);
         _imp_menu_horizontal(menu, 1);
+        tmp_opciones[0]=1;
+        tmp_opciones[1]=0;
+        tmp_opciones[2]=0;
+        tmp_opciones[3]=1;        
     }
     wrefresh(descmenuwin);
     
-    int tmp_opciones[4]={1,0,0,0};
     muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
     
     refresh();
@@ -81,6 +89,13 @@ int muestra_menu(int id_course){
                 flag_dentro_menus=false;
                 flag_dentro_menu_lecciones=false;
                 eleccio=10000;//como le restaremos 1 se quedará en 9999
+            case 0x10c:/*f4 change course*/
+                if(id_course!=0){
+                    flag_dentro_menu_lecciones=false;
+                    bucle_menus();
+                    eleccio=12345;//en teoria esto no tiene que suceder nunca pero lo pongo por si acaso para que salga del bucle
+                }
+                break;
             default:
                 refresh();
                 break;

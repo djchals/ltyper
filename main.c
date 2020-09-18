@@ -199,14 +199,12 @@ void muestra_texto(int act_id_texto, int id_course){
                     pos_w_actual=ini_w;
                     pos_h_actual++;
                 }
-//                 act_pos++;//sumamos una posición 
                 i_row++;
-//                 i_row=act_pos+contar_195(i_row,todo_texto);
                 break;
         }
-//         wmove(childwin,pos_h_actual,pos_w_actual);
         wrefresh(childwin);
     }
+
     finalizar(id_course);
 }
 bool is_special(int tmp_caracter){
@@ -265,7 +263,6 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, int flag_at
     }
     if(todo_texto[i_row]==ENTER){
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",32);   
-        marca_blink_letra(64,true);
     }else if(isprint(todo_texto[i_row])){
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
     }else{
@@ -290,7 +287,6 @@ void muestra_cabecera(int id_texto, int id_course){
     timewin = newwin(1, 15, y_timewin, x_timewin);
     errorwin = newwin(1, 15, y_errorwin, x_errorwin);
     lessonwin=newwin(1, max_x, y_lessonwin,x_lessonwin);  
-    WINDOW *descwin;
     descwin=newwin(1, max_x, y_descwin,x_descwin);  
     //
     
@@ -372,8 +368,8 @@ void muestra_pie(int opciones[4]){
         pos_opc=pos_opc+strlen(et_opcion11)+3;
     }else if(opciones[1]==2){
         wattron(footerwin,WA_BOLD);
-        mvwprintw(footerwin,0, pos_opc,"R");
-        pos_opc++;
+        mvwprintw(footerwin,0, pos_opc,"F2");
+        pos_opc=pos_opc+2;
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
@@ -446,7 +442,7 @@ void finalizar(int id_course){
     //PARAMOS EL CRONOMETRO
     WINDOW *finalwin, *descfinalwin;
     alarm(0);
-
+    
     wclear(lessonwin);
     wclear(errorwin);
     wclear(timewin);
@@ -454,16 +450,16 @@ void finalizar(int id_course){
     wclear(keyboardwin);
     wclear(descwin);
 
+    wrefresh(descwin);
     wrefresh(lessonwin);
     wrefresh(errorwin);
     wrefresh(timewin);
     wrefresh(childwin);
     wrefresh(keyboardwin);
-//     wrefresh(descwin);
 
     muestra_titulo_curso(id_course);
     flag_salir=true;
-    ungetch(ch);
+
     bool flag_opcion_valida=false;
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
@@ -474,7 +470,6 @@ void finalizar(int id_course){
     descfinalwin=newwin(1, ancho_caja_final, y_descfinal, x_descfinal);
     mvwprintw(descfinalwin,0, 0, ET_YOUR_SCORE);
     wrefresh(descfinalwin);
-    
     mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
     mvwprintw(finalwin,3, 1, "%20s",ET_PPM);
     mvwprintw(finalwin,3, 25, "%d",(int)num_ppm);
@@ -483,11 +478,9 @@ void finalizar(int id_course){
     mvwprintw(finalwin,5, 1, "%20s",ET_TIME);
     mvwprintw(finalwin,5, 25, "%02d:%02d",minutos,segundos);
     wrefresh(finalwin);
-
     int tmp_opciones[4]={1,2,1,1};
     refresh();
-    muestra_pie(tmp_opciones);    
-
+    muestra_pie(tmp_opciones);  
    do{
         ch=getch();
         //comprobamos las opciones del footer menu
@@ -501,8 +494,7 @@ void finalizar(int id_course){
                 seleccionar_menu();
                 return;
                 break;
-            case 'r':
-            case 'R'://R repeat the text
+            case 0x10a:/*f2 repeat the text*/
                 flag_opcion_valida=true;
                 //do need anymore, whe are in a loop 
                 break;
