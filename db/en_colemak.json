@@ -1,18 +1,151 @@
 {
 "id_course": 3,
-"distribution": "1234567890QWERTYUIOPASDFGHJKL;ZXCVBNM,. @~^'",
+"distribution": "1234567890QWFPGJLUY;ARSTDHNEIOZXCVBKM,./ @~^'",
 "titles":
-    ["Lección 1","Lección 2"],
+    ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27"],
 "texts": 
     [
-    "nnnn eeee iiii oooo aaaa rrrr ssss tttt oooo iiii eeee nnnn
+"nnnn eeee iiii oooo aaaa rrrr ssss tttt oooo iiii eeee nnnn
 tttt ssss rrrr aaaa oooo aaaa iiii rrrr eeee ssss nnnn tttt
 aann rree ssii ttoo nnaa eerr iiss oott ooaa iirr eess nntt
 anto onta asni rteo oetr inta rise iser inoe satr tinr anot",
-    "nhtd ehsd ihrd ohad ehsd ihrd ohad ihrd ohah ihrd ehsd nhtd
+
+"nhtd ehsd ihrd ohad ehsd ihrd ohad ihrd ohah ihrd ehsd nhtd
 tdnh sdeh rdih adoh sdeh rdih adoh rdih adoh rdih sdeh tdnh
 ntet itot anrn sntn ahrh shsh thod ided nddh dohd ahdi hrdh
-dhhd daho drhi dshe dthn dhhd doha dihr dehs dnht dhhd hado"
-    ]
-}  
+dhhd daho drhi dshe dthn dhhd doha dihr dehs dnht dhhd hado",
 
+"aotn irnt arst oien tdhn nhdt nttn esoa hoda orse nais stra teno
+aotn irnt arst oien tdhn nhdt nttn esoa hoda orse nais stra teno
+taisar raiar daiar arar saoar darar hasar datar aoasar eaea tairar
+taisar raiar daiar arar saoar darar hasar datar aoasar eaea tairar",
+
+"eses eueu sese eueu euse seeu esue uees ueue suie eeia eueie
+sese eueu sese eueu euse seeu esue uees ueue suie eeia eueie
+reoa tear eiia neta sune ieoa tuna raie iuda suda ruoa suier
+reoa tear eiia neta sune ieoa tuna raie iuda suda ruoa suier",
+
+"t;t; nlnl ;t;t lnln nuel tes; hld; els; a;;a olol nl;a ;ali
+t;t; nlnl ;t;t lnln nuel tes; hld; els; a;;a olol nl;a ;ali
+ei sua ;eai nlda; er serea; iuda; tese;ai hleie ;eai t;eda;
+ei sua ;eai nlda; er serea; iuda; tese;ai hleie ;eai t;eda;",
+
+"re du;a ia d;asa ;eai nl;ar reoaia a rl iiedasa se aidar
+;eser se resa ;uoar se t;erar tuna; ia hlera sena hleiia
+ieoa se era tea iiedasa re ;ue ei tese;ai se te;ua lrasa
+re;a du;asa rleie ;eda; aredl;a tlie;ar t;ua re ia nleda",
+
+"tunere ia nle;da se iar tue;ar raiusar se tuiar se resa
+iieda; a erar t;erar haiia; rleoar ia ieoa se eiia hleia
+tunere ia nle;da se iar tue;ar raiusar se tuiar se resa
+iieda; a erar t;erar haiia; rleoar ia ieoa se eiia hleia",
+
+"hnnl ddt; hnnl ddt; ;dln nhdd d;nl t;dd nlhn t;dd nlnh
+hnnl ddt; hnnl ddt; ;dln nhdd d;nl t;dd nlhn t;dd nlnh
+due;;a se nedlar d;adar na ade ei nade han harda iadar
+due;;a se nedlar d;adar na ade ei nade han harda iadar",
+
+"rwiy iyrw yiwr wryi arwe oiyu we;d yuln iyue rwes ;ewr luyi
+rwiy iyrw yiwr wryi arwe oiyu we;d yuln iyue rwes ;ewr luyi
+iyr iy;yr yudy yr sudy ny dysyr iyr ;uyr syn d;udy dy;;udyr
+whe;e why weii whude whad wuii wade; wed wusywr whedhe; wan",
+
+"iysyr n due;;a raie se aiiu d;uedar ai aoy ha raiusy ai rleiy
+nliuy n t;uy er ;a;y udlai dl raier n ei ;yny re a;aoa y;lny
+iysyr n due;;a raie se aiiu d;uedar ai aoy ha raiusy ai rleiy
+nliuy n t;uy er ;a;y udlai dl raier n ei ;yny re a;aoa y;lny",
+
+"d;asy hlery y;lny nu;ata werd ner y;y aoy nldasa iurdy raier hlusy
+serduiy heiasyr adla se d;uty iy;yr ;ynyr nldleder syiusy d;adasy
+d;asy hlery y;lny nu;ata werd ner y;y aoy nldasa iurdy raier hlusy
+serduiy heiasyr adla se d;uty iy;yr ;ynyr nldleder syiusy d;adasy",
+
+"aqo; aqo; qa;o qa;o wqy; y;wq qw;y ;yqw lq;; ;;ql q;q;
+aqo; aqo; qa;o qa;o wqy; y;wq qw;y ;yqw lq;; ;;ql q;q;
+qlesade ;erasy qluda ;yqludy d;lqluiiy ;aqlede ;eqleoy
+qle;a qlunyde ;y;qle ;uqluiiy ;eilsy qle qlue;e ;e;udy",
+
+"ssss eeee sscc ee,, scsc e,e, cc,, c,c, sce, e,sc ce,s ,sce c,c,
+ssss eeee sscc ee,, scsc e,e, cc,, c,c, sce, e,sc ce,s ,sce c,c,
+caruda, caca, cycy, cace;ua, ca;yde, caslcy, iaca, iycy, ca;eda,
+;iace;, ;ycuidar, cada;;y, ;ucasl;a, ca;edar, erdacasa, ca;acar",
+
+"ei chucy se ane; caru re cae ;y; ia ercaie;a ca;acyie;a,
+ei qle qlue;a cyde; ia t;lda qle re ace;qle harda aqlu,
+de ;leser c;ee; qle re cara ser;ler se cy;;e; iar ca;;e;ar,
+nleda aru n ;e;se;ar caru dysy, er iy qle ha suchy ei ca;de;y,",
+
+"tvnm, tvnm, tvnm, nhme, tdvt, v;v;, mlml, mhmh, vdvd, vemu, yevu,
+tvnm, tvnm, tvnm, nhme, tdvt, v;v;, mlml, mhmh, vdvd, vemu, yevu,
+vaie mar da;se ;e;y cy;;ecdy qle a ia hy;a n mai, secua vucdy;ua,
+vaie mar da;se ;e;y cy;;ecdy qle a ia hy;a n mai, secua vucdy;ua,",
+
+"iyr ve;ser ;;asyr se ia ;ua, ;ues;ar ai ;le;dy, va hacua vudy,
+casa sua re erca;a, du;a ai ;uy n cym;;a mar ;ercasy, dl iy ver,
+ei ;a;adany se dl vusa, ei iy;udy de sa rl cymusa, vuduia ia dua,
+cymeda ;y; ei cueiy, mydy;urdar se vuane, dysy rudle udlai se mai,",
+
+"tdnh tvnm tdbd nmnk tbtb nknk t;vb nlmk nhmk tdvb bkbk kbkb
+tdnh tvnm tdbd nmnk tbtb nknk t;vb nlmk nhmk tdvb bkbk kbkb
+bleky bykudy ba;ady klevy beiiy babyry klecer ka;ucer bebek
+kaka klkca ba;;ui caka kuvei bykudy vekeky by;;edy vuky uba",
+
+"sume cyk qluek aksar n de su;e qluek e;er,
+ky ;y; mlchy mas;lda; amakece mar ;;ykdy,
+re cyde akder ai mekdu;yry qle ai cyny,
+a cabaiiy ;edaiasy ky ie mu;er ei sekdasy,
+;e;;y ias;asy; ;ycy my;sesy;",
+
+"rrrr xxxx iiii .... xxxx .... vvvv mmmm cccc ,,,, xxxx ....
+rrxx ii.. sscc ee,, ttvv nnmm xcvb .,mk bvcx km,. xx.. x.x.
+rrxx ii.. sscc ee,, ttvv nnmm xcvb .,mk bvcx km,. xx.. x.x.
+exd;a. exudy. exceiekde. dexdyr. exceruvy. exumu;. examek.
+exd;a. exudy. exceiekde. dexdyr. exceruvy. exumu;. examek.",
+
+"zzzz ---- zzzz ---- zz-- zz-- z-z- aazz oo-- azaz o-o-
+zeda-zy;;y-zyka-cazy-zud-zad-;yzy-d;yzy-mauz-myzy-;auz-
+ryez-alsaz-ca;az-veiyz-ve;az-za;adyza-zau;e-zakahy;ua-
+zeda-zy;;y-zyka-cazy-zud-zad-;yzy-d;yzy-mauz-myzy-;auz-
+ryez-alsaz-ca;az-veiyz-ve;az-za;adyza-zau;e-zakahy;ua-",
+
+"ry;a vuchnrryure - ;;e;a;acuyk - cyce; iyr ukd;esuekder ek ei caisy se
+;yiiy harda qle erdek rlaver. sena; ekt;ua; n cyiyca;iyr ek ei vary se
+ia badusy;a, da;a; n cykecda; a veiycusas aida harda qlesa; ia mezcia
+de;ra. ruk ;a;a; ei mydy;, ad;eda; ia c;ema se ieche ;y; ia abe;dl;a se
+ia da;a n mezcia; ek veiycusas mesua harda qlesa; buek ukcy;;y;asa.",
+
+"ryiy re qle ky re kasa - ryc;ader - tuiyryty d;uedy.
+vuvueksy dysy taida, ml;ueksy dysy ryb;a - iy;e se veda - erc;udy;.
+iiedle, vu n vekcu - nliuy cera; - em;e;asy; ;ymaky.
+dla;sa a dl amudy bany ia iiave se dl ;;y;ua vusa - rhaeer;ea;e.
+han ryiy lka sute;ekcua ekd;e lk iycy n ny. ny ky erdyn iycy - saiu",
+
+"ra;dek uilruok cama;a dliu;ak kume;y ukde;er railso
+suderduok cam;eok rais;a ukucy ;a;usy deietyky hli
+ukrdaiacuok ;ehek erc;ubi caiekdok dukuca cakda;a
+sidudy aitabeducy mue;cyier viby;a rabasy movuier",
+
+"nlda;a, anlse, raii, ;ukdo, ;ubiucy, cama;a, ;edaiy, iksuce, domaiy.
+;amasak, railse, riiaba, dymo, ;urducy, akty;a, dake, ;ym;i, ;azok.
+;abaky, hle;taky, kidusy, ;adok, udui, rabaka, ser;ler, ;air, cymuk.
+mar, ;ade, iyde;ia, tl;dok, dabu, rabasy, dambuek, ;yiucia, muruca.",
+
+";eiyda. sublny. ra;dek. tidliy. camuok. avekdl;a. tietakde.
+yclidy. cakcuok. mekdu;a. qlery. iasy. rledy. ;aiyma. trde.
+ma;zy. za;zleia. ;ycyr. rurducy. kavusaser. raiok. ukde;er.
+vaiuekde. nedla. t;abanasy;. baiok. semaruasy. y;lerdy. ti.
+cymusa. nlrducua. reai. hlksusy. zocaiy. euiy. cle;;y. haz.",
+
+"receda se tr;adledur a ia ca;byka;a - cyce; iyr er;adledur ek adla
+raiasa. raiia; ei qlery. t;ycea; iyr anyr n ei dycuky. tk lka
+ra;dek t;eu; iyr anyr n ei dycuky. tk lka tlekde badu; iyr hlevyr
+cyk ia kada iiqlusa, ei qlery, ia rai n ia ;umuekda. ukcy;;y;a; a
+ia ra;dek ia ;arda n ;emyve;. cyiyca; ia ;arda ek ia tlekde n
+mezcia;ia cyk ei hlevy badusy, ;emyvueksyiy dysy.",
+
+"lkyr sucek iy qle rabek, n yd;yr rabek iy qle sucek.
+re a;;e;uekde lky se iy qle suce, ;e;y ky se iy qle ;uekra.
+iy qle hyn ruekde dl cy;azok, maoaka iy ekdekse;a dl cabeza.
+lka dyda se aied;ia er lk cha;cy se er;e;akza.
+vuve dl vusa cymy de dlrda;ia qle dlr hunyr vuvue;ak ia rlna."]
+}  
