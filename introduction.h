@@ -1,9 +1,9 @@
 void muestra_introduccion(){
     int opciones_pie[4]={2,0,0,0};
     int ch;
-    WINDOW *introductionwin;
-    muestra_titulo_menu();
+    muestra_titulo_menu(true);
 
+    WINDOW *introductionwin;
     introductionwin=newwin(max_y, max_x, y_introductionwin,x_introductionwin); 
     
     wprintw(introductionwin,"%s\n\n",ET_INTRODUCTION_1);

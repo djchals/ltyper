@@ -17,8 +17,11 @@ int main(){
 void bucle_menus(){
     flag_dentro_menus=true;
     int opcion_selec,lecccion_sel;
-    
-    muestra_introduccion();
+    if(flag_primera_vez){ //Solo mostraremos la introducción al iniciar el programa
+        muestra_introduccion();
+        flag_primera_vez=false;
+    }    
+
     while(flag_dentro_menus){
         flag_dentro_menu_lecciones=true;
         opcion_selec=0;

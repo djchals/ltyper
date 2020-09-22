@@ -39,7 +39,7 @@ int muestra_menu(int id_course){
     }
 
     //imprimimos con la primera opción seleccionada
-    muestra_titulo_menu();    
+    muestra_titulo_menu(false);    
     descmenuwin=newwin(1, max_x, y_descmenuwin,x_descmenuwin);  
     if(id_course==0){
         mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_COURSE);
@@ -233,15 +233,24 @@ void _init_ncurses(){
     refresh();
 }
  
-void muestra_titulo_menu(){
+void muestra_titulo_menu(bool flag_introduccion){
+    char et_titulo_menu[50];
+    if(!flag_introduccion){
+        strcpy(et_titulo_menu,ET_PROGRAMA);
+    }else{
+        strcpy(et_titulo_menu,ET_INTRODUCTION_TITLE);
+        strcat(et_titulo_menu," - ");
+        strcat(et_titulo_menu,ET_PROGRAMA);
+    }
+    
     titlewin=newwin(1, max_x, y_titlewin,y_titlewin);  
     char var_barra[max_x];
     init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
-    int tmp_borde=floor((max_x-strlen(ET_PROGRAMA))/2);
+    int tmp_borde=floor((max_x-strlen(et_titulo_menu))/2);
 
     memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
     wattron(titlewin, WA_BOLD | COLOR_PAIR(C_TITLE));
     mvwprintw(titlewin, 0, 0,"%s",var_barra);
-    mvwprintw(titlewin, 0, tmp_borde, "%s",ET_PROGRAMA);
+    mvwprintw(titlewin, 0, tmp_borde, "%s",et_titulo_menu);
     wrefresh(titlewin);
 }

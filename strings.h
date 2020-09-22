@@ -51,3 +51,5 @@ char *array_et_course_title[MAX_COURSES]={
 #define ET_INTRODUCTION_3 "Las manos siempre estarán en la posición Base, esto quiere decir que los dedos índice, corazón, anular y meñique irán sobre las teclas ASDF y JKL; en el teclado QWERTY. Los pulgares descansarán sobre la tecla espacio. Cada vez que se pulse una tecla las manos volverán a la posición base."
 
 #define ET_PRESS_ANY_KEY "Pulse cualquier tecla para continuar o ESC para salir del programa"
+
+#define ET_INTRODUCTION_TITLE "Introducción"

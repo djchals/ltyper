@@ -35,13 +35,15 @@ void seleccionar_menu();
 bool flag_dentro_menus,flag_dentro_menu_lecciones,flag_dentro_texto;
 void bucle_menus();
 void muestra_titulo_curso(int id_course);
-void muestra_titulo_menu();
+void muestra_titulo_menu(bool flag_introduccion);
 int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]);
 bool is_special(int tmp_caracter);
 int contar_195(int i_row, unsigned char todo_texto[]);
 
 void muestra_introduccion();
 void dibuja_manos();
+
+bool flag_primera_vez=true;//solo mostraremos la intro la primera vez
 
 //menus.h
 #define ENTER          10
