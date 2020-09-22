@@ -39,6 +39,10 @@ void muestra_titulo_menu();
 int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]);
 bool is_special(int tmp_caracter);
 int contar_195(int i_row, unsigned char todo_texto[]);
+
+void muestra_introduccion();
+void dibuja_manos();
+
 //menus.h
 #define ENTER          10
 
@@ -62,13 +66,14 @@ static int x_errorwin, y_errorwin;
 static int x_finalwin, y_finalwin;
 static int x_footerwin, y_footerwin;
 static int x_keyboardwin, y_keyboardwin;
+static int x_keybintrowin, y_keybintrowin;
 static int x_titlewin, y_titlewin;
 static int x_lessonwin, y_lessonwin;
 static int x_descwin, y_descwin;
 static int x_menuwin, y_menuwin;
 static int x_descmenuwin, y_descmenuwin;
 static int x_descfinal, y_descfinal;
-
+static int x_introductionwin,y_introductionwin;
 bool flag_timeout=false, flag_salir=false;
 int ch;
 
@@ -81,7 +86,7 @@ int ancho_caja=80, alto_caja=10;//dimensiones de la caja
 int ancho_caja_menu=70, alto_caja_menu=10,alto_caja_submenu=6;
 int ancho_caja_final=50, alto_caja_final=8;
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *handswin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2
@@ -91,7 +96,14 @@ WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lesso
 #define C_TITLE         5
 #define ENTER           10
 #define C_LETRA_PRUEBA  20
-
+#define KEYB_WHITE      6
+#define KEYB_BLACK      7
+#define KEYB_FINGER1     8
+#define KEYB_FINGER2     9
+#define KEYB_FINGER3     10
+#define KEYB_FINGER4     11
+#define KEYB_FINGER5     12    
+#define KEYB_FINGER6     13   
 //
 //
 #endif /* FOO_DOT_H */

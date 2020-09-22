@@ -3,6 +3,8 @@
 #include "menus.h"
 #include "draw_keys.h"
 #include "coord_wins.h"
+#include "introduction.h"
+
 
 int main(){
     setlocale(LC_ALL,"es_ES");
@@ -16,7 +18,7 @@ void bucle_menus(){
     flag_dentro_menus=true;
     int opcion_selec,lecccion_sel;
     
-    titlewin=newwin(1, max_x, y_titlewin,y_titlewin);  
+    muestra_introduccion();
     while(flag_dentro_menus){
         flag_dentro_menu_lecciones=true;
         opcion_selec=0;
@@ -347,7 +349,7 @@ void muestra_pie(int opciones[4]){
     char et_opcion3[]=ET_OPTION3;   
     int pos_opc=1;//with this variable we control the options position in the menu
 // return 0;    
-    if(opciones[0]){
+    if(opciones[0]==1){
         wattron(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"ESC");
         pos_opc=pos_opc+3;
@@ -356,6 +358,11 @@ void muestra_pie(int opciones[4]){
         pos_opc++;        
         mvwprintw(footerwin,0, pos_opc,et_opcion0);
         pos_opc=pos_opc+strlen(et_opcion0)+3;
+    }else if(opciones[0]==2){
+        wattron(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,ET_PRESS_ANY_KEY);
+        wattroff(footerwin,WA_BOLD);
+        pos_opc=pos_opc+strlen(ET_PRESS_ANY_KEY);        
     }
     if(opciones[1]==1){
         wattron(footerwin,WA_BOLD);

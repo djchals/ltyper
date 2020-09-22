@@ -11,7 +11,11 @@ int max_y_keyb=13;
 
 void dibuja_teclado(int id_texto,int id_course){    
     int i,j;
-    keyboardwin= subwin(mainwin,max_y_keyb, 80,y_keyboardwin, x_keyboardwin);
+    if(id_texto!=9998){
+        keyboardwin= subwin(mainwin,max_y_keyb, 80,y_keyboardwin, x_keyboardwin);
+    }else{
+        keyboardwin= subwin(mainwin,max_y_keyb, 80,y_keybintrowin, x_keybintrowin);
+    }
 
     int keyb_schetch[13][66]={
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -81,14 +85,7 @@ void dibuja_teclado(int id_texto,int id_course){
     array_coord_letras[43]=8.52;//94 shift right
     array_coord_letras[44]=6.50;//39 tilde
     array_coord_letras[45]=6.46;//95 Ñ
-    #define KEYB_WHITE      6
-    #define KEYB_BLACK      7
-    #define KEYB_FINGER1     8
-    #define KEYB_FINGER2     9
-    #define KEYB_FINGER3     10
-    #define KEYB_FINGER4     11
-    #define KEYB_FINGER5     12    
-    #define KEYB_FINGER6     13    
+ 
     
     init_pair(KEYB_WHITE,COLOR_WHITE,COLOR_WHITE);
     init_pair(KEYB_BLACK,COLOR_BLACK,COLOR_BLACK);
@@ -119,7 +116,7 @@ void dibuja_teclado(int id_texto,int id_course){
         for(j=0;j<66;j++){
             switch(keyb_schetch[i][j]){
                 case 1:
-                    if(flag_muestra_borde_keyb){
+                    if(flag_muestra_borde_keyb && id_texto!=9998){
                         wattron(keyboardwin,COLOR_PAIR(KEYB_WHITE));
                         mvwprintw(keyboardwin,i,j,"%c",35);
                     }
@@ -151,7 +148,9 @@ void dibuja_teclado(int id_texto,int id_course){
             }
         }
     }
+    //si id_texto==9998 es que estamos dibujando el teclado sin las letras, en la introducción
     escribe_teclas(id_texto,id_course);
+
 }
 void escribe_teclas(int id_texto,int id_course){
     char array_letras[NUM_LETRAS];
@@ -161,7 +160,6 @@ void escribe_teclas(int id_texto,int id_course){
     int y,x,i,j,flag_repite;
     unsigned char tmp_special_char[2];
     //
-    
     char act_distribucion_teclado[NUM_LETRAS]={};
     strcpy(act_distribucion_teclado,&*obten_distribucion(id_texto,id_course));
     memcpy(array_letras,act_distribucion_teclado,(strlen(act_distribucion_teclado)));
@@ -207,12 +205,15 @@ void escribe_teclas(int id_texto,int id_course){
                 flag_repite=0;
                 break;
         }
+        if(id_texto==9998){
+            act_tecla=32;
+        }
         for(j=0;j<(1+flag_repite);j++){
             if(flag_special){
                 mvwprintw(keyboardwin,y, x,"%s",tmp_special_char);
                  wrefresh(keyboardwin);
             }else{
-                mvwprintw(keyboardwin,y, x+j,"%c",toupper(act_tecla));
+                mvwprintw(keyboardwin,y, x+j,"%c",act_tecla);
             }
         }
 //         wattroff(keyboardwin,COLOR_PAIR(array_colores_letras[i]));

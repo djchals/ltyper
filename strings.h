@@ -42,3 +42,12 @@ char *array_et_course_title[MAX_COURSES]={
 #define ET_FINGER_RING "Dedo anular"
 #define ET_FINGER_LITTLE "Dedo meñique"
 #define ET_FINGER_THUMB "Dedo pulgar"
+
+//introduction.h
+#define ET_INTRODUCTION_1 "Hoy en dia el teclado es uno de los medios utilizados para comunicarnos y escribir correctamente y sin errores con él agilizará las comunicaciones. La mecanografía es una habilidad que se aprende con la práctica.Nos ahorraremos mucho tiempo si aprendemos algo básico como dominar el teclado."
+
+#define ET_INTRODUCTION_2 "Mediante ejercicios básicos y repetitivos iremos adquiriendo práctica y también una velocidad con la que deberiamos alcanzar entre 70 y 250 pulsaciones por minuto. Deberemos intentar hacer el mínimo posible de errores siendo 3 el número máximo de errores permitidos antes de saltar a la siguiente lección."
+
+#define ET_INTRODUCTION_3 "Las manos siempre estarán en la posición Base, esto quiere decir que los dedos índice, corazón, anular y meñique irán sobre las teclas ASDF y JKL; en el teclado QWERTY. Los pulgares descansarán sobre la tecla espacio. Cada vez que se pulse una tecla las manos volverán a la posición base."
+
+#define ET_PRESS_ANY_KEY "Pulse cualquier tecla para continuar o ESC para salir del programa"

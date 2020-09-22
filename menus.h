@@ -89,6 +89,13 @@ int muestra_menu(int id_course){
                 flag_dentro_menus=false;
                 flag_dentro_menu_lecciones=false;
                 eleccio=10000;//como le restaremos 1 se quedará en 9999
+            case 0x109:/*f1 introducción*/
+                if(id_course!=0){
+                    flag_dentro_menu_lecciones=false;
+                    muestra_introduccion();
+                    eleccio=12345;//en teoria esto no tiene que suceder nunca pero lo pongo por si acaso para que salga del bucle
+                }
+                break;
             case 0x10c:/*f4 change course*/
                 if(id_course!=0){
                     flag_dentro_menu_lecciones=false;
@@ -227,7 +234,7 @@ void _init_ncurses(){
 }
  
 void muestra_titulo_menu(){
-    wrefresh(titlewin);
+    titlewin=newwin(1, max_x, y_titlewin,y_titlewin);  
     char var_barra[max_x];
     init_pair(C_TITLE,COLOR_WHITE,COLOR_MAGENTA);
     int tmp_borde=floor((max_x-strlen(ET_PROGRAMA))/2);
