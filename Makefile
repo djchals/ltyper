@@ -2,9 +2,9 @@ CFLAGS=``
 LIBS=-lm -lncurses -ljson-c
 
 all:
-	gcc -o typeminal main.c -Wall $(CFLAGS) $(LIBS) 
+	gcc -o ltyper main.c -Wall $(CFLAGS) $(LIBS) 
 .PHONY: clean
 
 clean:
-	rm -f typeminal
+	rm -f ltyper
 
