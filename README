@@ -1,0 +1,15 @@
+Ltyper is a tool for practice and improve your typing skills. 
+
+Ltyper has a simple but effective graphical environment through which
+you can practice in 4 keyboard variations (QWERTY, DVORAK, COLEMAK and
+DVORAK REVERSE). 
+
+Ltyper has been developed in C and uses libncurses-5 and libjson-c3, and 
+mirrored to GitHub:
+
+	https://github.com/djchals/ltyper
+
+
+Ltyper is distributed under the GNU General Public License, version 2
+or later. See the COPYING file for details.
+
