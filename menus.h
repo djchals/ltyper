@@ -24,14 +24,12 @@ void _imp_menu_vertical(t_menu menu, int seleccionat);
 
 void obten_menu_inicial();
 void obten_submenu(int id_course);
+void construye_menu(int id_course);
 
-int muestra_menu(int id_course){
-    WINDOW *descmenuwin;
-    int seleccionat = 1;
-    int eleccio = 0;
-    int c;
-    int tmp_opciones[4];
-    _init_ncurses();
+void construye_menu(int id_course){
+    clear();
+    refresh();
+    int tmp_opciones[5];
     if(id_course==0){
         obten_menu_inicial();
     }else{
@@ -45,23 +43,32 @@ int muestra_menu(int id_course){
         mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_COURSE);
         _imp_menu_vertical(menu, 1);
         tmp_opciones[0]=1;
-        tmp_opciones[1]=0;
+        tmp_opciones[1]=1;
         tmp_opciones[2]=0;
         tmp_opciones[3]=0;        
+        tmp_opciones[4]=0;
 
     }else{
         mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_LESSON);
         _imp_menu_horizontal(menu, 1);
         tmp_opciones[0]=1;
-        tmp_opciones[1]=0;
+        tmp_opciones[1]=1;
         tmp_opciones[2]=0;
-        tmp_opciones[3]=1;        
+        tmp_opciones[3]=0;        
+        tmp_opciones[4]=1;        
+
+        
     }
     wrefresh(descmenuwin);
     
     muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
-    
-    refresh();
+}
+
+int muestra_menu(int id_course){
+    int seleccionat = 1;
+    int eleccio = 0;
+    int c;
+    construye_menu(id_course);
     //
     while(1){
         c = wgetch(menu.wmenu);
@@ -90,11 +97,15 @@ int muestra_menu(int id_course){
                 flag_dentro_menu_lecciones=false;
                 eleccio=10000;//como le restaremos 1 se quedará en 9999
             case 0x109:/*f1 introducción*/
-                if(id_course!=0){
+//                 if(id_course!=0){
                     flag_dentro_menu_lecciones=false;
                     muestra_introduccion();
-                    eleccio=12345;//en teoria esto no tiene que suceder nunca pero lo pongo por si acaso para que salga del bucle
-                }
+                    construye_menu(id_course);
+//                     wrefresh(menu.wmenu);
+//                     wrefresh(descmenuwin);
+//                     continue;
+//                     eleccio=12345;//en teoria esto no tiene que suceder nunca pero lo pongo por si acaso para que salga del bucle
+//                 }
                 break;
             case 0x10c:/*f4 change course*/
                 if(id_course!=0){
@@ -107,11 +118,11 @@ int muestra_menu(int id_course){
                 refresh();
                 break;
         }
-    if(id_course==0){
-        _imp_menu_vertical(menu, seleccionat);
-    }else{
-        _imp_menu_horizontal(menu, seleccionat);
-    }
+        if(id_course==0){
+            _imp_menu_vertical(menu, seleccionat);
+        }else{
+            _imp_menu_horizontal(menu, seleccionat);
+        }
 
 //         _imp_menu(menu, seleccionat);
         if(eleccio != 0) break;

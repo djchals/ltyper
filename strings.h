@@ -2,10 +2,11 @@
 #define ET_ERRORS "Errores"
 #define ET_DESC "Repite el texto que ves a continuación:"
 #define ET_OPTION0 "Salir"
-#define ET_OPTION11 "Cancelar texto"
-#define ET_OPTION12 "Repetir texto"
-#define ET_OPTION2 "Cambiar de lección"
-#define ET_OPTION3 "Cambiar de curso"
+#define ET_OPTION1 "Tutorial"
+#define ET_OPTION21 "Cancelar texto"
+#define ET_OPTION22 "Repetir texto"
+#define ET_OPTION3 "Cambiar de lección"
+#define ET_OPTION4 "Cambiar de curso"
 #define ET_TIME "Tiempo"
 #define ET_TIME_OVER "SE TE HA ACABADO EL TIEMPO!!"
 #define ET_PRESS_KEY_CONTINUE "Presiona cualquier tecla para continuar..."
@@ -48,8 +49,10 @@ char *array_et_course_title[MAX_COURSES]={
 
 #define ET_INTRODUCTION_2 "Mediante ejercicios básicos y repetitivos iremos adquiriendo práctica y también una velocidad con la que deberiamos alcanzar entre 70 y 250 pulsaciones por minuto. Deberemos intentar hacer el mínimo posible de errores siendo 3 el número máximo de errores permitidos antes de saltar a la siguiente lección."
 
-#define ET_INTRODUCTION_3 "Las manos siempre estarán en la posición Base, esto quiere decir que los dedos índice, corazón, anular y meñique irán sobre las teclas ASDF y JKL; en el teclado QWERTY. Los pulgares descansarán sobre la tecla espacio. Cada vez que se pulse una tecla las manos volverán a la posición base."
+#define ET_INTRODUCTION_3 "Para una mejor visualización del programa recomendamos realizar los cursos con la ventana maximizada."
+
+#define ET_INTRODUCTION_4 "Las manos siempre estarán en la posición Base, esto quiere decir que los dedos índice, corazón, anular y meñique irán sobre las teclas ASDF y JKL; en el teclado QWERTY. Los pulgares descansarán sobre la tecla espacio. Cada vez que se pulse una tecla las manos volverán a la posición base."
 
 #define ET_PRESS_ANY_KEY "Pulse cualquier tecla para continuar o ESC para salir del programa"
 
-#define ET_INTRODUCTION_TITLE "Introducción"
+#define ET_INTRODUCTION_TITLE "Tutorial"

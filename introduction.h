@@ -1,15 +1,31 @@
-void muestra_introduccion(){
-    int opciones_pie[4]={2,0,0,0};
+void muestra_presentacion(){
+    int opciones_pie[5]={2,0,0,0,0};
     int ch;
     muestra_titulo_menu(true);
-
+    dibuja_presentacion();
+    muestra_pie(opciones_pie);
+    ch=getch();
+    switch(ch){
+        case 27:
+            //ESC exit program
+            flag_dentro_menus=false;
+            flag_dentro_menu_lecciones=false;
+            return;
+            break;
+    }
+    wclear(prwin);
+}
+void muestra_introduccion(){
+    int opciones_pie[5]={2,0,0,0,0};
+    int ch;
+    muestra_titulo_menu(true);
+    
     WINDOW *introductionwin;
     introductionwin=newwin(max_y, max_x, y_introductionwin,x_introductionwin); 
     
     wprintw(introductionwin,"%s\n\n",ET_INTRODUCTION_1);
-    wprintw(introductionwin,"%s",ET_INTRODUCTION_2);
-    wrefresh(introductionwin);
-    
+    wprintw(introductionwin,"%s\n\n",ET_INTRODUCTION_2);
+    wprintw(introductionwin,"%s",ET_INTRODUCTION_3);
     wrefresh(introductionwin);
     muestra_pie(opciones_pie);
     ch=getch();
@@ -22,7 +38,7 @@ void muestra_introduccion(){
             break;
     }
     wclear(introductionwin);
-    mvwprintw(introductionwin,0,1,"%s\n\n",ET_INTRODUCTION_3);
+    mvwprintw(introductionwin,0,1,"%s\n\n",ET_INTRODUCTION_4);
     wrefresh(introductionwin);
 
     dibuja_teclado(9998,1);
@@ -40,7 +56,9 @@ void muestra_introduccion(){
             return;
             break;
     }
-
+    wclear(introductionwin);
+    wclear(handswin);
+    refresh();
 }
 
 void dibuja_manos(){    
@@ -106,4 +124,80 @@ void dibuja_manos(){
         }
     }
     wrefresh(handswin);
+}
+
+void dibuja_presentacion(){
+    int i,j;
+    prwin=subwin(mainwin,MAX_Y_INTRO+1, MAX_X_INTRO+1,y_prwin,x_prwin);
+        
+    int pr_schetch[MAX_Y_INTRO][MAX_X_INTRO]={
+//                          10                  20                  30                  40                  50                  60
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {1,0,0,1,1,1,1,1,0,1,0,0,0,1,0,1,1,1,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0},
+        {1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,1},
+        {1,0,0,0,0,1,0,0,0,1,1,0,1,1,0,1,0,0,1,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
+        {1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,1,1,0,0,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
+        {1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,1},
+        {1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,1},
+        {1,1,1,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,1,0,1,0,0,1,0,0,0,0,0,1,0,0,1,1,1,0,1,0,0,0,1,1,0},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0}
+     };
+    init_pair(KEYB_WHITE,COLOR_WHITE,COLOR_WHITE);
+    init_pair(KEYB_BLACK,COLOR_BLACK,COLOR_BLACK);
+    init_pair(KEYB_FINGER1,COLOR_WHITE,COLOR_YELLOW);
+    init_pair(KEYB_FINGER2,COLOR_WHITE,COLOR_GREEN);
+    init_pair(KEYB_FINGER3,COLOR_WHITE,COLOR_BLUE);
+    init_pair(KEYB_FINGER4,COLOR_WHITE,COLOR_RED);
+    init_pair(KEYB_FINGER5,COLOR_WHITE,COLOR_MAGENTA);    
+    init_pair(KEYB_FINGER6,COLOR_WHITE,COLOR_CYAN);  
+    
+    for(i=0;i<MAX_Y_INTRO;i++){
+        for(j=0;j<MAX_X_INTRO;j++){
+            switch(pr_schetch[i][j]){
+                case 1:
+                    wattron(prwin,COLOR_PAIR(KEYB_WHITE));
+                    mvwprintw(prwin,i,j,"%c",35);
+                    break;
+                case 8:
+                    wattron(prwin,COLOR_PAIR(KEYB_FINGER1));
+                    mvwprintw(prwin,i,j,"%c",32);
+                    break;
+                case 9:
+                    wattron(prwin,COLOR_PAIR(KEYB_FINGER2));
+                    mvwprintw(prwin,i,j,"%c",32);
+                    break;
+                case 10:
+                    wattron(prwin,COLOR_PAIR(KEYB_FINGER3));
+                    mvwprintw(prwin,i,j,"%c",32);
+                    break;
+                case 11:
+                    wattron(prwin,COLOR_PAIR(KEYB_FINGER4));
+                    mvwprintw(prwin,i,j,"%c",32);
+                    break;
+                case 12:
+                    wattron(prwin,COLOR_PAIR(KEYB_FINGER5));
+                    mvwprintw(prwin,i,j,"%c",32);
+                    break;
+                case 13:
+                    wattron(prwin,COLOR_PAIR(KEYB_FINGER6));
+                    mvwprintw(prwin,i,j,"%c",32);
+                    break;
+            }    
+            
+        }
+    }
+    wrefresh(prwin);    
 }

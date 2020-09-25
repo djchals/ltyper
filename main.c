@@ -18,7 +18,7 @@ void bucle_menus(){
     flag_dentro_menus=true;
     int opcion_selec,lecccion_sel;
     if(flag_primera_vez){ //Solo mostraremos la introducción al iniciar el programa
-        muestra_introduccion();
+        muestra_presentacion();
         flag_primera_vez=false;
     }    
 
@@ -117,7 +117,7 @@ void muestra_texto(int act_id_texto, int id_course){
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
 
     muestra_cabecera(id_texto,id_course);//esta línea debe ir despues del refresh();
-    int tmp_opciones[4]={1,1,1,1};
+    int tmp_opciones[5]={1,0,1,1,1};
     muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
     
     //esto será necesario para el tratamiento de los carácteres especiales
@@ -331,7 +331,7 @@ void muestra_titulo_curso(int id_course){
     mvwprintw(titlewin, 0, tmp_borde, "%s",act_titulo_curso);
     wrefresh(titlewin);
 }
-void muestra_pie(int opciones[4]){    
+void muestra_pie(int opciones[5]){    
     //según las opciones[] que traigamos mostraremos unas opciones del menú u otras
     char var_barra[max_x];
 
@@ -346,10 +346,11 @@ void muestra_pie(int opciones[4]){
     mvwprintw(footerwin,0, 0,"%s",var_barra);
     
     char et_opcion0[]=ET_OPTION0;
-    char et_opcion11[]=ET_OPTION11;
-    char et_opcion12[]=ET_OPTION12;
-    char et_opcion2[]=ET_OPTION2;
-    char et_opcion3[]=ET_OPTION3;   
+    char et_opcion1[]=ET_OPTION1;
+    char et_opcion21[]=ET_OPTION21;
+    char et_opcion22[]=ET_OPTION22;
+    char et_opcion3[]=ET_OPTION3;
+    char et_opcion4[]=ET_OPTION4;   
     int pos_opc=1;//with this variable we control the options position in the menu
 // return 0;    
     if(opciones[0]==1){
@@ -369,42 +370,52 @@ void muestra_pie(int opciones[4]){
     }
     if(opciones[1]==1){
         wattron(footerwin,WA_BOLD);
-        mvwprintw(footerwin,0, pos_opc,"F2");
+        mvwprintw(footerwin,0, pos_opc,"F1");
         pos_opc=pos_opc+2;
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0, pos_opc,et_opcion11);
-        pos_opc=pos_opc+strlen(et_opcion11)+3;
-    }else if(opciones[1]==2){
+        mvwprintw(footerwin,0, pos_opc,et_opcion1);
+        pos_opc=pos_opc+strlen(et_opcion1)+3;
+    }
+    if(opciones[2]==1){
         wattron(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"F2");
         pos_opc=pos_opc+2;
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0, pos_opc,et_opcion12);
-        pos_opc=pos_opc+strlen(et_opcion12)+3;        
+        mvwprintw(footerwin,0, pos_opc,et_opcion21);
+        pos_opc=pos_opc+strlen(et_opcion21)+3;
+    }else if(opciones[2]==2){
+        wattron(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"F2");
+        pos_opc=pos_opc+2;
+        wattroff(footerwin,WA_BOLD);
+        mvwprintw(footerwin,0, pos_opc,"=");
+        pos_opc++;        
+        mvwprintw(footerwin,0, pos_opc,et_opcion22);
+        pos_opc=pos_opc+strlen(et_opcion22)+3;        
     }
-    if(opciones[2]){
+    if(opciones[3]){
         wattron(footerwin,WA_BOLD);
         mvwprintw(footerwin,0,pos_opc,"F3");
         pos_opc=pos_opc+2;
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0,pos_opc,et_opcion2);
-        pos_opc=pos_opc+strlen(et_opcion2)+3;
+        mvwprintw(footerwin,0,pos_opc,et_opcion3);
+        pos_opc=pos_opc+strlen(et_opcion3)+3;
     }
-    if(opciones[3]){
+    if(opciones[4]){
         wattron(footerwin,WA_BOLD);
         mvwprintw(footerwin,0,pos_opc,"F4");
         pos_opc=pos_opc+2;
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0,pos_opc,et_opcion3);
-        pos_opc=pos_opc+strlen(et_opcion2)+3;
+        mvwprintw(footerwin,0,pos_opc,et_opcion4);
+        pos_opc=pos_opc+strlen(et_opcion4)+3;
     }
     
     wattroff(footerwin,COLOR_PAIR(C_LETRA_PIE));
@@ -473,18 +484,19 @@ void finalizar(int id_course){
     bool flag_opcion_valida=false;
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
-
+    float porcentaje_errores=((float) num_errores/(float) (long_texto+num_errores))*100;
     finalwin=newwin(alto_caja_final, ancho_caja_final, y_finalwin, x_finalwin);
     box(finalwin, 0, 0);   
 
     descfinalwin=newwin(1, ancho_caja_final, y_descfinal, x_descfinal);
     mvwprintw(descfinalwin,0, 0, ET_YOUR_SCORE);
     wrefresh(descfinalwin);
+    mvwprintw(finalwin,2, 1, "%20s",ET_LESSON);    
     mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
     mvwprintw(finalwin,3, 1, "%20s",ET_PPM);
     mvwprintw(finalwin,3, 25, "%d",(int)num_ppm);
     mvwprintw(finalwin,4, 1, "%20s",ET_ERRORS);
-    mvwprintw(finalwin,4, 25, "%d",num_errores);
+    mvwprintw(finalwin,4, 25, "%d (%.2f%)",num_errores,porcentaje_errores);
     mvwprintw(finalwin,5, 1, "%20s",ET_TIME);
     mvwprintw(finalwin,5, 25, "%02d:%02d",minutos,segundos);
     wrefresh(finalwin);

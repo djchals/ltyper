@@ -40,8 +40,11 @@ int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]);
 bool is_special(int tmp_caracter);
 int contar_195(int i_row, unsigned char todo_texto[]);
 
+//introduction.h
 void muestra_introduccion();
+void muestra_presentacion();
 void dibuja_manos();
+void dibuja_presentacion();
 
 bool flag_primera_vez=true;//solo mostraremos la intro la primera vez
 
@@ -76,6 +79,7 @@ static int x_menuwin, y_menuwin;
 static int x_descmenuwin, y_descmenuwin;
 static int x_descfinal, y_descfinal;
 static int x_introductionwin,y_introductionwin;
+static int x_prwin,y_prwin;
 bool flag_timeout=false, flag_salir=false;
 int ch;
 
@@ -88,7 +92,7 @@ int ancho_caja=80, alto_caja=10;//dimensiones de la caja
 int ancho_caja_menu=70, alto_caja_menu=10,alto_caja_submenu=6;
 int ancho_caja_final=50, alto_caja_final=8;
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *handswin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *handswin, *prwin,*descmenuwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2
@@ -106,6 +110,9 @@ WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lesso
 #define KEYB_FINGER4     11
 #define KEYB_FINGER5     12    
 #define KEYB_FINGER6     13   
+
+#define MAX_Y_INTRO 22
+#define MAX_X_INTRO 47
 //
 //
 #endif /* FOO_DOT_H */
