@@ -1,3 +1,5 @@
+#ifndef FOO_STRINGS_H    /* This is an "include guard" */
+#define FOO_STRINGS_H    /* prevents the file from being included twice. */
 //main.c
 #define ET_ERRORS "Errors"
 #define ET_DESC "Repeat the text you see below:"
@@ -22,7 +24,7 @@
 
 
 //json_reader.h
-char *array_et_course_title[MAX_COURSES]={
+char *array_et_course_title[6]={
     0,
     "Typing course QWERTY",
     "Typing course DVORAK",
@@ -49,3 +51,5 @@ char *array_et_course_title[MAX_COURSES]={
 #define ET_PRESS_ANY_KEY "Press any key to continue or ESC to exit the program"
 
 #define ET_INTRODUCTION_TITLE "Tutorial"
+
+#endif /* FOO_STRINGS H */
