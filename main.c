@@ -5,9 +5,7 @@
 #include "coord_wins.h"
 #include "introduction.h"
 
-
 int main(){
-    setlocale(LC_ALL,"es_ES");
     _init_cursos();//necesario para leer el archivo json en json_reader.h
     _init_ncurses();//it s not the same
     obten_coord_wins();
@@ -307,11 +305,6 @@ void muestra_cabecera(int id_texto, int id_course){
 
     contar_segundos();
     wrefresh(timewin);
-
-    
-//     wrefresh(footerrwin);
-
-    
 }
 void muestra_titulo_curso(int id_course){
     wrefresh(titlewin);

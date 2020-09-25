@@ -74,6 +74,9 @@ int _init_cursos(){
     DIR *dir;/* Con un puntero a DIR abriremos el directorio */
     struct dirent *ent;/* en *ent habrá información sobre el archivo que se está "sacando" a cada momento */
     dir=opendir(ruta);//Empezaremos a leer en el directorio db
+    int tmp_id;
+    
+    
     /* Miramos que no haya error */
     if(dir==NULL){
         error("No puedo abrir el directorio");
@@ -83,7 +86,8 @@ int _init_cursos(){
         if ( (strcmp(ent->d_name, ".")!=0) && (strcmp(ent->d_name, "..")!=0) ){
             /* Una vez tenemos el archivo, lo pasamos a una función para procesarlo. */
             proceso_archivo(ent->d_name);
-            array_cursos[num_cursos]=obten_id_course();
+            tmp_id=obten_id_course();
+            array_cursos[tmp_id-1]=tmp_id;
             num_cursos++;
         }
     }

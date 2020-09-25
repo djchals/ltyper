@@ -97,15 +97,9 @@ int muestra_menu(int id_course){
                 flag_dentro_menu_lecciones=false;
                 eleccio=10000;//como le restaremos 1 se quedará en 9999
             case 0x109:/*f1 introducción*/
-//                 if(id_course!=0){
-                    flag_dentro_menu_lecciones=false;
-                    muestra_introduccion();
-                    construye_menu(id_course);
-//                     wrefresh(menu.wmenu);
-//                     wrefresh(descmenuwin);
-//                     continue;
-//                     eleccio=12345;//en teoria esto no tiene que suceder nunca pero lo pongo por si acaso para que salga del bucle
-//                 }
+                flag_dentro_menu_lecciones=false;
+                muestra_introduccion();
+                construye_menu(id_course);
                 break;
             case 0x10c:/*f4 change course*/
                 if(id_course!=0){
@@ -206,13 +200,11 @@ void _imp_menu_horizontal(t_menu menu, int seleccionat){
         
         if(seleccionat == i + 1){
             wattron(menu.wmenu, A_REVERSE);
-//             mvwprintw(menu.wmenu, yy, xx,"yy%d xx%d menu(%s)-", yy,xx,menu.menu[i]);
             mvwprintw(menu.wmenu, yy, xx," %.3s ",menu.menu[i]);
 
             wattroff(menu.wmenu, A_REVERSE);
         }
         else{
-//             mvwprintw(menu.wmenu, yy, xx, "yy%d xx%d menu%s- ",yy,xx, menu.menu[i]);
             mvwprintw(menu.wmenu, yy, xx, " %.3s ",menu.menu[i]);
         }
         xx+=3;
