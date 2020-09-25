@@ -1,4 +1,4 @@
-ltyperprgdir=../
+ltyperprgdir=/usr/local/bin/
 ltyperprg_PROGRAMS=ltyper
 ltyper_SOURCES=main.c
 
