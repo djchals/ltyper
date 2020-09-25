@@ -99,12 +99,13 @@ void proceso_archivo(char *archivo){
     char *ruta_archivo = malloc(strlen(ruta) + strlen(archivo) + 1); // +1 for the null-terminator
     strcpy(ruta_archivo, ruta);
     strcat(ruta_archivo, archivo);
+    
     FILE *fp;
 	char buffer[10240];//si el archivo ocupase más de 10kb habria que aumentar este valor
     fp = fopen(ruta_archivo,"r");
-	fread(buffer, 10240, 1, fp);//si el archivo ocupase más de 10kb habria que aumentar este valor
+	int flag_archivo_leido=fread(buffer, 10240, 1, fp);//si el archivo ocupase más de 10kb habria que aumentar este valor
 	fclose(fp);
-    tmp_json_parsed = json_tokener_parse(buffer);
+    tmp_json_parsed = json_tokener_parse(buffer); 
     
     int id_course=obten_id_course();
     array_json_parseds[id_course]=*&tmp_json_parsed;
