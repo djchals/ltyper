@@ -477,7 +477,12 @@ void finalizar(int id_course){
     bool flag_opcion_valida=false;
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
-    float porcentaje_errores=((float) num_errores/(float) (long_texto+num_errores))*100;
+    float porcentaje_errores;
+    if(long_texto+num_errores!=0){
+        porcentaje_errores=((float) num_errores/(float) (long_texto+num_errores))*100;
+    }else{
+        porcentaje_errores=0;
+    }
     finalwin=newwin(alto_caja_final, ancho_caja_final, y_finalwin, x_finalwin);
     box(finalwin, 0, 0);   
 
