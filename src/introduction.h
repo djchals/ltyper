@@ -25,7 +25,9 @@ void muestra_introduccion(){
     
     wprintw(introductionwin,"%s\n\n",ET_INTRODUCTION_1);
     wprintw(introductionwin,"%s\n\n",ET_INTRODUCTION_2);
-    wprintw(introductionwin,"%s",ET_INTRODUCTION_3);
+    wprintw(introductionwin,"%s\n\n",ET_INTRODUCTION_3);
+    wprintw(introductionwin,"%s\n\n",ET_INTRODUCTION_4);
+    wprintw(introductionwin,"%s",ET_INTRODUCTION_5);
     wrefresh(introductionwin);
     muestra_pie(opciones_pie);
     ch=getch();
@@ -38,7 +40,7 @@ void muestra_introduccion(){
             break;
     }
     wclear(introductionwin);
-    mvwprintw(introductionwin,0,1,"%s\n\n",ET_INTRODUCTION_4);
+    mvwprintw(introductionwin,0,1,"%s\n\n",ET_INTRODUCTION_6);
     wrefresh(introductionwin);
 
     dibuja_teclado(9998,1);
