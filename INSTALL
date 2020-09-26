@@ -5,7 +5,7 @@ HOW TO INSTALL Ltyper
 it we must first resolve these dependencies. 
 
     When dependencies are installed the shell commands:
-    ./autogen.sh
+    	./autogen.sh
 	./configure
 	make 
 	make install
