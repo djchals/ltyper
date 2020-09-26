@@ -498,7 +498,7 @@ void finalizar(int id_course){
     mvwprintw(finalwin,5, 1, "%20s",ET_TIME);
     mvwprintw(finalwin,5, 25, "%02d:%02d",minutos,segundos);
     wrefresh(finalwin);
-    int tmp_opciones[4]={1,2,1,1};
+    int tmp_opciones[5]={1,0,2,1,1};
     refresh();
     muestra_pie(tmp_opciones);  
    do{
