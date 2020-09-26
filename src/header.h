@@ -113,6 +113,8 @@ WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lesso
 
 #define MAX_Y_INTRO 22
 #define MAX_X_INTRO 47
+
+#define DATADIR "/usr/local/share/ltyper/db/"
 //
 //
 #endif /* FOO_DOT_H */

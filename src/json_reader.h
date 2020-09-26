@@ -18,7 +18,7 @@ int _init_cursos();
 json_object *array_json_parseds[MAX_COURSES];
 json_object *tmp_json_parsed;
 
-char ruta[]="db/";
+char ruta[]=DATADIR;
 int array_cursos[MAX_COURSES];//array_cursos[i]=id_course
 int num_cursos=0;
 
