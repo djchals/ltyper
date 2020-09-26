@@ -110,7 +110,7 @@ void obten_coord_wins(){
         y_descmenuwin=100;
         y_descfinal=100;
         y_introductionwin=3;
-        y_prwin=y_introductionwin;
+        y_prwin=1;
 
         max_y_keyb=11;        
     }else if(max_y==23){
@@ -129,7 +129,7 @@ void obten_coord_wins(){
         y_descmenuwin=100;
         y_descfinal=100;
         y_introductionwin=3;
-        y_prwin=y_introductionwin;
+        y_prwin=0;
 
         max_y_keyb=11;        
     }else if(max_y<23 && max_y>15){
@@ -148,7 +148,7 @@ void obten_coord_wins(){
         y_descmenuwin=3;
         y_descfinal=3;
         y_introductionwin=2;
-        y_prwin=y_introductionwin;
+        y_prwin=0;
 
         max_y_keyb=11;        
     }else if(max_y<=15){
@@ -169,7 +169,7 @@ void obten_coord_wins(){
         y_descfinal=100;
         max_y_keyb=11;   
         y_introductionwin=100;//mostramos uera del rango para que no se vea
-        y_prwin=y_introductionwin;
+        y_prwin=0;
 
         
     }
