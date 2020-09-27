@@ -159,7 +159,7 @@ void muestra_texto(int act_id_texto, int id_course){
             case 0x109:/*f1 help*/break;
             case 0x10a:/*f2 cancel*/
                 long_texto=i_row;
-                finalizar(id_course);
+                finalizar(id_course,true);
                 return;//lo frenamos aquí en seco, para que no se vaya al final de este while y ejecute otra vez finalizar();
                 break;
             case 0x10b:/*f3 change lesson*/
@@ -208,7 +208,7 @@ void muestra_texto(int act_id_texto, int id_course){
         wrefresh(childwin);
     }
 
-    finalizar(id_course);
+    finalizar(id_course,false);
 }
 bool is_special(int tmp_caracter){
     switch(tmp_caracter){
@@ -452,9 +452,10 @@ void contar_segundos(){
     }
     wattroff(timewin,COLOR_PAIR(C_TIMEOUT) | WA_BLINK | WA_BOLD);
 }
-void finalizar(int id_course){
+void finalizar(int id_course,bool flag_cancela_texto){
     //PARAMOS EL CRONOMETRO
-    WINDOW *finalwin, *descfinalwin;
+    WINDOW *finalwin, *descfinalwin, *frasefinalwin;
+    int tmp_opciones[5];
     alarm(0);
     
     wclear(lessonwin);
@@ -478,6 +479,12 @@ void finalizar(int id_course){
     float minutos_reales=(float) total_tiempo/60;
     float num_ppm=(long_texto+num_errores)/minutos_reales;
     float porcentaje_errores;
+
+    //anadimos esto por si se cancela el texto en el segundo 0 (demasiado rápido)
+    if(flag_cancela_texto && minutos_reales==0){
+        num_ppm=0;
+    }
+    
     if(long_texto+num_errores!=0){
         porcentaje_errores=((float) num_errores/(float) (long_texto+num_errores))*100;
     }else{
@@ -486,7 +493,7 @@ void finalizar(int id_course){
     finalwin=newwin(alto_caja_final, ancho_caja_final, y_finalwin, x_finalwin);
     box(finalwin, 0, 0);   
 
-    descfinalwin=newwin(1, ancho_caja_final, y_descfinal, x_descfinal);
+    descfinalwin=newwin(1, ancho_caja_final, y_descfinalwin, x_descfinalwin);
     mvwprintw(descfinalwin,0, 0, ET_YOUR_SCORE);
     wrefresh(descfinalwin);
     mvwprintw(finalwin,2, 1, "%20s",ET_LESSON);    
@@ -498,7 +505,40 @@ void finalizar(int id_course){
     mvwprintw(finalwin,5, 1, "%20s",ET_TIME);
     mvwprintw(finalwin,5, 25, "%02d:%02d",minutos,segundos);
     wrefresh(finalwin);
-    int tmp_opciones[5]={1,0,2,1,1};
+    frasefinalwin=newwin(10, ancho_caja_final, y_frasefinalwin, x_frasefinalwin);
+    if(!flag_cancela_texto){
+        if(num_errores==0 && long_texto>0){
+            mvwprintw(frasefinalwin, 0,0,ET_FINISH_PHRASE1);
+            tmp_opciones[0]=1;
+            tmp_opciones[1]=0;
+            tmp_opciones[2]=0;
+            tmp_opciones[3]=1;
+            tmp_opciones[4]=1;
+        }else if(num_errores>=0 && num_errores<3 && long_texto>0){
+            mvwprintw(frasefinalwin, 0,0, ET_FINISH_PHRASE2,num_errores);        
+            tmp_opciones[0]=1;
+            tmp_opciones[1]=0;
+            tmp_opciones[2]=0;
+            tmp_opciones[3]=1;
+            tmp_opciones[4]=1;
+        }else if(long_texto>0){
+            mvwprintw(frasefinalwin, 0,0, ET_FINISH_PHRASE3,num_errores);        
+            tmp_opciones[0]=1;
+            tmp_opciones[1]=0;
+            tmp_opciones[2]=2;
+            tmp_opciones[3]=1;
+            tmp_opciones[4]=1;
+        }
+    }else{
+        tmp_opciones[0]=1;
+        tmp_opciones[1]=0;
+        tmp_opciones[2]=2;
+        tmp_opciones[3]=1;
+        tmp_opciones[4]=1;    
+        mvwprintw(frasefinalwin, 0,0, ET_FINISH_PHRASE_CANCELLED);  
+    }
+    wrefresh(frasefinalwin);
+        
     refresh();
     muestra_pie(tmp_opciones);  
    do{

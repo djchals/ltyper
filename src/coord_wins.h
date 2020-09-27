@@ -24,7 +24,8 @@ void obten_coord_wins(){
 
     int tmp_borde_final=floor((max_x-ancho_caja_final)/2);
     x_finalwin=tmp_borde_final;
-    x_descfinal=tmp_borde_final;
+    x_descfinalwin=tmp_borde_final;
+    x_frasefinalwin=tmp_borde_final;  
     
     x_footerwin=0;
     x_keyboardwin+=tmp_borde;
@@ -46,6 +47,7 @@ void obten_coord_wins(){
         y_timewin=2;
         y_errorwin=2;
         y_finalwin=5;
+        y_frasefinalwin=14;
         y_footerwin=max_y-1;
         y_keyboardwin=16;
         y_keybintrowin=7;//va igual que childwin
@@ -53,7 +55,7 @@ void obten_coord_wins(){
         y_lessonwin=2;
         y_descwin=4;
         y_descmenuwin=4;
-        y_descfinal=4;
+        y_descfinalwin=4;
         y_introductionwin=3;
         y_prwin=y_introductionwin;
 
@@ -71,7 +73,7 @@ void obten_coord_wins(){
         y_lessonwin=1;
         y_descwin=3;
         y_descmenuwin=3;
-        y_descfinal=3;
+        y_descfinalwin=3;
         y_introductionwin=3;
         y_prwin=y_introductionwin;
 
@@ -89,7 +91,7 @@ void obten_coord_wins(){
         y_lessonwin=1;        
         y_descwin=3;    
         y_descmenuwin=3;
-        y_descfinal=3;
+        y_descfinalwin=3;
         y_introductionwin=3;
         y_prwin=y_introductionwin;
 
@@ -108,7 +110,7 @@ void obten_coord_wins(){
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
         y_descmenuwin=100;
-        y_descfinal=100;
+        y_descfinalwin=100;
         y_introductionwin=3;
         y_prwin=1;
 
@@ -127,7 +129,7 @@ void obten_coord_wins(){
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
         y_descmenuwin=100;
-        y_descfinal=100;
+        y_descfinalwin=100;
         y_introductionwin=3;
         y_prwin=0;
 
@@ -146,7 +148,7 @@ void obten_coord_wins(){
         y_lessonwin=1;
         y_descwin=3;
         y_descmenuwin=3;
-        y_descfinal=3;
+        y_descfinalwin=3;
         y_introductionwin=2;
         y_prwin=0;
 
@@ -166,11 +168,10 @@ void obten_coord_wins(){
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
         y_descmenuwin=100;
-        y_descfinal=100;
+        y_descfinalwin=100;
         max_y_keyb=11;   
         y_introductionwin=100;//mostramos uera del rango para que no se vea
         y_prwin=0;
-
-        
+   
     }
 }
