@@ -142,7 +142,7 @@ void obten_menu_inicial(){
     menu.startx = x_menuwin;
     menu.starty = y_menuwin;
     menu.max_x = ancho_caja_menu;
-    menu.max_y = 5+(int)menu.n_op;
+    menu.max_y = 6+(int)menu.n_op;
 
     menu.wmenu = newwin(menu.max_y, menu.max_x, menu.starty, menu.startx);
     keypad(menu.wmenu, TRUE);

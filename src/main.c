@@ -75,11 +75,18 @@ void muestra_texto(int act_id_texto, int id_course){
 
     //obtenemos el texto que hay que repetir
     char *array_puntero_texto;
-    if(id_course!=9){
-        array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
-    }else{
-        array_puntero_texto=obten_texto_random(act_id_texto);
+    switch(id_course){
+        case 9:
+            array_puntero_texto=obten_texto_especial(act_id_texto,9);
+            break;
+        case 10:
+            array_puntero_texto=obten_texto_especial(act_id_texto,10);
+            break;                        
+        default:
+            array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
+            break;
     }
+
     long_texto=strlen(array_puntero_texto);
     unsigned char todo_texto[long_texto];
     memcpy(todo_texto,array_puntero_texto,long_texto);
@@ -115,7 +122,7 @@ void muestra_texto(int act_id_texto, int id_course){
     }
 //     actualiza_cursor(0,pos_h_actual,pos_w_actual,3,todo_texto);//mostramos el cursor en la primera letra
     //dibujamos el teclado salvo que sea un texto con caracteres aleatorios
-    if(id_course!=9){
+    if(id_course!=9 && id_course!=10){
         dibuja_teclado(id_texto,id_course);   
     }
     //
@@ -302,7 +309,7 @@ void muestra_cabecera(int id_texto, int id_course){
     //
     
     muestra_titulo_curso(id_course);
-    if(id_course==9){
+    if(id_course==9 || id_course==10){
         mvwprintw(lessonwin,0, 0,"%s %s",obten_titulo(id_texto,id_course),ET_RANDOM_CHARS);        
     }else{
         mvwprintw(lessonwin,0, 0,"%s %s",ET_LESSON, obten_titulo(id_texto,id_course));
@@ -508,7 +515,7 @@ void finalizar(int id_course,bool flag_cancela_texto){
     descfinalwin=newwin(1, ancho_caja_final, y_descfinalwin, x_descfinalwin);
     mvwprintw(descfinalwin,0, 0, ET_YOUR_SCORE);
     wrefresh(descfinalwin);
-    if(id_course==9){
+    if(id_course==9 || id_course==10){
         mvwprintw(finalwin,2, 1, "%20s",ET_RANDOM_CHARS);    
     }else{
         mvwprintw(finalwin,2, 1, "%20s",ET_LESSON);    

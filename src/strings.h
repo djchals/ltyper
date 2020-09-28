@@ -29,7 +29,7 @@
 #define ET_ENUNCIADO_RANDOM_CHARS "Choose how many characters do you want to practice:"
 
 //json_reader.h
-char *array_et_course_title[10]={
+char *array_et_course_title[11]={
     0,
     "Typing course QWERTY",
     "Typing course DVORAK",
@@ -39,7 +39,8 @@ char *array_et_course_title[10]={
     "INSANE typing course DVORAK (without intelligible words)",
     "INSANE typing course COLEMAK (without intelligible words)",
     "INSANE typing course DVORAK REVERSE (without intelligible words)",
-    "Text created with random characters"
+    "Text created with Random Alphanumeric characters",
+    "Text created with Random Non-Alphanumeric characters"
 };
 
 //draw_keys.h

@@ -5,7 +5,7 @@ char *obten_texto(int id_texto,int id_course);
 char *obten_titulo(int id_texto, int id_course);
 char *obten_course_title(int id_course);
 char *obten_distribucion(int id_texto, int id_course);
-char *obten_texto_random(int long_texto);
+char *obten_texto_especial(int id_texto,int id_course);
 int obten_num_titulos(int id_course);
 void obten_titulos();
 void quita_espacios(char *act_texto);
@@ -152,13 +152,21 @@ char *obten_course_title(int id_course){
     char *act_titulo=array_et_course_title[id_course];
     return act_titulo;
 }
-char *obten_texto_random(int id_texto){
+char *obten_texto_especial(int id_texto,int id_course){
     int array_longs[]={125,190,255,320,385,440};
     long_texto=array_longs[id_texto];
     
     //long_texto funcionará muy bien con los tamaños: 125 190 255 320
     srand (getpid());
-    char array_imprimibles[]={"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz?!-'.,1234567890"};
+    char array_imprimibles[200];
+    switch(id_course){
+        case 9:
+            strcpy(array_imprimibles,"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz?!-'.,1234567890");
+            break;
+        case 10:
+            strcpy(array_imprimibles,"!'#$%^&*()-={}][<>/-_+|");
+            break;
+    }
     int num_imprimibles=strlen(array_imprimibles)-1;//esto es así y punto, porque si pongo justo da error
     int num_espacios[100];
     int i, i_espacio, i_enter;
