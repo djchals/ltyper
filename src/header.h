@@ -112,7 +112,7 @@ WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lesso
 #define KEYB_FINGER5     12    
 #define KEYB_FINGER6     13   
 
-#define MAX_Y_INTRO 22
+#define MAX_Y_INTRO 20
 #define MAX_X_INTRO 47
 
 #define DATADIR "/usr/local/share/ltyper/db/"

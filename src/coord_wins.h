@@ -46,8 +46,10 @@ void obten_coord_wins(){
         y_childwin=5;
         y_timewin=2;
         y_errorwin=2;
+
         y_finalwin=5;
         y_frasefinalwin=14;
+
         y_footerwin=max_y-1;
         y_keyboardwin=16;
         y_keybintrowin=7;//va igual que childwin
@@ -64,7 +66,10 @@ void obten_coord_wins(){
         y_childwin=4;
         y_timewin=1;
         y_errorwin=1;
+
         y_finalwin=4;
+        y_frasefinalwin=13;
+
         y_footerwin=max_y-1;
         y_keyboardwin=14;
         y_keybintrowin=8;//va igual que childwin
@@ -83,7 +88,10 @@ void obten_coord_wins(){
         y_childwin=4;
         y_timewin=1;
         y_errorwin=1;
+        
         y_finalwin=4;
+        y_frasefinalwin=13;
+        
         y_footerwin=max_y-1;
         y_keyboardwin=13;
         y_keybintrowin=9;//va igual que childwin
@@ -102,7 +110,11 @@ void obten_coord_wins(){
         y_childwin=3;
         y_timewin=1;
         y_errorwin=1;
+
+        y_descfinalwin=3;
         y_finalwin=4;
+        y_frasefinalwin=13;
+
         y_footerwin=max_y-1;
         y_keyboardwin=11;
         y_keybintrowin=8;//va igual que childwin
@@ -110,7 +122,6 @@ void obten_coord_wins(){
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
         y_descmenuwin=100;
-        y_descfinalwin=100;
         y_introductionwin=3;
         y_prwin=1;
 
@@ -121,7 +132,10 @@ void obten_coord_wins(){
         y_childwin=2;
         y_timewin=1;
         y_errorwin=1;
+        y_descfinalwin=3;
         y_finalwin=4;
+        y_frasefinalwin=13;
+
         y_footerwin=max_y-1;
         y_keyboardwin=10;
         y_keybintrowin=8;//va igual que childwin
@@ -131,7 +145,7 @@ void obten_coord_wins(){
         y_descmenuwin=100;
         y_descfinalwin=100;
         y_introductionwin=3;
-        y_prwin=0;
+        y_prwin=1;
 
         max_y_keyb=11;        
     }else if(max_y<23 && max_y>15){
@@ -140,7 +154,10 @@ void obten_coord_wins(){
         y_childwin=4;
         y_timewin=1;
         y_errorwin=1;
+        y_descfinalwin=3;
         y_finalwin=4;
+        y_frasefinalwin=13;
+
         y_footerwin=max_y-1;
         y_keyboardwin=100;//mostramos uera del rango para que no se vea
         y_keybintrowin=5;//va igual que childwin
@@ -150,7 +167,7 @@ void obten_coord_wins(){
         y_descmenuwin=3;
         y_descfinalwin=3;
         y_introductionwin=2;
-        y_prwin=0;
+        y_prwin=1;
 
         max_y_keyb=11;        
     }else if(max_y<=15){
@@ -159,7 +176,11 @@ void obten_coord_wins(){
         y_childwin=2;
         y_timewin=1;
         y_errorwin=1;
+        y_descfinalwin=3;
+
         y_finalwin=4;
+        y_frasefinalwin=13;
+  
         y_footerwin=max_y-1;
         y_keyboardwin=100;//mostramos uera del rango para que no se vea
         y_keybintrowin=1;//va igual que childwin
@@ -171,7 +192,7 @@ void obten_coord_wins(){
         y_descfinalwin=100;
         max_y_keyb=11;   
         y_introductionwin=100;//mostramos uera del rango para que no se vea
-        y_prwin=0;
+        y_prwin=1;
    
     }
 }

@@ -96,6 +96,7 @@ int muestra_menu(int id_course){
                 flag_dentro_menus=false;
                 flag_dentro_menu_lecciones=false;
                 eleccio=10000;//como le restaremos 1 se quedará en 9999
+                break;
             case 0x109:/*f1 introducción*/
                 flag_dentro_menu_lecciones=false;
                 muestra_introduccion();
