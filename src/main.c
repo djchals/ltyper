@@ -27,8 +27,10 @@ void bucle_menus(){
         opcion_selec=muestra_menu(0);
         while(flag_dentro_menu_lecciones && opcion_selec!=9999){
             lecccion_sel=muestra_menu(array_cursos[opcion_selec]);//aquí ya deiniremos id_course
+            
             flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
             clear();
+            
             while(flag_dentro_texto && lecccion_sel!=9999){
                 muestra_texto(lecccion_sel,array_cursos[opcion_selec]);
             }
@@ -38,7 +40,6 @@ void bucle_menus(){
     endwin();//si llegamos aquí es que hemos pulsado la tecla ESC en los menús
 }
 void muestra_texto(int act_id_texto, int id_course){
-
     //inicializamos de nuevo las variables globales
     flag_timeout=false;
     total_tiempo=-1;
@@ -73,7 +74,12 @@ void muestra_texto(int act_id_texto, int id_course){
     //
 
     //obtenemos el texto que hay que repetir
-    char *array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
+    char *array_puntero_texto;
+    if(id_course!=9){
+        array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
+    }else{
+        array_puntero_texto=obten_texto_random(act_id_texto);
+    }
     long_texto=strlen(array_puntero_texto);
     unsigned char todo_texto[long_texto];
     memcpy(todo_texto,array_puntero_texto,long_texto);
@@ -108,8 +114,10 @@ void muestra_texto(int act_id_texto, int id_course){
         num_cols_texto++;//añadimos el salto de línea al inal para que se vea la última línea
     }
 //     actualiza_cursor(0,pos_h_actual,pos_w_actual,3,todo_texto);//mostramos el cursor en la primera letra
-//     dibujamos el teclado
-    dibuja_teclado(id_texto,id_course);   
+    //dibujamos el teclado salvo que sea un texto con caracteres aleatorios
+    if(id_course!=9){
+        dibuja_teclado(id_texto,id_course);   
+    }
     //
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
@@ -294,7 +302,11 @@ void muestra_cabecera(int id_texto, int id_course){
     //
     
     muestra_titulo_curso(id_course);
-    mvwprintw(lessonwin,0, 0,"%s %s",ET_LESSON, obten_titulo(id_texto,id_course));
+    if(id_course==9){
+        mvwprintw(lessonwin,0, 0,"%s %s",obten_titulo(id_texto,id_course),ET_RANDOM_CHARS);        
+    }else{
+        mvwprintw(lessonwin,0, 0,"%s %s",ET_LESSON, obten_titulo(id_texto,id_course));
+    }
     wrefresh(lessonwin);
 
     mvwprintw(descwin,0,0, ET_DESC);
@@ -496,7 +508,11 @@ void finalizar(int id_course,bool flag_cancela_texto){
     descfinalwin=newwin(1, ancho_caja_final, y_descfinalwin, x_descfinalwin);
     mvwprintw(descfinalwin,0, 0, ET_YOUR_SCORE);
     wrefresh(descfinalwin);
-    mvwprintw(finalwin,2, 1, "%20s",ET_LESSON);    
+    if(id_course==9){
+        mvwprintw(finalwin,2, 1, "%20s",ET_RANDOM_CHARS);    
+    }else{
+        mvwprintw(finalwin,2, 1, "%20s",ET_LESSON);    
+    }
     mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
     mvwprintw(finalwin,3, 1, "%20s",ET_PPM);
     mvwprintw(finalwin,3, 25, "%d",(int)num_ppm);

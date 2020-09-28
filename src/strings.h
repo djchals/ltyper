@@ -15,6 +15,8 @@
 #define ET_YOUR_SCORE "You've obtained the following score:"
 #define ET_PPM "Pulses/min"
 #define ET_LESSON "Lesson"
+#define ET_RANDOM_CHARS "Random chrs"
+
 #define ET_FINISH_PHRASE1 "Congratulations! You have done it perfect! :D\nYou made 0 errors!\nThe next lesson is waiting for you Mr. Keyman"
 #define ET_FINISH_PHRASE2 "You made %d errors! :)\nNow you are ready for go to the next lesson, but need improve your accuracy"
 #define ET_FINISH_PHRASE3 "You made %d errors.\nYou need repeat this lesson until do only 3 or less errors"
@@ -24,15 +26,20 @@
 #define ET_PROGRAMA "LTYPER v1.0"
 #define ET_ENUNCIADO_COURSE "Choose the Course you want to take:"
 #define ET_ENUNCIADO_LESSON "Choose the Lesson you want to practice:"
-
+#define ET_ENUNCIADO_RANDOM_CHARS "Choose how many characters do you want to practice:"
 
 //json_reader.h
-char *array_et_course_title[6]={
+char *array_et_course_title[10]={
     0,
     "Typing course QWERTY",
     "Typing course DVORAK",
     "Typing course COLEMAK",
-    "Typing course DVORAK REVERSE"
+    "Typing course DVORAK REVERSE",
+    "INSANE typing course QWERTY (without intelligible words)",
+    "INSANE typing course DVORAK (without intelligible words)",
+    "INSANE typing course COLEMAK (without intelligible words)",
+    "INSANE typing course DVORAK REVERSE (without intelligible words)",
+    "Text created with random characters"
 };
 
 //draw_keys.h

@@ -13,7 +13,7 @@ t_menu menu;
 //Deinimos los menus.
 int num_menus = 1;
 int num_lecciones;
-char *m_principal[MAX_COURSES];
+char *m_principal[20];
 char *m_lecciones[MAX_LESSONS_FOR_COURSE];
 
 void _init_ncurses();
@@ -49,7 +49,11 @@ void construye_menu(int id_course){
         tmp_opciones[4]=0;
 
     }else{
-        mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_LESSON);
+        if(id_course==9){//how many characters do you want?
+            mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_RANDOM_CHARS);            
+        }else{
+            mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_LESSON);
+        }
         _imp_menu_horizontal(menu, 1);
         tmp_opciones[0]=1;
         tmp_opciones[1]=1;
@@ -129,7 +133,8 @@ int muestra_menu(int id_course){
 }
 
 void obten_menu_inicial(){  
-    for(int i=0;i<num_cursos;i++){
+    int i;
+    for(i=0;i<num_cursos;i++){
         m_principal[i]=obten_course_title(array_cursos[i]);
     }
     menu.menu = m_principal;
@@ -137,8 +142,7 @@ void obten_menu_inicial(){
     menu.startx = x_menuwin;
     menu.starty = y_menuwin;
     menu.max_x = ancho_caja_menu;
-//     menu.max_y = alto_caja_menu;
-    menu.max_y = 4+(int)menu.n_op;
+    menu.max_y = 5+(int)menu.n_op;
 
     menu.wmenu = newwin(menu.max_y, menu.max_x, menu.starty, menu.startx);
     keypad(menu.wmenu, TRUE);
@@ -177,6 +181,9 @@ void _imp_menu_vertical(t_menu menu, int seleccionat){
         }
         else
         mvwprintw(menu.wmenu, y, x, "%s", menu.menu[i]);
+        if(i==3 || i==7){
+            ++y;            
+        }
         ++y;
     }
     wrefresh(menu.wmenu);
@@ -202,13 +209,12 @@ void _imp_menu_horizontal(t_menu menu, int seleccionat){
         if(seleccionat == i + 1){
             wattron(menu.wmenu, A_REVERSE);
             mvwprintw(menu.wmenu, yy, xx," %.3s ",menu.menu[i]);
-
             wattroff(menu.wmenu, A_REVERSE);
         }
         else{
             mvwprintw(menu.wmenu, yy, xx, " %.3s ",menu.menu[i]);
         }
-        xx+=3;
+        xx+=4;
     }
     wrefresh(menu.wmenu);
 }

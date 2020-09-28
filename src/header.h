@@ -14,7 +14,7 @@
 // #include <ncursesw/curses.h>
 #include <curses.h>
 
-#define MAX_COURSES 6 //debe estar aquí para que la coja en cadenas_menus.hs
+#define MAX_COURSES 9 //debe estar aquí para que la coja en cadenas_menus.hs
 #define MAX_LESSONS_FOR_COURSE 40
 #include "strings.h"
 

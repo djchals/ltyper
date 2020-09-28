@@ -5,9 +5,11 @@ char *obten_texto(int id_texto,int id_course);
 char *obten_titulo(int id_texto, int id_course);
 char *obten_course_title(int id_course);
 char *obten_distribucion(int id_texto, int id_course);
+char *obten_texto_random(int long_texto);
 int obten_num_titulos(int id_course);
 void obten_titulos();
 void quita_espacios(char *act_texto);
+
 json_object *parsed_json, *titulos;
 
 void error(const char *s);/* Función para devolver un error en caso de que ocurra */
@@ -149,6 +151,59 @@ int obten_id_course(){
 char *obten_course_title(int id_course){
     char *act_titulo=array_et_course_title[id_course];
     return act_titulo;
+}
+char *obten_texto_random(int id_texto){
+    int array_longs[]={125,190,255,320,385,440};
+    long_texto=array_longs[id_texto];
+    
+    //long_texto funcionará muy bien con los tamaños: 125 190 255 320
+    srand (getpid());
+    char array_imprimibles[]={"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz?!-'.,1234567890"};
+    int num_imprimibles=strlen(array_imprimibles)-1;//esto es así y punto, porque si pongo justo da error
+    int num_espacios[100];
+    int i, i_espacio, i_enter;
+    int numero;
+    char texto_random[long_texto];
+    int j=0;//con este contador contamos cuantos caracteres llevamos escritos seguidos para ver si ya toca escribir un espacio o no
+
+    for(i=0;i<100;i++){
+        numero=rand()%7+2;
+        num_espacios[i]=numero;
+    }
+
+    i_espacio=0;i_enter=0;
+    for(i=0;i<long_texto;i++){
+        
+        numero=rand()%num_imprimibles+1;
+        
+        if(rand()%30+1==2 && isalpha(array_imprimibles[numero])){
+            texto_random[i]=toupper(array_imprimibles[numero]);
+        }else{
+            texto_random[i]=array_imprimibles[numero];
+        }
+        
+        j++;
+        i_enter++;
+        if(i!=long_texto && i_enter==65){
+            texto_random[i]=10;
+            i_enter=0;
+            j=0;
+        }
+        
+        //comprobamos si hemos de colocar un espacio en este momento
+        if(j==num_espacios[i_espacio] && i!=long_texto){
+            texto_random[i]=32;
+            i_espacio++;
+            j=0;
+        }
+    }
+    texto_random[i]=0;
+
+    char *tmp_return;
+    tmp_return=malloc(sizeof(char)*strlen(texto_random));
+    memcpy((void *)tmp_return,texto_random,strlen(texto_random));
+//     printf("%s\n",&tmp_return);
+    return tmp_return;
 }
 void error(const char *s){
     /* perror() devuelve la cadena S y el error (en cadena de caracteres) que tenga errno */
