@@ -514,7 +514,7 @@ void finalizar(int id_course,bool flag_cancela_texto){
             tmp_opciones[2]=0;
             tmp_opciones[3]=1;
             tmp_opciones[4]=1;
-        }else if(num_errores>=0 && num_errores<3 && long_texto>0){
+        }else if(num_errores>0 && num_errores<=3 && long_texto>0){
             mvwprintw(frasefinalwin, 0,0, ET_FINISH_PHRASE2,num_errores);        
             tmp_opciones[0]=1;
             tmp_opciones[1]=0;
@@ -555,7 +555,9 @@ void finalizar(int id_course,bool flag_cancela_texto){
                 return;
                 break;
             case 0x10a:/*f2 repeat the text*/
-                flag_opcion_valida=true;
+                if(tmp_opciones[2]==2){
+                    flag_opcion_valida=true;
+                }
                 //do need anymore, whe are in a loop 
                 break;
             case 0x10b://f3 change lesson
