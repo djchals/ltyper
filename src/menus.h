@@ -10,7 +10,7 @@ typedef struct menus {
 
 t_menu menu;
 
-//Deinimos los menus.
+//Definimos los menus.
 int num_menus = 1;
 int num_lecciones;
 char *m_principal[20];
@@ -18,7 +18,6 @@ char *m_lecciones[MAX_LESSONS_FOR_COURSE];
 
 void _init_ncurses();
 void _init_menus();
-// void _imp_menu(t_menu menu, int seleccionat);
 void _imp_menu_horizontal(t_menu menu, int seleccionat);
 void _imp_menu_vertical(t_menu menu, int seleccionat);
 
@@ -27,6 +26,8 @@ void obten_submenu(int id_course);
 void construye_menu(int id_course);
 
 void construye_menu(int id_course){
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     clear();
     refresh();
     int tmp_opciones[5];
@@ -38,9 +39,10 @@ void construye_menu(int id_course){
 
     //imprimimos con la primera opción seleccionada
     muestra_titulo_menu(false);    
-    descmenuwin=newwin(1, max_x, y_descmenuwin,x_descmenuwin);  
+    descmenuwin=newwin(1, max_x, y_descmenuwin,0);  
     if(id_course==0){
-        mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_COURSE);
+        //print centered
+        mvwprintw(descmenuwin, 0, ((strlen(ET_ENUNCIADO_COURSE)<max_x)?floor((max_x-strlen(ET_ENUNCIADO_COURSE))/2):0),ET_ENUNCIADO_COURSE);
         _imp_menu_vertical(menu, 1);
         tmp_opciones[0]=1;
         tmp_opciones[1]=1;
@@ -50,9 +52,10 @@ void construye_menu(int id_course){
 
     }else{
         if(id_course==9){//how many characters do you want?
-            mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_RANDOM_CHARS);            
+            //print centered
+            mvwprintw(descmenuwin, 0, ((strlen(ET_ENUNCIADO_RANDOM_CHARS)<max_x)?floor((max_x-strlen(ET_ENUNCIADO_RANDOM_CHARS))/2):0),ET_ENUNCIADO_RANDOM_CHARS);
         }else{
-            mvwprintw(descmenuwin,0, 0, "%s",ET_ENUNCIADO_LESSON);
+            mvwprintw(descmenuwin, 0, ((strlen(ET_ENUNCIADO_LESSON)<max_x)?floor((max_x-strlen(ET_ENUNCIADO_LESSON))/2):0),ET_ENUNCIADO_LESSON);
         }
         _imp_menu_horizontal(menu, 1);
         tmp_opciones[0]=1;
@@ -122,8 +125,6 @@ int muestra_menu(int id_course){
         }else{
             _imp_menu_horizontal(menu, seleccionat);
         }
-
-//         _imp_menu(menu, seleccionat);
         if(eleccio != 0) break;
     }   
     refresh();
@@ -133,6 +134,8 @@ int muestra_menu(int id_course){
 }
 
 void obten_menu_inicial(){  
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     int i;
     for(i=0;i<num_cursos;i++){
         m_principal[i]=obten_course_title(array_cursos[i]);
@@ -151,6 +154,8 @@ void obten_menu_inicial(){
 
 
 void obten_submenu(int id_course){
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     num_lecciones=obten_num_titulos(id_course);
 
     for(int i=0;i<num_lecciones;i++){
@@ -222,17 +227,17 @@ void _imp_menu_horizontal(t_menu menu, int seleccionat){
 void _init_ncurses(){
     /*  Initialize ncurses  */
     if((mainwin=initscr())==NULL){
-        fprintf(stderr, "Error initializing ncurses.\n");
+        fprintf(stderr, ET_ERRORS_NCURSES1);
         exit(EXIT_FAILURE);
     }
     if(has_colors()==FALSE){
         endwin();
-        printf("Your terminal does not support color\n");
+        printf(ET_ERRORS_NCURSES2);
         exit(EXIT_FAILURE);
     }
     if(start_color()!=OK){
         endwin();
-        printf("Your terminal cannot start colors\n");
+        printf(ET_ERRORS_NCURSES3);
         exit(EXIT_FAILURE);
     }
     getmaxyx(stdscr, max_y, max_x);  
@@ -244,6 +249,8 @@ void _init_ncurses(){
 }
  
 void muestra_titulo_menu(bool flag_introduccion){
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     char et_titulo_menu[50];
     if(!flag_introduccion){
         strcpy(et_titulo_menu,ET_PROGRAMA);

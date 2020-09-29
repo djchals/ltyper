@@ -30,6 +30,10 @@
 #define ET_ENUNCIADO_COURSE "Choose the Course you want to take:"
 #define ET_ENUNCIADO_LESSON "Choose the Lesson you want to practice:"
 #define ET_ENUNCIADO_RANDOM_CHARS "Choose how many characters do you want to practice:"
+#define ET_ERRORS_NCURSES1 "Error initializing ncurses.\n"
+#define ET_ERRORS_NCURSES2 "Your terminal does not support color.\n"
+#define ET_ERRORS_NCURSES3 "Your terminal cannot start colors.\n"
+
 
 //json_reader.h
 #define ET_CANNOT_OPEN_DIR "Cannot open the directory"

@@ -4,6 +4,8 @@ void muestra_presentacion(){
     sleep(1.5);
 }
 void muestra_introduccion(){
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     int opciones_pie[5]={2,0,0,0,0};
     int ch;
     muestra_titulo_menu(true);
@@ -52,8 +54,8 @@ void muestra_introduccion(){
 }
 
 void dibuja_manos(){    
-    int i,j;
     obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+    int i,j;
     handswin=subwin(mainwin,11, 80,y_keyboardwin+4, x_keyboardwin);
 
     int keyb_schetch[11][66]={
@@ -118,6 +120,7 @@ void dibuja_manos(){
 
 void dibuja_presentacion(){
     int i,j;
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
     prwin=subwin(mainwin,MAX_Y_INTRO+1, MAX_X_INTRO+1,y_prwin,x_prwin);
         
     int pr_schetch[MAX_Y_INTRO][MAX_X_INTRO]={

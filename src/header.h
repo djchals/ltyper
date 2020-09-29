@@ -89,7 +89,7 @@ int ancho_caja=80, alto_caja=10;//dimensiones de la caja
 int ancho_caja_menu=70, alto_caja_menu=10,alto_caja_submenu=6;
 int ancho_caja_final=50, alto_caja_final=8;
 
-WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *handswin, *prwin,*descmenuwin;
+WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *handswin, *prwin,*descmenuwin, *footerwin;
 
 #define C_LETRA_ERR     1
 #define C_LETRA_OK      2

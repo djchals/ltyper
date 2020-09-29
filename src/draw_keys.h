@@ -10,6 +10,7 @@ int max_y_keyb=13;
 
 void dibuja_teclado(int id_texto,int id_course){    
     int i,j;
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
     if(id_texto!=9998){
         keyboardwin= subwin(mainwin,max_y_keyb, 80,y_keyboardwin, x_keyboardwin);
     }else{

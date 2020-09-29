@@ -1,4 +1,5 @@
 void obten_coord_wins(){
+    getmaxyx(stdscr, max_y, max_x);  
     //X
     x_menuwin=0;    
     x_childwin=0;
@@ -34,7 +35,7 @@ void obten_coord_wins(){
     x_descwin+=tmp_borde;    
     int tmp_borde_menu=floor((max_x-ancho_caja_menu)/2);   
     x_menuwin+=tmp_borde_menu;
-    x_descmenuwin+=tmp_borde_menu;
+//     x_descmenuwin+=tmp_borde_menu;
     
     int tmp_borde_intro=floor((max_x-MAX_X_INTRO)/2);
     x_prwin=tmp_borde_intro;
@@ -83,6 +84,7 @@ void obten_coord_wins(){
     }else if(max_y==26 || max_y==27){
         flag_muestra_borde_keyb=false;
         y_menuwin=4;    
+        y_descmenuwin=3;
         y_childwin=4;
         y_timewin=1;
         y_errorwin=1;
@@ -96,7 +98,6 @@ void obten_coord_wins(){
         y_titlewin=0;
         y_lessonwin=1;        
         y_descwin=3;    
-        y_descmenuwin=3;
         y_descfinalwin=3;
         y_introductionwin=3;
         y_prwin=y_introductionwin;
@@ -104,7 +105,8 @@ void obten_coord_wins(){
         max_y_keyb=11;
     }else if(max_y==25 || max_y==24){
         flag_muestra_borde_keyb=false;
-        y_menuwin=3;    
+        y_menuwin=4;    
+        y_descmenuwin=3;
         y_childwin=3;
         y_timewin=1;
         y_errorwin=1;
@@ -119,14 +121,14 @@ void obten_coord_wins(){
         y_titlewin=0;
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
-        y_descmenuwin=100;
         y_introductionwin=3;
         y_prwin=1;
 
         max_y_keyb=11;        
     }else if(max_y==23){
         flag_muestra_borde_keyb=false;
-        y_menuwin=2;    
+        y_menuwin=3;    
+        y_descmenuwin=2;
         y_childwin=2;
         y_timewin=1;
         y_errorwin=1;
@@ -140,7 +142,6 @@ void obten_coord_wins(){
         y_titlewin=0;
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
-        y_descmenuwin=100;
         y_descfinalwin=100;
         y_introductionwin=3;
         y_prwin=1;
@@ -148,11 +149,12 @@ void obten_coord_wins(){
         max_y_keyb=11;        
     }else if(max_y<23 && max_y>15){
         flag_muestra_borde_keyb=false;
-        y_menuwin=4;    
+        y_menuwin=3;    
+        y_descmenuwin=2;
         y_childwin=4;
         y_timewin=1;
         y_errorwin=1;
-        y_descfinalwin=3;
+        y_descfinalwin=2;
         y_finalwin=4;
         y_frasefinalwin=13;
 
@@ -162,7 +164,6 @@ void obten_coord_wins(){
         y_titlewin=0;
         y_lessonwin=1;
         y_descwin=3;
-        y_descmenuwin=3;
         y_descfinalwin=3;
         y_introductionwin=2;
         y_prwin=1;
@@ -170,7 +171,8 @@ void obten_coord_wins(){
         max_y_keyb=11;        
     }else if(max_y<=15){
         flag_muestra_borde_keyb=false;
-        y_menuwin=2;    
+        y_menuwin=3;    
+        y_descmenuwin=2;
         y_childwin=2;
         y_timewin=1;
         y_errorwin=1;
@@ -186,7 +188,6 @@ void obten_coord_wins(){
         y_titlewin=0;
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
-        y_descmenuwin=100;
         max_y_keyb=11;   
         y_introductionwin=100;//mostramos uera del rango para que no se vea
         y_prwin=1;

@@ -101,6 +101,7 @@ void muestra_texto(int act_id_texto, int id_course){
 
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
     childwin = subwin(mainwin, alto_caja, ancho_caja, y_childwin, x_childwin);
     box(childwin, 0, 0);
 
@@ -301,6 +302,8 @@ void muestra_errores(void){
     wrefresh(errorwin);    
 }
 void muestra_cabecera(int id_texto, int id_course){
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     //Creamos las ventana de tiempo y errores ya que se tendrán que ir rerescando periodicamente
     timewin=newwin(1, 15, y_timewin, x_timewin);
     errorwin=newwin(1, 15, y_errorwin, x_errorwin);
@@ -343,13 +346,14 @@ void muestra_titulo_curso(int id_course){
     wrefresh(titlewin);
 }
 void muestra_pie(int opciones[5]){    
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     //según las opciones[] que traigamos mostraremos unas opciones del menú u otras
     char var_barra[max_x];
 
     //creamos los pares de colores
     init_pair(C_LETRA_PIE,COLOR_WHITE,COLOR_BLUE);
     
-    WINDOW *footerwin; 
     footerwin=newwin(1, max_x, y_footerwin,x_footerwin);    
     memset(var_barra,32,max_x);//llenamos var_barra con espacios para mostrar el fondo del pie
     
@@ -465,6 +469,8 @@ void contar_segundos(){
     wattroff(timewin,COLOR_PAIR(C_TIMEOUT) | WA_BLINK | WA_BOLD);
 }
 void finalizar(int id_course,bool flag_cancela_texto){
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+
     //PARAMOS EL CRONOMETRO
     WINDOW *finalwin, *descfinalwin, *frasefinalwin;
     int tmp_opciones[5];
@@ -476,14 +482,16 @@ void finalizar(int id_course,bool flag_cancela_texto){
     wclear(childwin);
     wclear(keyboardwin);
     wclear(descwin);
-
+    wclear(footerwin);
+    
     wrefresh(descwin);
     wrefresh(lessonwin);
     wrefresh(errorwin);
     wrefresh(timewin);
     wrefresh(childwin);
     wrefresh(keyboardwin);
-
+    wrefresh(footerwin);
+    
     muestra_titulo_curso(id_course);
     flag_salir=true;
 
