@@ -27,7 +27,6 @@ void bucle_menus(){
         opcion_selec=muestra_menu(0);
         while(flag_dentro_menu_lecciones && opcion_selec!=9999){
             lecccion_sel=muestra_menu(array_cursos[opcion_selec]);//aquí ya deiniremos id_course
-            
             flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
             clear();
             
@@ -35,7 +34,7 @@ void bucle_menus(){
                 muestra_texto(lecccion_sel,array_cursos[opcion_selec]);
             }
         }
-    }
+    }    
     refresh();
     endwin();//si llegamos aquí es que hemos pulsado la tecla ESC en los menús
 }
@@ -59,9 +58,6 @@ void muestra_texto(int act_id_texto, int id_course){
     init_pair(C_LETRA_ERR,COLOR_WHITE,COLOR_RED);
     init_pair(C_LETRA_OK,COLOR_WHITE,COLOR_BLACK);
     init_pair(C_TIMEOUT,COLOR_RED,COLOR_BLACK);
-//  init_pair(C_LETRA_PRUEBA,COLOR_WHITE,COLOR_RED);
-    init_pair(C_LETRA_PRUEBA,COLOR_WHITE,COLOR_GREEN);
-    
     //
     ini_w=1;
     ini_h=1;
@@ -75,15 +71,19 @@ void muestra_texto(int act_id_texto, int id_course){
 
     //obtenemos el texto que hay que repetir
     char *array_puntero_texto;
+    bool flag_blink;
     switch(id_course){
         case 9:
             array_puntero_texto=obten_texto_especial(act_id_texto,9);
+            flag_blink=false;
             break;
         case 10:
             array_puntero_texto=obten_texto_especial(act_id_texto,10);
+            flag_blink=false;
             break;                        
         default:
             array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
+            flag_blink=true;
             break;
     }
 
@@ -153,9 +153,9 @@ void muestra_texto(int act_id_texto, int id_course){
         conta++;
         //marcamos la tecla que debemos pulsar
         if(todo_texto[i_row]==ENTER){
-            marca_blink_letra(64,true); 
+            (flag_blink)?marca_blink_letra(64,true):1;
         }else if(isalnum(todo_texto[i_row]) || ispunct(todo_texto[i_row]) || isspace(todo_texto[i_row])){
-            marca_blink_letra(todo_texto[i_row],true); 
+            (flag_blink)?marca_blink_letra(todo_texto[i_row],true):1; 
         }
         ch=getch();
         wrefresh(childwin);
@@ -205,13 +205,13 @@ void muestra_texto(int act_id_texto, int id_course){
                 }
                 //Si la tecla pulsada no es ENTER entonces la marcamos en negrita
                 if(todo_texto[i_row]!=ENTER){
-                    marca_blink_letra(todo_texto[i_row],false); //desmarcamos la última tecla pulsada
+                    (flag_blink)?marca_blink_letra(todo_texto[i_row],false):1; //desmarcamos la última tecla pulsada
                     actualiza_cursor(i_row,pos_h_actual,pos_w_actual,act_attrs,todo_texto);
                     pos_w_actual++;//corremos una posición
                     
                 }else{
                     //desmarcamos la última tecla pulsada
-                    marca_blink_letra(64,false);
+                    (flag_blink)?marca_blink_letra(64,false):1;
                     //
                     actualiza_cursor(i_row,pos_h_actual,pos_w_actual,act_attrs,todo_texto);
                     pos_w_actual=ini_w;
@@ -225,50 +225,50 @@ void muestra_texto(int act_id_texto, int id_course){
 
     finalizar(id_course,false);
 }
-bool is_special(int tmp_caracter){
-    switch(tmp_caracter){
-        case 161://á
-        case 169://é
-        case 173://í
-        case 179://ó
-        case 186://ú
-        case 129://Á
-        case 137://É
-        case 141://Í
-        case 147://Ó
-        case 154://Ú
-        case 177://ñ
-        case 145://Ñ
-            return true;
-        break;
-        default:
-            return false;
-        break;
-    }
-}
+// bool is_special(int tmp_caracter){
+//     switch(tmp_caracter){
+//         case 161://á
+//         case 169://é
+//         case 173://í
+//         case 179://ó
+//         case 186://ú
+//         case 129://Á
+//         case 137://É
+//         case 141://Í
+//         case 147://Ó
+//         case 154://Ú
+//         case 177://ñ
+//         case 145://Ñ
+//             return true;
+//         break;
+//         default:
+//             return false;
+//         break;
+//     }
+// }
 int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]){
-     if(ch<=128){
-         return (int)(ch==todo_texto[i_row]);
-    }
-    switch(ch){
-        case 161://á
-        case 169://é
-        case 173://í
-        case 179://ó
-        case 186://ú
-        case 129://Á
-        case 137://É
-        case 141://Í
-        case 147://Ó
-        case 154://Ú
-        case 177://ñ
-        case 145://Ñ
+//      if(ch<=128){
+//          return (int)(ch==todo_texto[i_row]);
+//     }
+//     switch(ch){
+//         case 161://á
+//         case 169://é
+//         case 173://í
+//         case 179://ó
+//         case 186://ú
+//         case 129://Á
+//         case 137://É
+//         case 141://Í
+//         case 147://Ó
+//         case 154://Ú
+//         case 177://ñ
+//         case 145://Ñ
             return (int)(ch==todo_texto[i_row]);
-            break;
-        default:
-            return 0;
-            break;
-    }
+//             break;
+//         default:
+//             return 0;
+//             break;
+//     }
 }
 
 void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, int flag_attrs,unsigned char todo_texto[]){
@@ -285,12 +285,12 @@ void actualiza_cursor(int i_row, int pos_h_actual, int pos_w_actual, int flag_at
         mvwprintw(childwin,pos_h_actual, pos_w_actual, "%c",todo_texto[i_row]);
     }else{
         //AQUÍ LOS CARACTERES ESPECIALES
-        if(is_special(todo_texto[i_row])){
-            unsigned char tmp_special_char[2];
-            *(tmp_special_char+0)=195;
-            *(tmp_special_char+1)=todo_texto[i_row];
-            mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);
-        }
+//         if(is_special(todo_texto[i_row])){
+//             unsigned char tmp_special_char[2];
+//             *(tmp_special_char+0)=195;
+//             *(tmp_special_char+1)=todo_texto[i_row];
+//             mvwprintw(childwin,pos_h_actual, pos_w_actual, "%s",tmp_special_char);
+//         }
     }
     wrefresh(childwin);
 }
@@ -302,8 +302,8 @@ void muestra_errores(void){
 }
 void muestra_cabecera(int id_texto, int id_course){
     //Creamos las ventana de tiempo y errores ya que se tendrán que ir rerescando periodicamente
-    timewin = newwin(1, 15, y_timewin, x_timewin);
-    errorwin = newwin(1, 15, y_errorwin, x_errorwin);
+    timewin=newwin(1, 15, y_timewin, x_timewin);
+    errorwin=newwin(1, 15, y_errorwin, x_errorwin);
     lessonwin=newwin(1, max_x, y_lessonwin,x_lessonwin);  
     descwin=newwin(1, max_x, y_descwin,x_descwin);  
     //
@@ -319,7 +319,6 @@ void muestra_cabecera(int id_texto, int id_course){
     mvwprintw(descwin,0,0, ET_DESC);
     wrefresh(descwin);
 
-    
     muestra_errores();
 
     contar_segundos();
@@ -357,14 +356,8 @@ void muestra_pie(int opciones[5]){
     wattron(footerwin,COLOR_PAIR(C_LETRA_PIE));
     mvwprintw(footerwin,0, 0,"%s",var_barra);
     
-    char et_opcion0[]=ET_OPTION0;
-    char et_opcion1[]=ET_OPTION1;
-    char et_opcion21[]=ET_OPTION21;
-    char et_opcion22[]=ET_OPTION22;
-    char et_opcion3[]=ET_OPTION3;
-    char et_opcion4[]=ET_OPTION4;   
     int pos_opc=1;//with this variable we control the options position in the menu
-// return 0;    
+    
     if(opciones[0]==1){
         wattron(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"ESC");
@@ -372,8 +365,8 @@ void muestra_pie(int opciones[5]){
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0, pos_opc,et_opcion0);
-        pos_opc=pos_opc+strlen(et_opcion0)+3;
+        mvwprintw(footerwin,0, pos_opc,ET_OPTION0);
+        pos_opc=pos_opc+strlen(ET_OPTION0)+3;
     }else if(opciones[0]==2){
         wattron(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,ET_PRESS_ANY_KEY);
@@ -387,8 +380,8 @@ void muestra_pie(int opciones[5]){
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0, pos_opc,et_opcion1);
-        pos_opc=pos_opc+strlen(et_opcion1)+3;
+        mvwprintw(footerwin,0, pos_opc,ET_OPTION1);
+        pos_opc=pos_opc+strlen(ET_OPTION1)+3;
     }
     if(opciones[2]==1){
         wattron(footerwin,WA_BOLD);
@@ -397,8 +390,8 @@ void muestra_pie(int opciones[5]){
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0, pos_opc,et_opcion21);
-        pos_opc=pos_opc+strlen(et_opcion21)+3;
+        mvwprintw(footerwin,0, pos_opc,ET_OPTION21);
+        pos_opc=pos_opc+strlen(ET_OPTION21)+3;
     }else if(opciones[2]==2){
         wattron(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"F2");
@@ -406,8 +399,8 @@ void muestra_pie(int opciones[5]){
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0, pos_opc,et_opcion22);
-        pos_opc=pos_opc+strlen(et_opcion22)+3;        
+        mvwprintw(footerwin,0, pos_opc,ET_OPTION22);
+        pos_opc=pos_opc+strlen(ET_OPTION22)+3;        
     }
     if(opciones[3]){
         wattron(footerwin,WA_BOLD);
@@ -416,8 +409,8 @@ void muestra_pie(int opciones[5]){
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0,pos_opc,et_opcion3);
-        pos_opc=pos_opc+strlen(et_opcion3)+3;
+        mvwprintw(footerwin,0,pos_opc,ET_OPTION3);
+        pos_opc=pos_opc+strlen(ET_OPTION3)+3;
     }
     if(opciones[4]){
         wattron(footerwin,WA_BOLD);
@@ -426,8 +419,8 @@ void muestra_pie(int opciones[5]){
         wattroff(footerwin,WA_BOLD);
         mvwprintw(footerwin,0, pos_opc,"=");
         pos_opc++;        
-        mvwprintw(footerwin,0,pos_opc,et_opcion4);
-        pos_opc=pos_opc+strlen(et_opcion4)+3;
+        mvwprintw(footerwin,0,pos_opc,ET_OPTION4);
+        pos_opc=pos_opc+strlen(ET_OPTION4)+3;
     }
     
     wattroff(footerwin,COLOR_PAIR(C_LETRA_PIE));
@@ -496,30 +489,19 @@ void finalizar(int id_course,bool flag_cancela_texto){
 
     bool flag_opcion_valida=false;
     float minutos_reales=(float) total_tiempo/60;
-    float num_ppm=(long_texto+num_errores)/minutos_reales;
-    float porcentaje_errores;
+    //si se cancela el texto en el segundo 0 (demasiado rápido) num_ppm=0, sino se calcula
+    float num_ppm=(!(flag_cancela_texto && minutos_reales==0)?(long_texto+num_errores)/minutos_reales:0);
+    float porcentaje_errores=(long_texto+num_errores!=0)?((float) num_errores/(float) (long_texto+num_errores))*100:0;
 
-    //anadimos esto por si se cancela el texto en el segundo 0 (demasiado rápido)
-    if(flag_cancela_texto && minutos_reales==0){
-        num_ppm=0;
-    }
-    
-    if(long_texto+num_errores!=0){
-        porcentaje_errores=((float) num_errores/(float) (long_texto+num_errores))*100;
-    }else{
-        porcentaje_errores=0;
-    }
     finalwin=newwin(alto_caja_final, ancho_caja_final, y_finalwin, x_finalwin);
     box(finalwin, 0, 0);   
 
-    descfinalwin=newwin(1, ancho_caja_final, y_descfinalwin, x_descfinalwin);
-    mvwprintw(descfinalwin,0, 0, ET_YOUR_SCORE);
+    //imprimimos descripción del finalwin
+    descfinalwin=newwin(1, max_x, y_descfinalwin, 0);
+    mvwprintw(descfinalwin,0,floor((max_x-strlen(ET_YOUR_SCORE))/2),ET_YOUR_SCORE);
     wrefresh(descfinalwin);
-    if(id_course==9 || id_course==10){
-        mvwprintw(finalwin,2, 1, "%20s",ET_RANDOM_CHARS);    
-    }else{
-        mvwprintw(finalwin,2, 1, "%20s",ET_LESSON);    
-    }
+    //
+    mvwprintw(finalwin,2, 1, "%20s",((id_course==9 || id_course==10)?ET_RANDOM_CHARS:ET_LESSON));    
     mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
     mvwprintw(finalwin,3, 1, "%20s",ET_PPM);
     mvwprintw(finalwin,3, 25, "%d",(int)num_ppm);
@@ -528,24 +510,29 @@ void finalizar(int id_course,bool flag_cancela_texto){
     mvwprintw(finalwin,5, 1, "%20s",ET_TIME);
     mvwprintw(finalwin,5, 25, "%02d:%02d",minutos,segundos);
     wrefresh(finalwin);
-    frasefinalwin=newwin(10, ancho_caja_final, y_frasefinalwin, x_frasefinalwin);
+
+    //imprimimos la frase final centradita
+    frasefinalwin=newwin(10, max_x, y_frasefinalwin, 0);
     if(!flag_cancela_texto){
         if(num_errores==0 && long_texto>0){
-            mvwprintw(frasefinalwin, 0,0,ET_FINISH_PHRASE1);
+            mvwprintw(frasefinalwin, 0, ((strlen(ET_FINISH_PHRASE11)<max_x)?floor((max_x-strlen(ET_FINISH_PHRASE11))/2):0),ET_FINISH_PHRASE11);
+            mvwprintw(frasefinalwin, 2, ((strlen(ET_FINISH_PHRASE12)<max_x)?floor((max_x-strlen(ET_FINISH_PHRASE12))/2):0),ET_FINISH_PHRASE12);
+            mvwprintw(frasefinalwin, 3, ((strlen(ET_FINISH_PHRASE13)<max_x)?floor((max_x-strlen(ET_FINISH_PHRASE13))/2):0),ET_FINISH_PHRASE13);
             tmp_opciones[0]=1;
             tmp_opciones[1]=0;
             tmp_opciones[2]=0;
             tmp_opciones[3]=1;
             tmp_opciones[4]=1;
         }else if(num_errores>0 && num_errores<=3 && long_texto>0){
-            mvwprintw(frasefinalwin, 0,0, ET_FINISH_PHRASE2,num_errores);        
+            mvwprintw(frasefinalwin, 0, ((strlen(ET_FINISH_PHRASE21)<max_x)?floor((max_x-strlen(ET_FINISH_PHRASE21))/2):0),ET_FINISH_PHRASE21);
+            mvwprintw(frasefinalwin, 1, ((strlen(ET_FINISH_PHRASE22)<max_x)?floor((max_x-strlen(ET_FINISH_PHRASE22))/2):0),ET_FINISH_PHRASE22);
             tmp_opciones[0]=1;
             tmp_opciones[1]=0;
             tmp_opciones[2]=0;
             tmp_opciones[3]=1;
             tmp_opciones[4]=1;
         }else if(long_texto>0){
-            mvwprintw(frasefinalwin, 0,0, ET_FINISH_PHRASE3,num_errores);        
+            mvwprintw(frasefinalwin, 0, ((strlen(ET_FINISH_PHRASE3)<max_x)?floor((max_x-strlen(ET_FINISH_PHRASE3))/2):0),ET_FINISH_PHRASE3,num_errores);
             tmp_opciones[0]=1;
             tmp_opciones[1]=0;
             tmp_opciones[2]=2;
@@ -553,15 +540,17 @@ void finalizar(int id_course,bool flag_cancela_texto){
             tmp_opciones[4]=1;
         }
     }else{
+        wattron(frasefinalwin,COLOR_PAIR(C_LETRA_ERR) | WA_BOLD);
+        mvwprintw(frasefinalwin, 0, ((strlen(ET_FINISH_PHRASE_CANCELLED)<max_x)?floor((max_x-strlen(ET_FINISH_PHRASE_CANCELLED))/2):0),ET_FINISH_PHRASE_CANCELLED);
+        wattroff(frasefinalwin,COLOR_PAIR(C_LETRA_ERR) | WA_BOLD);
         tmp_opciones[0]=1;
         tmp_opciones[1]=0;
         tmp_opciones[2]=2;
         tmp_opciones[3]=1;
         tmp_opciones[4]=1;    
-        mvwprintw(frasefinalwin, 0,0, ET_FINISH_PHRASE_CANCELLED);  
     }
     wrefresh(frasefinalwin);
-        
+    //
     refresh();
     muestra_pie(tmp_opciones);  
    do{
@@ -609,13 +598,4 @@ void seleccionar_menu(){
     flag_dentro_texto=false;
     delwin(childwin);    
     endwin();    
-}
-int contar_195(int i_row, unsigned char todo_texto[]){
-    int cont=0;
-    for (int i=0; i<=i_row;++i){
-        if(todo_texto[i]==195){
-            cont++;
-        }
-    }
-    return cont;
 }

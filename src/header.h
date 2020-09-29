@@ -10,15 +10,12 @@
 #include <math.h> //necesitaremos floor() para el cronometro
 
 #include<json-c/json.h>
-#include <ctype.h> //incluyo para tener isspace()
-// #include <ncursesw/curses.h>
+#include <ctype.h> //incluyo para tener isalpha() isprint() isupper()...
 #include <curses.h>
 
 #define MAX_COURSES 9 //debe estar aquí para que la coja en cadenas_menus.hs
 #define MAX_LESSONS_FOR_COURSE 40
 #include "strings.h"
-
-#include <locale.h>
 
 //PROTOTIPOS y VARIABLES GLOBALES main.c
 int leer_tecla(int comprueba_letra);
@@ -37,8 +34,7 @@ void bucle_menus();
 void muestra_titulo_curso(int id_course);
 void muestra_titulo_menu(bool flag_introduccion);
 int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]);
-bool is_special(int tmp_caracter);
-int contar_195(int i_row, unsigned char todo_texto[]);
+// bool is_special(int tmp_caracter);
 
 //introduction.h
 void muestra_introduccion();
@@ -84,7 +80,7 @@ static int x_prwin,y_prwin;
 bool flag_timeout=false, flag_salir=false;
 int ch;
 
-static int minutos, segundos;//, centesimas=0;
+static int minutos, segundos;
 static int long_texto;
 static int id_texto;    
 
@@ -116,6 +112,5 @@ WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lesso
 #define MAX_X_INTRO 47
 
 #define DATADIR "/usr/local/share/ltyper/db/"
-//
 //
 #endif /* FOO_DOT_H */

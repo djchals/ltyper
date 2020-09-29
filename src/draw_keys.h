@@ -2,7 +2,6 @@
 void escribe_teclas(int id_texto,int id_course);
 double array_coord_letras[NUM_LETRAS];
 double array_colores_letras[NUM_LETRAS];
-// char act_distribucion_teclado[NUM_LETRAS]="1234567890QWERTYUIOPASDFGHJKL;ZXCVBNM,. @~^'";
 int array_num_letra_posicion[255];
 void marca_blink_letra(int act_letra,bool flag_marcala);
 void dibuja_teclado(int id_texto,int id_course);
@@ -158,7 +157,7 @@ void escribe_teclas(int id_texto,int id_course){
     bool flag_special;
     double tmp_y, tmp_x;
     int y,x,i,j,flag_repite;
-    unsigned char tmp_special_char[2];
+//     unsigned char tmp_special_char[2];
     //
     char act_distribucion_teclado[NUM_LETRAS]={};
     strcpy(act_distribucion_teclado,&*obten_distribucion(id_texto,id_course));
@@ -192,13 +191,13 @@ void escribe_teclas(int id_texto,int id_course){
                 flag_repite=18;
                 act_tecla=32;
                 break;
-            case 95://ñ
-                flag_repite=0;
-                flag_special=true;
-
-                tmp_special_char[0]=195;
-                tmp_special_char[1]=177;//solo imprime ñ en minúscula
-                tmp_special_char[2]=0x00;
+//             case 95://ñ
+//                 flag_repite=0;
+//                 flag_special=true;
+// 
+//                 tmp_special_char[0]=195;
+//                 tmp_special_char[1]=177;//solo imprime ñ en minúscula
+//                 tmp_special_char[2]=0x00;
                 break;
             default://ANY OTHER KEY
                 act_tecla=array_letras[i];
@@ -209,12 +208,12 @@ void escribe_teclas(int id_texto,int id_course){
             act_tecla=32;
         }
         for(j=0;j<(1+flag_repite);j++){
-            if(flag_special){
-                mvwprintw(keyboardwin,y, x,"%s",tmp_special_char);
-                 wrefresh(keyboardwin);
-            }else{
+//             if(flag_special){
+//                 mvwprintw(keyboardwin,y, x,"%s",tmp_special_char);
+//                  wrefresh(keyboardwin);
+//             }else{
                 mvwprintw(keyboardwin,y, x+j,"%c",act_tecla);
-            }
+//             }
         }
 //         wattroff(keyboardwin,COLOR_PAIR(array_colores_letras[i]));
     }   
@@ -222,11 +221,11 @@ void escribe_teclas(int id_texto,int id_course){
 void marca_blink_letra(int tmp_letra,bool flag_marcala){
     char act_tecla;//necesario para marcar los espacios y el enter
     int j,flag_repite;
-    bool flag_special=false;
+//     bool flag_special=false;
 
-    unsigned char tmp_special_char[2];
-    *(tmp_special_char+0)=195;
-    tmp_special_char[2]=0x00;
+//     unsigned char tmp_special_char[2];
+//     *(tmp_special_char+0)=195;
+//     tmp_special_char[2]=0x00;
     //
    
     //veriicamos si es un caracter especial
@@ -364,12 +363,12 @@ void marca_blink_letra(int tmp_letra,bool flag_marcala){
             break;   
     }
     
-    if(flag_special){
-        mvwprintw(keyboardwin,y, x,"%s",tmp_special_char);
-    }else{
+//     if(flag_special){
+//         mvwprintw(keyboardwin,y, x,"%s",tmp_special_char);
+//     }else{
         for(j=0;j<(1+flag_repite);j++){
             mvwprintw(keyboardwin,y, x+j,"%c",toupper(act_tecla));
         }
-    }
+//     }
  wrefresh(keyboardwin);
 }

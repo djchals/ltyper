@@ -17,10 +17,13 @@
 #define ET_LESSON "Lesson"
 #define ET_RANDOM_CHARS "Random chrs"
 
-#define ET_FINISH_PHRASE1 "Congratulations! You have done it perfect! :D\nYou made 0 errors!\nThe next lesson is waiting for you Mr. Keyman"
-#define ET_FINISH_PHRASE2 "You made %d errors! :)\nNow you are ready for go to the next lesson, but need improve your accuracy"
-#define ET_FINISH_PHRASE3 "You made %d errors.\nYou need repeat this lesson until do only 3 or less errors"
-#define ET_FINISH_PHRASE_CANCELLED "This practice has been canceled"
+#define ET_FINISH_PHRASE11 "Congratulations! You have done it perfect! :D"
+#define ET_FINISH_PHRASE12 "You made 0 errors!"
+#define ET_FINISH_PHRASE13 "The next lesson is waiting for you Mr. Keyman"
+#define ET_FINISH_PHRASE21 "You made %d errors! :)"
+#define ET_FINISH_PHRASE22 "Now you are ready for go to the next lesson, but need improve your accuracy"
+#define ET_FINISH_PHRASE3 "You made %d errors. Repeat this lesson until do 3 or less errors"
+#define ET_FINISH_PHRASE_CANCELLED "THIS PRACTICE HAS BEEN CANCELED"
 
 //menus.h
 #define ET_PROGRAMA "LTYPER v1.0"
@@ -29,6 +32,7 @@
 #define ET_ENUNCIADO_RANDOM_CHARS "Choose how many characters do you want to practice:"
 
 //json_reader.h
+#define ET_CANNOT_OPEN_DIR "Cannot open the directory"
 char *array_et_course_title[11]={
     0,
     "Typing course QWERTY",
@@ -39,8 +43,8 @@ char *array_et_course_title[11]={
     "INSANE typing course DVORAK (without intelligible words)",
     "INSANE typing course COLEMAK (without intelligible words)",
     "INSANE typing course DVORAK REVERSE (without intelligible words)",
-    "Text created with Random Alphanumeric characters",
-    "Text created with Random Non-Alphanumeric characters"
+    "Random Alphanumeric text",
+    "Random Non-Alphanumeric text"
 };
 
 //draw_keys.h

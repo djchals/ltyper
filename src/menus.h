@@ -110,7 +110,7 @@ int muestra_menu(int id_course){
                 if(id_course!=0){
                     flag_dentro_menu_lecciones=false;
                     bucle_menus();
-                    eleccio=12345;//en teoria esto no tiene que suceder nunca pero lo pongo por si acaso para que salga del bucle
+                    eleccio=10000;//en teoria esto no tiene que suceder nunca pero lo pongo por si acaso para que salga del bucle
                 }
                 break;
             default:

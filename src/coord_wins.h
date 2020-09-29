@@ -24,8 +24,6 @@ void obten_coord_wins(){
 
     int tmp_borde_final=floor((max_x-ancho_caja_final)/2);
     x_finalwin=tmp_borde_final;
-    x_descfinalwin=tmp_borde_final;
-    x_frasefinalwin=tmp_borde_final;  
     
     x_footerwin=0;
     x_keyboardwin+=tmp_borde;
@@ -176,10 +174,10 @@ void obten_coord_wins(){
         y_childwin=2;
         y_timewin=1;
         y_errorwin=1;
-        y_descfinalwin=3;
+        y_descfinalwin=1;
 
-        y_finalwin=4;
-        y_frasefinalwin=13;
+        y_finalwin=2;
+        y_frasefinalwin=11;
   
         y_footerwin=max_y-1;
         y_keyboardwin=100;//mostramos uera del rango para que no se vea
@@ -189,7 +187,6 @@ void obten_coord_wins(){
         y_lessonwin=1;
         y_descwin=100;//mostramos uera del rango para que no se vea
         y_descmenuwin=100;
-        y_descfinalwin=100;
         max_y_keyb=11;   
         y_introductionwin=100;//mostramos uera del rango para que no se vea
         y_prwin=1;

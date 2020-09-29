@@ -1,4 +1,4 @@
-#include <sys/types.h>
+// #include <sys/types.h>
 #include <dirent.h>
 
 char *obten_texto(int id_texto,int id_course);
@@ -6,13 +6,12 @@ char *obten_titulo(int id_texto, int id_course);
 char *obten_course_title(int id_course);
 char *obten_distribucion(int id_texto, int id_course);
 char *obten_texto_especial(int id_texto,int id_course);
-int obten_num_titulos(int id_course);
 void obten_titulos();
+int obten_num_titulos(int id_course);
 void quita_espacios(char *act_texto);
 
 json_object *parsed_json, *titulos;
 
-void error(const char *s);/* Función para devolver un error en caso de que ocurra */
 void proceso_archivo(char *archivo);/* Función que hace algo con un archivo */
 int obten_id_course();
 int _init_cursos();
@@ -70,18 +69,18 @@ char *trim(char *s){
     *end = 0;
     return start;
 }
-
-
 int _init_cursos(){
     DIR *dir;/* Con un puntero a DIR abriremos el directorio */
     struct dirent *ent;/* en *ent habrá información sobre el archivo que se está "sacando" a cada momento */
     dir=opendir(ruta);//Empezaremos a leer en el directorio db
     int tmp_id;
     
-    
     /* Miramos que no haya error */
     if(dir==NULL){
-        error("No puedo abrir el directorio");
+        char tmp_not_open[100];
+        sprintf(tmp_not_open,"%s \"%s\"",ET_CANNOT_OPEN_DIR,ruta);
+        perror(tmp_not_open);
+        exit(EXIT_FAILURE);
     }
     while((ent=readdir(dir))!=NULL){/* Leyendo uno a uno todos los archivos que hay */
         /* Nos devolverá el directorio actual (.) y el anterior (..), como hace ls */
@@ -138,8 +137,8 @@ char *obten_titulo(int id_texto, int id_course){
 char *obten_distribucion(int id_texto, int id_course){
     json_object *distribution;
     json_object_object_get_ex(array_json_parseds[id_course], "distribution", &distribution);
-    char *tmp_distribution=(char *)json_object_get_string(distribution);
-    return tmp_distribution;
+//     char *tmp_distribution=(char *)json_object_get_string(distribution);
+    return (char *)json_object_get_string(distribution);
 }
 
 int obten_id_course(){
@@ -149,8 +148,10 @@ int obten_id_course(){
     return (int)tmp_id;
 }
 char *obten_course_title(int id_course){
-    char *act_titulo=array_et_course_title[id_course];
-    return act_titulo;
+//     char *act_titulo=array_et_course_title[id_course];
+//     return act_titulo;
+    return (char *) array_et_course_title[id_course];
+    
 }
 char *obten_texto_especial(int id_texto,int id_course){
     int array_longs[]={125,190,255,320,385,440};
@@ -169,8 +170,7 @@ char *obten_texto_especial(int id_texto,int id_course){
     }
     int num_imprimibles=strlen(array_imprimibles)-1;//esto es así y punto, porque si pongo justo da error
     int num_espacios[100];
-    int i, i_espacio, i_enter;
-    int numero;
+    int numero, i, i_espacio, i_enter;
     char texto_random[long_texto];
     int j=0;//con este contador contamos cuantos caracteres llevamos escritos seguidos para ver si ya toca escribir un espacio o no
 
@@ -210,11 +210,5 @@ char *obten_texto_especial(int id_texto,int id_course){
     char *tmp_return;
     tmp_return=malloc(sizeof(char)*strlen(texto_random));
     memcpy((void *)tmp_return,texto_random,strlen(texto_random));
-//     printf("%s\n",&tmp_return);
     return tmp_return;
-}
-void error(const char *s){
-    /* perror() devuelve la cadena S y el error (en cadena de caracteres) que tenga errno */
-    perror (s);
-    exit(EXIT_FAILURE);
 }

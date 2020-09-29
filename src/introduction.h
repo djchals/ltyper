@@ -1,5 +1,4 @@
 void muestra_presentacion(){
-    int ch;
     muestra_titulo_menu(false);
     dibuja_presentacion();
     sleep(1.5);
@@ -54,7 +53,8 @@ void muestra_introduccion(){
 
 void dibuja_manos(){    
     int i,j;
-        handswin=subwin(mainwin,11, 80,y_keyboardwin+4, x_keyboardwin);
+    obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
+    handswin=subwin(mainwin,11, 80,y_keyboardwin+4, x_keyboardwin);
 
     int keyb_schetch[11][66]={
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -109,7 +109,6 @@ void dibuja_manos(){
                     wattron(handswin,COLOR_PAIR(KEYB_FINGER6));
                     mvwprintw(handswin,i,j,"%c",32);
                     break;
-                
             }    
             
         }
@@ -185,7 +184,6 @@ void dibuja_presentacion(){
                     mvwprintw(prwin,i,j,"%c",32);
                     break;
             }    
-            
         }
     }
     wrefresh(prwin);    
