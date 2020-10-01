@@ -1,15 +1,15 @@
-Ltyper is a tool for practice and improve your typing skills. 
+LTyper is a tool for practice and improve your typing skills. 
 
-Ltyper has been developed in C and uses libncurses-5 and libjson-c3, and 
+LTyper has been developed in C and uses libncurses-5 and libjson-c3, and 
 mirrored to GitHub:
 
 	https://github.com/djchals/ltyper
 
-Ltyper has a simple but effective graphical environment through which
+LTyper has a simple but effective graphical environment through which
 you can practice in 4 keyboard variations (QWERTY, DVORAK, COLEMAK and
 DVORAK REVERSE).
 
-Ltyper contains 8 courses and 3 more options to practice typing. These are divided as follows:
+LTyper contains 8 courses and 3 more options to practice typing. These are divided as follows:
 
 4 English keyboard typing courses for QWERTY, DVORAK, COLEMAK and DVORAK_REVERSE keyboard variants
 
@@ -25,6 +25,6 @@ ONLY for Typing MANIACS: Random Alphanumeric text: Text created with NOT charact
 random alphanumerics with no intelligible words. You can choose the text length.
 
 
-Ltyper is distributed under the GNU General Public License, version 2
+LTyper is distributed under the GNU General Public License, version 2
 or later. See the COPYING file for details.
 
