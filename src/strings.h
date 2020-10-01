@@ -45,13 +45,13 @@ char *array_et_course_title[12]={
     "Typing course DVORAK",
     "Typing course COLEMAK",
     "Typing course DVORAK REVERSE",
-    "INSANE typing course QWERTY (without intelligible words)",
-    "INSANE typing course DVORAK (without intelligible words)",
-    "INSANE typing course COLEMAK (without intelligible words)",
-    "INSANE typing course DVORAK REVERSE (without intelligible words)",
+    "HARD: Typing course QWERTY without intelligible words",
+    "HARD: Typing course DVORAK without intelligible words",
+    "HARD: Typing course COLEMAK without intelligible words",
+    "HARD: Typing course DVORAK REVERSE without intelligible words",
     "100 Paragraphs from different books and sources",
-    "Random Alphanumeric text",
-    "Random Non-Alphanumeric text"
+    "ONLY for Typing MANIACS: Random Alphanumeric text",
+    "ONLY for Typing MANIACS: Random Non-Alphanumeric text"
 };
 
 //draw_keys.h
