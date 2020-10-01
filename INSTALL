@@ -4,10 +4,10 @@ HOW TO INSTALL Ltyper
     This program depends on autotools, libncurses5 and libjson-c3, before installing
 it we must first resolve these dependencies. 
 
-    When dependencies are installed the shell commands:
+    When dependencies are installed the shell commands should configure, build, and install this package.
     	./autogen.sh
 	./configure
 	make 
-	make install
+	sudo make install
 
- should configure, build, and install this package.
+ 
