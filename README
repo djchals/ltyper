@@ -1,6 +1,6 @@
-LTyper is a tool for practice and improve your typing skills. 
+LTyper (Linux Typer) is a GNU Linux tool for practice and improve your typing skills. 
 
-LTyper has been developed in C and uses libncurses-5 and libjson-c3, and 
+LTyper has been developed in C, and depends on autotools, libncurses-5 and libjson-c3, and 
 mirrored to GitHub:
 
 	https://github.com/djchals/ltyper
@@ -15,7 +15,8 @@ LTyper contains 8 courses and 3 more options to practice typing. These are divid
 
 HARD Courses: the same 4 typing courses but in these there are NO intelligible words.
 
-100 Random fragments from various classic books and other sources. In AUTHORS file appears the bibliography with the books from which they have been extracted.
+100 Random fragments from various classic books and other sources. In AUTHORS file appears the 
+bibliography with the books from which they have been extracted.
 
 ONLY for Typing MANIACS: Random Alphanumeric text: Text created with characters
 random alphanumerics with no intelligible words. You can choose the text length.
@@ -27,4 +28,3 @@ random alphanumerics with no intelligible words. You can choose the text length.
 
 LTyper is distributed under the GNU General Public License, version 2
 or later. See the COPYING file for details.
-
