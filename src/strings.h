@@ -16,6 +16,8 @@
 #define ET_PPM "Pulses/min"
 #define ET_LESSON "Lesson"
 #define ET_RANDOM_CHARS "Random chrs"
+#define ET_RANDOM_PARAGRAPH "Random paragraph"
+#define ET_GOOD_BYE "Thanks for use LTyper! See you soon."
 
 #define ET_FINISH_PHRASE11 "Congratulations! You have done it perfect! :D"
 #define ET_FINISH_PHRASE12 "You made 0 errors!"
@@ -37,7 +39,7 @@
 
 //json_reader.h
 #define ET_CANNOT_OPEN_DIR "Cannot open the directory"
-char *array_et_course_title[11]={
+char *array_et_course_title[12]={
     0,
     "Typing course QWERTY",
     "Typing course DVORAK",
@@ -47,6 +49,7 @@ char *array_et_course_title[11]={
     "INSANE typing course DVORAK (without intelligible words)",
     "INSANE typing course COLEMAK (without intelligible words)",
     "INSANE typing course DVORAK REVERSE (without intelligible words)",
+    "100 Paragraphs from different books and sources",
     "Random Alphanumeric text",
     "Random Non-Alphanumeric text"
 };

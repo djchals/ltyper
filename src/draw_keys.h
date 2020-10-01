@@ -164,6 +164,7 @@ void escribe_teclas(int id_texto,int id_course){
     strcpy(act_distribucion_teclado,&*obten_distribucion(id_texto,id_course));
     memcpy(array_letras,act_distribucion_teclado,(strlen(act_distribucion_teclado)));
     array_letras[strlen(act_distribucion_teclado)]=0;
+
     //La @ equivale a ENTER
     for(i=0;i<NUM_LETRAS;i++){
         flag_special=false;
@@ -205,7 +206,8 @@ void escribe_teclas(int id_texto,int id_course){
                 flag_repite=0;
                 break;
         }
-        if(id_texto==9998){
+        //si estamos mostrando la presentación o estamos en los cursos "Random" no mostraremos las letras
+        if(id_texto==9998 || id_course==9 || id_course==10 || id_course==11){
             act_tecla=32;
         }
         for(j=0;j<(1+flag_repite);j++){

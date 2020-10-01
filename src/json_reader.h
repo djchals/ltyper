@@ -1,4 +1,3 @@
-// #include <sys/types.h>
 #include <dirent.h>
 
 char *obten_texto(int id_texto,int id_course);
@@ -18,7 +17,6 @@ int _init_cursos();
 
 json_object *array_json_parseds[MAX_COURSES];
 json_object *tmp_json_parsed;
-
 char ruta[]=DATADIR;
 int array_cursos[MAX_COURSES];//array_cursos[i]=id_course
 int num_cursos=0;
@@ -70,6 +68,7 @@ char *trim(char *s){
     return start;
 }
 int _init_cursos(){
+    srand (getpid());
     DIR *dir;/* Con un puntero a DIR abriremos el directorio */
     struct dirent *ent;/* en *ent habrá información sobre el archivo que se está "sacando" a cada momento */
     dir=opendir(ruta);//Empezaremos a leer en el directorio db
@@ -102,9 +101,9 @@ void proceso_archivo(char *archivo){
     strcat(ruta_archivo, archivo);
     
     FILE *fp;
-	char buffer[10240];//si el archivo ocupase más de 10kb habria que aumentar este valor
+	char buffer[34000];//si el archivo ocupase más de 10kb habria que aumentar este valor
     fp = fopen(ruta_archivo,"r");
-	int flag_archivo_leido=fread(buffer, 10240, 1, fp);//si el archivo ocupase más de 10kb habria que aumentar este valor
+	int flag_archivo_leido=fread(buffer, 34000, 1, fp);//si el archivo ocupase más de 10kb habria que aumentar este valor
 	fclose(fp);
     tmp_json_parsed = json_tokener_parse(buffer); 
     
@@ -158,7 +157,7 @@ char *obten_texto_especial(int id_texto,int id_course){
     long_texto=array_longs[id_texto];
     
     //long_texto funcionará muy bien con los tamaños: 125 190 255 320
-    srand (getpid());
+
     char array_imprimibles[200];
     switch(id_course){
         case 9:

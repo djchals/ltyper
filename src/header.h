@@ -7,7 +7,7 @@
 #include <signal.h> // Para las constantes SIGALRM y similares
 #include <unistd.h> //incluyo este para tener la funcion sleep() y alarm()
 #include <string.h> //incluyo para tener strcpy()
-#include <math.h> //necesitaremos floor() para el cronometro
+#include <math.h> //necesitaremos floor() para el cronometro y ceil() para otras cosas
 
 #include<json-c/json.h>
 #include <ctype.h> //incluyo para tener isalpha() isprint() isupper()...
@@ -35,6 +35,7 @@ void muestra_titulo_curso(int id_course);
 void muestra_titulo_menu(bool flag_introduccion);
 int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]);
 // bool is_special(int tmp_caracter);
+int leccion_sel;
 
 //introduction.h
 void muestra_introduccion();
@@ -86,7 +87,7 @@ static int id_texto;
 
 //inicializamos las variables para la childwin y el cursor
 int ancho_caja=80, alto_caja=10;//dimensiones de la caja
-int ancho_caja_menu=70, alto_caja_menu=10,alto_caja_submenu=6;
+int ancho_caja_menu=70, alto_caja_submenu=6;//alto_caja_menu=10,al final no usaré esta variable
 int ancho_caja_final=50, alto_caja_final=8;
 
 WINDOW *mainwin, *childwin, *timewin, *errorwin, *keyboardwin, *titlewin, *lessonwin, *descwin, *handswin, *prwin,*descmenuwin, *footerwin;

@@ -10,28 +10,33 @@ int main(){
     _init_ncurses();//it s not the same
     obten_coord_wins();
     bucle_menus();
+    printf("\n\%s\n\n",ET_GOOD_BYE);
     return 0;
 }
 void bucle_menus(){
     flag_dentro_menus=true;
-    int opcion_selec,lecccion_sel;
+    int opcion_selec;
     if(flag_primera_vez){ //Solo mostraremos la introducción al iniciar el programa
         muestra_presentacion();
         flag_primera_vez=false;
     }    
-
     while(flag_dentro_menus){
         flag_dentro_menu_lecciones=true;
         opcion_selec=0;
-        lecccion_sel=0;
+        leccion_sel=0;
         opcion_selec=muestra_menu(0);
         while(flag_dentro_menu_lecciones && opcion_selec!=9999){
-            lecccion_sel=muestra_menu(array_cursos[opcion_selec]);//aquí ya deiniremos id_course
+            //si estamos en el curso de los 100 textos omitimos muestra_menu(lecciones)
+            if(opcion_selec!=8){
+                leccion_sel=muestra_menu(array_cursos[opcion_selec]);//aquí ya deiniremos id_course
+            }else if(leccion_sel==0){
+                leccion_sel=rand()%101;
+            }
             flag_dentro_texto=true;//con este flag controlamos si estamos escribiendo un texto y lo estamos repitiendo
             clear();
             
-            while(flag_dentro_texto && lecccion_sel!=9999){
-                muestra_texto(lecccion_sel,array_cursos[opcion_selec]);
+            while(flag_dentro_texto && leccion_sel!=9999){
+                muestra_texto(leccion_sel,array_cursos[opcion_selec]);
             }
         }
     }    
@@ -73,14 +78,18 @@ void muestra_texto(int act_id_texto, int id_course){
     char *array_puntero_texto;
     bool flag_blink;
     switch(id_course){
-        case 9:
+        case 10:
             array_puntero_texto=obten_texto_especial(act_id_texto,9);
             flag_blink=false;
             break;
-        case 10:
+        case 11:
             array_puntero_texto=obten_texto_especial(act_id_texto,10);
             flag_blink=false;
-            break;                        
+            break;    
+        case 9:
+            array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
+            flag_blink=false;//es un texto random así que no marcaremos las letras
+            break;
         default:
             array_puntero_texto=obten_texto(act_id_texto,id_course);//id_texto es una variable global
             flag_blink=true;
@@ -90,6 +99,7 @@ void muestra_texto(int act_id_texto, int id_course){
     long_texto=strlen(array_puntero_texto);
     unsigned char todo_texto[long_texto];
     memcpy(todo_texto,array_puntero_texto,long_texto);
+    array_puntero_texto[long_texto]=0;//porsiaca.com añadimos el final del string
     //
 
     //preparamos el terminal para el modo menú/lectura de tecla
@@ -101,6 +111,7 @@ void muestra_texto(int act_id_texto, int id_course){
 
     //iniciamos el cronometro asociando la señal SIGALRM a la función contar_segundos
 	signal(SIGALRM, contar_segundos);
+    
     obten_coord_wins();//volvemos a obtener las coordenadas por si acaso ha redimensionado
     childwin = subwin(mainwin, alto_caja, ancho_caja, y_childwin, x_childwin);
     box(childwin, 0, 0);
@@ -123,9 +134,9 @@ void muestra_texto(int act_id_texto, int id_course){
     }
 //     actualiza_cursor(0,pos_h_actual,pos_w_actual,3,todo_texto);//mostramos el cursor en la primera letra
     //dibujamos el teclado salvo que sea un texto con caracteres aleatorios
-    if(id_course!=9 && id_course!=10){
+//     if(id_course!=9 && id_course!=10 && id_course!=9){
         dibuja_teclado(id_texto,id_course);   
-    }
+//     }
     //
     refresh();
     //iniciamos el bucle de lectura y comprobación de tecla pulsada
@@ -135,9 +146,9 @@ void muestra_texto(int act_id_texto, int id_course){
     muestra_pie(tmp_opciones);//esta línea debe ir despues del refresh();
     
     //esto será necesario para el tratamiento de los carácteres especiales
-    unsigned char tmp_special_char[2];
-    *(tmp_special_char+0)=195;
-    tmp_special_char[2]=0x00;
+//     unsigned char tmp_special_char[2];
+//     *(tmp_special_char+0)=195;
+//     tmp_special_char[2]=0x00;
     //
     int conta=0;
 //     int act_pos=0;//con esta controlamos la posición en el string, los caracteres especiales aquí serán solo 1
@@ -170,6 +181,7 @@ void muestra_texto(int act_id_texto, int id_course){
                 flag_dentro_menus=false;
                 flag_dentro_menu_lecciones=false;
                 seleccionar_menu();
+                endwin();
                 return;
                 break;
             case 0x109:/*f1 help*/break;
@@ -179,6 +191,10 @@ void muestra_texto(int act_id_texto, int id_course){
                 return;//lo frenamos aquí en seco, para que no se vaya al final de este while y ejecute otra vez finalizar();
                 break;
             case 0x10b:/*f3 change lesson*/
+                //si es 100textos no habrá menú lecciones
+                if(id_course==9){
+                    leccion_sel=0;
+                }
                 seleccionar_menu();
                 return;
                 break;
@@ -264,7 +280,11 @@ int comprueba_tecla(int ch, int i_row, unsigned char todo_texto[]){
 //         case 154://Ú
 //         case 177://ñ
 //         case 145://Ñ
-            return (int)(ch==todo_texto[i_row]);
+    if(ch==32 && todo_texto[i_row]==ENTER){
+        return true;
+    }else{
+        return (int)(ch==todo_texto[i_row]);
+    }
 //             break;
 //         default:
 //             return 0;
@@ -312,7 +332,9 @@ void muestra_cabecera(int id_texto, int id_course){
     //
     
     muestra_titulo_curso(id_course);
-    if(id_course==9 || id_course==10){
+    if(id_course==9){
+        mvwprintw(lessonwin,0, 0,"%s",ET_RANDOM_PARAGRAPH);
+    }else if(id_course==10 || id_course==11){
         mvwprintw(lessonwin,0, 0,"%s %s",obten_titulo(id_texto,id_course),ET_RANDOM_CHARS);        
     }else{
         mvwprintw(lessonwin,0, 0,"%s %s",ET_LESSON, obten_titulo(id_texto,id_course));
@@ -509,8 +531,19 @@ void finalizar(int id_course,bool flag_cancela_texto){
     mvwprintw(descfinalwin,0,floor((max_x-strlen(ET_YOUR_SCORE))/2),ET_YOUR_SCORE);
     wrefresh(descfinalwin);
     //
-    mvwprintw(finalwin,2, 1, "%20s",((id_course==9 || id_course==10)?ET_RANDOM_CHARS:ET_LESSON));    
-    mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
+    char tmp_et_lesson[50];
+    if(id_course==9){
+        strcpy(tmp_et_lesson,ET_RANDOM_PARAGRAPH);
+    }else if(id_course==10 || id_course==11){
+        strcpy(tmp_et_lesson,ET_RANDOM_CHARS);        
+    }else{
+        strcpy(tmp_et_lesson,ET_LESSON);
+    }
+    
+    mvwprintw(finalwin,2, 1, "%20s",tmp_et_lesson); 
+    if(id_course!=9){
+        mvwprintw(finalwin,2, 25, "%s",obten_titulo(id_texto,id_course));
+    }
     mvwprintw(finalwin,3, 1, "%20s",ET_PPM);
     mvwprintw(finalwin,3, 25, "%d",(int)num_ppm);
     mvwprintw(finalwin,4, 1, "%20s",ET_ERRORS);
@@ -566,21 +599,30 @@ void finalizar(int id_course,bool flag_cancela_texto){
         //comprobamos las opciones del footer menu
         switch(ch){
             case 27://ESC exit program
+
                 flag_opcion_valida=true;
                 flag_dentro_menus=false;
                 flag_dentro_menu_lecciones=false;
                 delwin(finalwin);
                 delwin(descfinalwin);
                 seleccionar_menu();
+                endwin();
                 return;
                 break;
             case 0x10a:/*f2 repeat the text*/
                 if(tmp_opciones[2]==2){
+                    if(id_course==9){
+                        leccion_sel=id_texto;
+                    }
                     flag_opcion_valida=true;
                 }
                 //do need anymore, whe are in a loop 
                 break;
             case 0x10b://f3 change lesson
+                //si es 100textos no habrá menú lecciones
+                if(id_course==9){
+                    leccion_sel=0;
+                }
                 flag_opcion_valida=true;
                 delwin(finalwin);
                 delwin(descfinalwin);
@@ -605,5 +647,4 @@ void seleccionar_menu(){
     alarm(0);
     flag_dentro_texto=false;
     delwin(childwin);    
-    endwin();    
 }

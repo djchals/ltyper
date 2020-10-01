@@ -51,7 +51,7 @@ void construye_menu(int id_course){
         tmp_opciones[4]=0;
 
     }else{
-        if(id_course==9){//how many characters do you want?
+        if(id_course==10 || id_course==11){//how many characters do you want?
             //print centered
             mvwprintw(descmenuwin, 0, ((strlen(ET_ENUNCIADO_RANDOM_CHARS)<max_x)?floor((max_x-strlen(ET_ENUNCIADO_RANDOM_CHARS))/2):0),ET_ENUNCIADO_RANDOM_CHARS);
         }else{
@@ -145,7 +145,7 @@ void obten_menu_inicial(){
     menu.startx = x_menuwin;
     menu.starty = y_menuwin;
     menu.max_x = ancho_caja_menu;
-    menu.max_y = 6+(int)menu.n_op;
+    menu.max_y = 7+(int)menu.n_op;
 
     menu.wmenu = newwin(menu.max_y, menu.max_x, menu.starty, menu.startx);
     keypad(menu.wmenu, TRUE);
@@ -166,7 +166,7 @@ void obten_submenu(int id_course){
     menu.startx = x_menuwin;
     menu.starty = y_menuwin;
     menu.max_x = ancho_caja_menu;
-    menu.max_y = alto_caja_submenu;
+    menu.max_y = ceil(num_lecciones/16)+5;
     menu.wmenu = newwin(menu.max_y, menu.max_x,  menu.starty, menu.startx);
    
     keypad(menu.wmenu, TRUE);
@@ -186,7 +186,7 @@ void _imp_menu_vertical(t_menu menu, int seleccionat){
         }
         else
         mvwprintw(menu.wmenu, y, x, "%s", menu.menu[i]);
-        if(i==3 || i==7){
+        if(i==3 || i==7 || i==8){
             ++y;            
         }
         ++y;
