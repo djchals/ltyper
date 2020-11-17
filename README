@@ -1,6 +1,6 @@
 LTyper (Linux Typer) is a GNU Linux tool for practice and improve your typing skills. 
 
-![](https://github.com/djchals/ltyper/img/ltyper-preview.png)
+![ltyper-preview](/img/ltyper-preview.png)
 
 LTyper has been developed in C, and depends on autotools, libncurses-5 and libjson-c3, and 
 mirrored to GitHub:
