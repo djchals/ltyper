@@ -6,7 +6,7 @@ AC_INIT([LTYPER], [1.0], [djtv93@yahoo.es])
 AC_CONFIG_SRCDIR([src/json_reader.h])
 
 AM_INIT_AUTOMAKE
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
 AC_PROG_CC
